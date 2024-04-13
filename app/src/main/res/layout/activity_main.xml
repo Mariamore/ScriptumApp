@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="798dp"
+        android:layout_height="1278dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ImagenInicio"
+        tools:layout_editor_absoluteY="1dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
