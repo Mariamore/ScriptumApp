@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/rectangle" />
+        app:srcCompat="@drawable/rectangle"
+        />
 
     <ImageView
         android:id="@+id/logo"
@@ -26,7 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo"
+        android:contentDescription="@string/logo"/>
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -35,7 +37,8 @@
         android:layout_marginTop="160dp"
         android:ems="10"
         android:textColor="@color/text"
-        android:hint="Email"
+        android:hint="@string/email"
+        android:autofillHints="emailAddress"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.507"
@@ -48,9 +51,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:textColor="@color/text"
         android:inputType="textPassword"
+        android:autofillHints="password"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
