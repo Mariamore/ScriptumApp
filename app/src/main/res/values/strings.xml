@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ScriptumApp</string>
+    <string name="log_in">Log in</string>
+    <string name="forgot_password"><u>Forgot password?</u></string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up"><u>Sign up</u></string>
 </resources>
