@@ -7,4 +7,8 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="logo">Logo</string>
+    <string name="address">Address</string>
+    <string name="name_and_surname">Name and Surname</string>
+    <string name="create_account">Create Account</string>
+    <string name="exit"><u>Exit</u></string>
 </resources>
