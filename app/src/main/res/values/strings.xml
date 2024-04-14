@@ -11,4 +11,8 @@
     <string name="name_and_surname">Name and Surname</string>
     <string name="create_account">Create Account</string>
     <string name="exit"><u>Exit</u></string>
+    <string name="personal_data">Personal data</string>
+    <string name="upload_book">Upload book</string>
+    <string name="check_books">Check books</string>
+    <string name="location">Location</string>
 </resources>

@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/rectangle" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/buttonuser"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginStart="64dp"
@@ -29,7 +29,7 @@
         app:srcCompat="@drawable/buttonuser" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/logoUser"
         android:layout_width="174dp"
         android:layout_height="160dp"
         android:layout_marginTop="36dp"
@@ -37,49 +37,80 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logouser" />
+        app:srcCompat="@drawable/userlogo"
+        android:outlineAmbientShadowColor="@color/black"/>
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/buttonupload"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginTop="280dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/buttonuser"
         app:layout_constraintTop_toTopOf="@+id/rectangle"
         app:srcCompat="@drawable/buttonupload" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/buttonconsult"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="36dp"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/buttonuser"
         app:srcCompat="@drawable/buttonconsult" />
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/buttonubi"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.534"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintStart_toEndOf="@+id/buttonconsult"
+        app:layout_constraintTop_toBottomOf="@+id/buttonupload"
         app:srcCompat="@drawable/buttonubi" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewPersonalData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
         android:layout_marginTop="8dp"
-        android:text="Personal data"
+        android:text="@string/personal_data"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonuser" />
+
+    <TextView
+        android:id="@+id/textViewUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:text="@string/upload_book"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintTop_toBottomOf="@+id/buttonupload" />
+
+    <TextView
+        android:id="@+id/textViewConsult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/check_books"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toBottomOf="@+id/buttonconsult" />
+
+    <TextView
+        android:id="@+id/textViewUbi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/location"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintTop_toBottomOf="@+id/buttonubi" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
