@@ -31,46 +31,83 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextEmail"
         android:layout_width="260dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
-        android:autofillHints="emailAddress"
-        android:ems="10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/text"
-        android:textSize="16sp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toTopOf="@+id/rectangle" />
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="1dp"
+            android:autofillHints="emailAddress"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/hintEmail"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextPassword"
         android:layout_width="260dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:autofillHints="password"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:textColor="@color/text"
-        android:textSize="16sp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="1dp"
+            android:autofillHints="password"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/hintPassword"
+            android:inputType="textPassword"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/buttonLogIn"
+        android:id="@+id/loginButton"
         android:layout_width="270dp"
         android:layout_height="64dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="44dp"
         android:backgroundTint="@color/buttons"
+        android:fontFamily="@font/inter"
         android:text="@string/log_in"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
@@ -79,7 +116,8 @@
         android:id="@+id/forgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="172dp"
+        android:layout_marginTop="144dp"
+        android:fontFamily="@font/inter"
         android:text="@string/forgot_password"
         android:textColor="@color/text"
         android:textSize="16sp"
@@ -91,8 +129,9 @@
         android:id="@+id/haveAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="408dp"
+        android:fontFamily="@font/inter"
         android:text="@string/don_t_have_an_account"
         android:textColor="@color/text"
         android:textSize="16sp"
@@ -104,12 +143,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="408dp"
+        android:fontFamily="@font/inter"
         android:text="@string/sign_up"
         android:textColor="@color/text"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
-        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintHorizontal_bias="0.185"
         app:layout_constraintStart_toEndOf="@+id/haveAccount"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
