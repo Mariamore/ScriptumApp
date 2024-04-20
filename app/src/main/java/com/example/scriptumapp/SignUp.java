@@ -46,7 +46,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
             View layout = inflater.inflate(R.layout.toast_layout,
                     (ViewGroup) findViewById(R.id.toastLayout));
             TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
-            txtMsg.setText("Account created");
+            txtMsg.setText(R.string.account_created);
             Toast toast = new Toast(getApplicationContext());
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout);

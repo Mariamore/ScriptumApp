@@ -15,4 +15,6 @@
     <string name="upload_book">Upload book</string>
     <string name="check_books">Check books</string>
     <string name="location">Location</string>
+    <string name="user_logged">User logged</string>
+    <string name="account_created">Account created</string>
 </resources>
