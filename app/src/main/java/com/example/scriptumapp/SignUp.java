@@ -2,9 +2,12 @@ package com.example.scriptumapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,7 +42,15 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         int id = v.getId();
         if (id == R.id.createAccountButton) {
             //crear cuenta en firebase
-
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.toast_layout,
+                    (ViewGroup) findViewById(R.id.toastLayout));
+            TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
+            txtMsg.setText("Account created");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
             // Hacer un intent para pasar a la MainActivity
             Intent intent = new Intent(SignUp.this, MainActivity.class);
             startActivity(intent);

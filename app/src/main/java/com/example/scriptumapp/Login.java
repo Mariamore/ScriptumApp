@@ -2,9 +2,13 @@ package com.example.scriptumapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +48,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         if (id == R.id.loginButton) {
             //login en Firebase
 
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.toast_layout,
+                    (ViewGroup) findViewById(R.id.toastLayout));
+            TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
+            txtMsg.setText("User logged");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
             // Hacer un intent para pasar a la MainActivity
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
