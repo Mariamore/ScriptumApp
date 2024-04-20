@@ -15,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
     Button loginButton;
-    TextView signUp;
+    TextView signUp, forgotPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +29,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
         loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUp);
+        forgotPassword = findViewById(R.id.forgotPassword);
         loginButton.setOnClickListener(this);
         signUp.setOnClickListener(this);
+        forgotPassword.setOnClickListener(this);
 
     }
 
@@ -46,11 +48,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
         } else if (id == R.id.signUp) {
-            //signup en firebase
-
-            // Hacer un intent para pasar a la MainActivity
-            Intent intent = new Intent(Login.this, MainActivity.class);
+            Intent intent = new Intent(Login.this, SignUp.class);
             startActivity(intent);
+        } else if (id == R.id.forgotPassword){
+            //Hacer en firebase lo del olvido de contraseña
         }
     }
 }

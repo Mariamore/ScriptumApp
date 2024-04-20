@@ -29,71 +29,139 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameSurname"
         android:layout_width="260dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
-        android:ems="10"
-        android:hint="@string/name_and_surname"
-        android:inputType="text"
-        android:textColor="@color/text"
-        android:textSize="16sp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toTopOf="@+id/rectangle" />
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/name_and_surname"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/address"
         android:layout_width="260dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
-        android:ems="10"
-        android:hint="@string/address"
-        android:inputType="text"
-
-        android:textColor="@color/text"
-        android:textSize="16sp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toTopOf="@+id/rectangle" />
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/address"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextEmail"
         android:layout_width="260dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="280dp"
-        android:ems="10"
-        android:hint="@string/hintEmail"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/text"
-        android:textSize="16sp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toTopOf="@+id/rectangle" />
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/hintEmail"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextPassword"
         android:layout_width="260dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="360dp"
-        android:ems="10"
-        android:hint="@string/hintPassword"
-        android:inputType="textPassword"
-        android:textColor="@color/text"
-        android:textSize="16sp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintTop_toTopOf="@+id/rectangle" />
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/hintPassword"
+            android:inputType="textPassword"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Button
-        android:id="@+id/buttonCreateAccount"
+        android:id="@+id/createAccountButton"
         android:layout_width="270dp"
         android:layout_height="64dp"
         android:layout_marginTop="440dp"
         android:backgroundTint="@color/buttons"
         android:text="@string/create_account"
         android:textSize="20sp"
+        android:fontFamily="@font/inter"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
@@ -101,12 +169,14 @@
 
     <TextView
         android:id="@+id/exitText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_marginTop="520dp"
+        android:fontFamily="@font/inter"
         android:text="@string/exit"
+        android:textAlignment="center"
         android:textColor="@color/text"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/rectangle"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/rectangle"
