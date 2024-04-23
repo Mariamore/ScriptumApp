@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ScriptumApp"
         tools:targetApi="31">
         <activity
+            android:name=".Queries"
+            android:exported="false" />
+        <activity
             android:name=".UploadBook"
             android:exported="false" />
         <activity
