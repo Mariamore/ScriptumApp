@@ -13,6 +13,12 @@
         android:theme="@style/Theme.ScriptumApp"
         tools:targetApi="31">
         <activity
+            android:name=".Messages"
+            android:exported="false" />
+        <activity
+            android:name=".Search"
+            android:exported="false" />
+        <activity
             android:name=".Location"
             android:exported="false" />
         <activity
