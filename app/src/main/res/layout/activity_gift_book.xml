@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/imageninicio"
-    tools:context=".BookExchange">
+    tools:context=".GiftBook">
 
     <ImageView
         android:id="@+id/rectangletwo"
@@ -30,12 +30,12 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textBookExchange"
+        android:id="@+id/textBookLoan"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/inter"
-        android:text="@string/book_exchange"
+        android:text="@string/book_loan"
         android:textColor="@color/buttonQueries"
         android:textSize="30dp"
         android:textStyle="bold"
@@ -58,7 +58,7 @@
         app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textBookExchange" />
+        app:layout_constraintTop_toBottomOf="@id/textBookLoan" />
 
     <Button
         android:id="@+id/add"
@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.220"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textBookExchange" />
+        app:layout_constraintTop_toBottomOf="@id/textBookLoan" />
 
     <Button
         android:id="@+id/edit"
@@ -92,6 +92,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.780"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textBookExchange" />
+        app:layout_constraintTop_toBottomOf="@id/textBookLoan" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

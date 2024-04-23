@@ -9,7 +9,7 @@
     tools:context=".BookLoan">
 
     <ImageView
-        android:id="@+id/rectangle"
+        android:id="@+id/rectangletwo"
         android:layout_width="344dp"
         android:layout_height="579dp"
         android:layout_marginTop="72dp"

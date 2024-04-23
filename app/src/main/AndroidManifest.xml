@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ScriptumApp"
         tools:targetApi="31">
         <activity
+            android:name=".GiftBook"
+            android:exported="false" />
+        <activity
             android:name=".BookExchange"
             android:exported="false" />
         <activity
