@@ -28,4 +28,6 @@
     <string name="book_exchange">Book Exchange</string>
     <string name="gift_book">Gift Book</string>
     <string name="back">Back</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
 </resources>
