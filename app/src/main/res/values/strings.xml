@@ -30,4 +30,7 @@
     <string name="back">Back</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>
+    <string name="phone">Phone</string>
+
+
 </resources>
