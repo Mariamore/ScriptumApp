@@ -17,4 +17,11 @@
     <string name="location">Location</string>
     <string name="user_logged">User logged</string>
     <string name="account_created">Account created</string>
+    <string name="book_title">Book Title</string>
+    <string name="author">Author</string>
+    <string name="editorial">Editorial</string>
+    <string name="publication_year">Publication Year</string>
+    <string name="current_status_book">Current Status Book</string>
+    <string name="comments">Comments</string>
+
 </resources>
