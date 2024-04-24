@@ -17,4 +17,5 @@
     <string name="location">Location</string>
     <string name="user_logged">User logged</string>
     <string name="account_created">Account created</string>
+    <string name="search">Search</string>
 </resources>
