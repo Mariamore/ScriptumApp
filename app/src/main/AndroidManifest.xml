@@ -13,7 +13,31 @@
         android:theme="@style/Theme.ScriptumApp"
         tools:targetApi="31">
         <activity
+            android:name=".Messages"
+            android:exported="false" />
+        <activity
             android:name=".Search"
+            android:exported="false" />
+        <activity
+            android:name=".Location"
+            android:exported="false" />
+        <activity
+            android:name=".PersonalData"
+            android:exported="false" />
+        <activity
+            android:name=".GiftBook"
+            android:exported="false" />
+        <activity
+            android:name=".BookExchange"
+            android:exported="false" />
+        <activity
+            android:name=".BookLoan"
+            android:exported="false" />
+        <activity
+            android:name=".Queries"
+            android:exported="false" />
+        <activity
+            android:name=".UploadBook"
             android:exported="false" />
         <activity
             android:name=".UserMenu"

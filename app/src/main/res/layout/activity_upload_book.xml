@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/imageninicio"
+    tools:context=".UploadBook">
+
+    <ImageView
+        android:id="@+id/rectangle"
+        android:layout_width="344dp"
+        android:layout_height="579dp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/rectangle" />
+
+    <ImageView
+        android:id="@+id/rectangle_photobook"
+        android:layout_width="193dp"
+        android:layout_height="147dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/photobook" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/titleBook"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/book_title"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/author"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/author"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editorial"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="220dp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/editorial"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/publication_year"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="280dp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/publication_year"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/current_status"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="340dp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/current_status_book"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/comments"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:textColorHint="@color/text"
+        app:boxBackgroundMode="none"
+        app:boxStrokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="@string/comments"
+            android:inputType="text"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/bookuploadbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="564dp"
+        android:background="color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bookuploadbutton" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

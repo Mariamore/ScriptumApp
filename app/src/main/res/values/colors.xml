@@ -5,4 +5,5 @@
     <color name="buttons">#AFAC7B</color>
     <color name="text">#787054</color>
     <color name="toastBackground">#EAEBC8</color>
+    <color name="buttonQueries">#575242</color>
 </resources>
