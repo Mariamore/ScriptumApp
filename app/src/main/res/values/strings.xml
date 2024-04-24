@@ -18,4 +18,21 @@
     <string name="user_logged">User logged</string>
     <string name="account_created">Account created</string>
     <string name="search">Search</string>
+    <string name="book_title">Book Title</string>
+    <string name="author">Author</string>
+    <string name="editorial">Editorial</string>
+    <string name="publication_year">Publication Year</string>
+    <string name="current_status_book">Current Status Book</string>
+    <string name="comments">Comments</string>
+    <string name="text_queries">Queries</string>
+    <string name="book_loan">Book Loan</string>
+    <string name="book_exchange">Book Exchange</string>
+    <string name="gift_book">Gift Book</string>
+    <string name="back">Back</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="phone">Phone</string>
+    <string name="messaging">Messaging</string>
+
+
 </resources>
