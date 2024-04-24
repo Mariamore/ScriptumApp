@@ -1,8 +1,10 @@
 package com.example.scriptumapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +42,21 @@ public class Queries extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
 
+        int id = v.getId();
+
+        if(id == R.id.book_loan){
+            Intent intent = new Intent(Queries.this, BookLoan.class);
+            startActivity(intent);
+            Toast.makeText(Queries.this, "Hola", Toast.LENGTH_LONG).show();
+
+
+        }else if(id == R.id.book_exchange){
+            Intent intent = new Intent(Queries.this, BookExchange.class);
+            startActivity(intent);
+        } else if (id == R.id.gift_book) {
+            Intent intent = new Intent( Queries.this, GiftBook.class);
+            startActivity(intent);
+        }
 
 
     }
