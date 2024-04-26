@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,15 +16,30 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener{
+import com.google.firebase.auth.FirebaseAuth;
 
+public class SignUp extends AppCompatActivity implements View.OnClickListener{
+    //Variables
     Button createAccButton;
     TextView exit;
+
+    EditText nameSurnameInputEditText, addressInputEditText, emailInputeditText, passwordInputEditText;
+
+    //Agregamos Firebase
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
+
+        //Instanciamos Firebase
+        mAuth = FirebaseAuth.getInstance();
+
+
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -32,8 +48,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
         createAccButton = findViewById(R.id.createAccountButton);
         exit = findViewById(R.id.exitText);
-        createAccButton.setOnClickListener(this);
-        exit.setOnClickListener(this);
+
+        createAccButton.setOnClickListener(this); //crear cuenta
+        exit.setOnClickListener(this); //salir
+
+        //Referencias de las cajas
+        nameSurnameInputEditText = findViewById(R.id.nameSurnameInputEditText);
+        addressInputEditText = findViewById(R.id.nameSurnameInputEditText);
+        emailInputeditText = findViewById(R.id.nameSurnameInputEditText);
+        passwordInputEditText = findViewById(R.id.nameSurnameInputEditText);
+
+
 
     }
 
@@ -42,6 +67,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         int id = v.getId();
         if (id == R.id.createAccountButton) {
             //crear cuenta en firebase
+
+
+
+
+
             LayoutInflater inflater = getLayoutInflater();
             View layout = inflater.inflate(R.layout.toast_layout,
                     (ViewGroup) findViewById(R.id.toastLayout));
