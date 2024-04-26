@@ -73,7 +73,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/addressInputeditText"
+            android:id="@+id/addressInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
