@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/nameSurnameInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
@@ -73,7 +73,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/addressInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/emailInputEdittext"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
@@ -135,7 +135,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/passwordInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"

@@ -6,24 +6,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener{
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.AuthResult;
 
+public class SignUp extends AppCompatActivity implements View.OnClickListener{
+    //variables
     Button createAccButton;
     TextView exit;
+
+    private FirebaseAuth mAuth;
+    EditText emailInputEditText, passwordInputEditText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
+
+        mAuth = FirebaseAuth.getInstance();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -35,25 +48,49 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         createAccButton.setOnClickListener(this);
         exit.setOnClickListener(this);
 
+        //Inicalizamos varibles
+        emailInputEditText = findViewById(R.id.emailInputEdittext);
+        passwordInputEditText = findViewById(R.id.passwordInputEditText);
+
+
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+
+
+        //variables
+        String email = emailInputEditText.getText().toString();
+        String password = passwordInputEditText.getText().toString();
+
         if (id == R.id.createAccountButton) {
             //crear cuenta en firebase
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.toast_layout,
-                    (ViewGroup) findViewById(R.id.toastLayout));
-            TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
-            txtMsg.setText(R.string.account_created);
-            Toast toast = new Toast(getApplicationContext());
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show();
-            // Hacer un intent para pasar a la MainActivity
-            Intent intent = new Intent(SignUp.this, MainActivity.class);
-            startActivity(intent);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Hacer un intent para pasar a la MainActivity
+                                Intent intent = new Intent(SignUp.this, UserMenu.class);
+                                startActivity(intent);
+
+                                Toast.makeText(SignUp.this, "Registro Creado",
+                                        Toast.LENGTH_SHORT).show();
+
+
+
+                            } else {
+
+                                Toast.makeText(SignUp.this, "Registro erroneo",
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+
+
+
         } else if (id == R.id.exitText) {
             Intent intent = new Intent(SignUp.this, Login.class);
             startActivity(intent);
