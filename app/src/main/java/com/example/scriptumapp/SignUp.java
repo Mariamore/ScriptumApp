@@ -2,6 +2,7 @@ package com.example.scriptumapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,43 +70,56 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
             String email = emailInputEdittext.getText().toString();
             String password = passwordInputEditText.getText().toString();
 
-            //crear cuenta en firebase
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            if(email.isEmpty()){
+                emailInputEdittext.setError("Requested field");
+                emailInputEdittext.requestFocus();
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                emailInputEdittext.setError("Enter a valid email");
+                emailInputEdittext.requestFocus();
+            } else if (password.isEmpty()){
+                passwordInputEditText.setError("Requested field");
+                passwordInputEditText.requestFocus();
+            } else if(password.length() < 6){
+                passwordInputEditText.setError("6 characters minimum");
+                passwordInputEditText.requestFocus();
+            } else{
+                //crear cuenta en firebase
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                LayoutInflater inflater = getLayoutInflater();
-                                View layout = inflater.inflate(R.layout.toast_layout_ok,
-                                        (ViewGroup) findViewById(R.id.toastLayoutOk));
-                                TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
-                                txtMsg.setText(R.string.account_created);
-                                Toast toast = new Toast(getApplicationContext());
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(layout);
-                                toast.show();
-                                // Hacer un intent para pasar a la MainActivity
-                                Intent intent = new Intent(SignUp.this, UserMenu.class);
-                                startActivity(intent);
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View layout = inflater.inflate(R.layout.toast_layout_ok,
+                                             findViewById(R.id.toastLayoutOk));
+                                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                                    txtMsg.setText(R.string.account_created);
+                                    Toast toast = new Toast(getApplicationContext());
+                                    toast.setDuration(Toast.LENGTH_LONG);
+                                    toast.setView(layout);
+                                    toast.show();
+                                    // Hacer un intent para pasar a la MainActivity
+                                    Intent intent = new Intent(SignUp.this, UserMenu.class);
+                                    startActivity(intent);
 
-                            } else {
+                                } else {
 
-                                LayoutInflater inflater = getLayoutInflater();
-                                View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                        (ViewGroup) findViewById(R.id.toastLayoutFail));
-                                TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
-                                txtMsg.setText(R.string.sign_up_failed);
-                                Toast toast = new Toast(getApplicationContext());
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(layout);
-                                toast.show();
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View layout = inflater.inflate(R.layout.toast_layout_fail,
+                                             findViewById(R.id.toastLayoutFail));
+                                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                                    txtMsg.setText(R.string.sign_up_failed);
+                                    Toast toast = new Toast(getApplicationContext());
+                                    toast.setDuration(Toast.LENGTH_LONG);
+                                    toast.setView(layout);
+                                    toast.show();
 
+                                }
                             }
-                        }
-                    });
+                        });
 
-
+                }
 
 
 
