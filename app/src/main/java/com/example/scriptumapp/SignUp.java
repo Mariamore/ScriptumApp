@@ -67,7 +67,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         if (id == R.id.createAccountButton) {
 
             String email = emailInputEdittext.getText().toString();
-            String password = emailInputEdittext.getText().toString();
+            String password = passwordInputEditText.getText().toString();
 
             //crear cuenta en firebase
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -77,8 +77,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 LayoutInflater inflater = getLayoutInflater();
-                                View layout = inflater.inflate(R.layout.toast_layout,
-                                        (ViewGroup) findViewById(R.id.toastLayout));
+                                View layout = inflater.inflate(R.layout.toast_layout_ok,
+                                        (ViewGroup) findViewById(R.id.toastLayoutOk));
                                 TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
                                 txtMsg.setText(R.string.account_created);
                                 Toast toast = new Toast(getApplicationContext());
@@ -91,8 +91,15 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
                             } else {
 
-                                Toast.makeText(SignUp.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                LayoutInflater inflater = getLayoutInflater();
+                                View layout = inflater.inflate(R.layout.toast_layout_fail,
+                                        (ViewGroup) findViewById(R.id.toastLayoutFail));
+                                TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
+                                txtMsg.setText(R.string.sign_up_failed);
+                                Toast toast = new Toast(getApplicationContext());
+                                toast.setDuration(Toast.LENGTH_LONG);
+                                toast.setView(layout);
+                                toast.show();
 
                             }
                         }

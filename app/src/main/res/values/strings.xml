@@ -33,6 +33,8 @@
     <string name="edit">Edit</string>
     <string name="phone">Phone</string>
     <string name="messaging">Messaging</string>
+    <string name="sign_up_failed">Sign up failed</string>
+    <string name="incorrect_name_pass">Incorrect email or password</string>
 
 
 </resources>
