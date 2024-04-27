@@ -94,8 +94,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                                     LayoutInflater inflater = getLayoutInflater();
                                     View layout = inflater.inflate(R.layout.toast_layout_ok,
-                                            (ViewGroup) findViewById(R.id.toastLayoutOk));
-                                    TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
+                                            findViewById(R.id.toastLayoutOk));
+                                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
                                     txtMsg.setText(R.string.user_logged);
                                     Toast toast = new Toast(getApplicationContext());
                                     toast.setDuration(Toast.LENGTH_LONG);
@@ -107,8 +107,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 } else {
                                     LayoutInflater inflater = getLayoutInflater();
                                     View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                            (ViewGroup) findViewById(R.id.toastLayoutFail));
-                                    TextView txtMsg = (TextView)layout.findViewById(R.id.toastMessage);
+                                             findViewById(R.id.toastLayoutFail));
+                                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
                                     txtMsg.setText(R.string.incorrect_name_pass);
                                     Toast toast = new Toast(getApplicationContext());
                                     toast.setDuration(Toast.LENGTH_LONG);
