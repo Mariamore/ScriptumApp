@@ -6,5 +6,5 @@
     <color name="text">#787054</color>
     <color name="toastBackground">#EAEBC8</color>
     <color name="buttonQueries">#575242</color>
-    <color name="transparent">#00FF0000</color>
+    <color name="colorTransparent">#00000000</color>
 </resources>
