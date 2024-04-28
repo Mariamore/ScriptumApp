@@ -1,3 +1,4 @@
+
 package com.example.scriptumapp;
 
 import android.content.Intent;
@@ -130,3 +131,4 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }
     }
 }
+

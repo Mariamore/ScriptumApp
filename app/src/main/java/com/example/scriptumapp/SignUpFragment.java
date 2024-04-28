@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,32 +86,54 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         if (id == R.id.createAccountButton) {
 
             String email = emailInputEdittext.getText().toString();
-            String password = emailInputEdittext.getText().toString();
+            String password = passwordInputEditText.getText().toString();
 
-            //crear cuenta en firebase
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
+            if(email.isEmpty()){
+                emailInputEdittext.setError("Required field");
+                emailInputEdittext.requestFocus();
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                emailInputEdittext.setError("Enter a valid email");
+                emailInputEdittext.requestFocus();
+            } else if (password.isEmpty()){
+                passwordInputEditText.setError("Required field");
+                passwordInputEditText.requestFocus();
+            } else if(password.length() < 6){
+                passwordInputEditText.setError("6 characters minimum");
+                passwordInputEditText.requestFocus();
+            } else{
 
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                LayoutInflater inflater = requireActivity().getLayoutInflater();
-                                View layout = inflater.inflate(R.layout.toast_layout_ok,
-                                        (ViewGroup) requireActivity().findViewById(R.id.toastLayoutOk));
-                                TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                                txtMsg.setText(R.string.account_created);
-                                Toast toast = new Toast(requireContext());
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(layout);
-                                toast.show();
-                                // Cambiar Fragment a Profile
-                                replaceFragment(new ProfileFragment());
-                            } else {
-                                Toast.makeText(getContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                //crear cuenta en firebase
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    LayoutInflater inflater = requireActivity().getLayoutInflater();
+                                    View layout = inflater.inflate(R.layout.toast_layout_ok,
+                                            (ViewGroup) requireActivity().findViewById(R.id.toastLayoutOk));
+                                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                                    txtMsg.setText(R.string.account_created);
+                                    Toast toast = new Toast(requireContext());
+                                    toast.setDuration(Toast.LENGTH_LONG);
+                                    toast.setView(layout);
+                                    toast.show();
+                                    // Cambiar Fragment a Profile
+                                    replaceFragment(new ProfileFragment());
+                                } else {
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View layout = inflater.inflate(R.layout.toast_layout_fail,
+                                            requireActivity().findViewById(R.id.toastLayoutFail));
+                                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                                    txtMsg.setText(R.string.sign_up_failed);
+                                    Toast toast = new Toast(requireContext());
+                                    toast.setDuration(Toast.LENGTH_LONG);
+                                    toast.setView(layout);
+                                    toast.show();
+                                }
                             }
-                        }
-                    });
+                        });
+                }
         } else if (id == R.id.exitText) {
             // Cambiar Fragment a Login
             replaceFragment(new LoginFragment());

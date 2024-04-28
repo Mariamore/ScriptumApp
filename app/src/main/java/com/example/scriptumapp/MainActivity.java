@@ -29,12 +29,12 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.home) {
                 replaceFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.profile) {
-                replaceFragment(new ProfileFragment());
+                replaceFragment(new LoginFragment());
             } else if (item.getItemId() == R.id.search) {
                 replaceFragment(new SearchFragment());
             } else if (item.getItemId() == R.id.messages) {
                 // Cambio por SignUpFragment para probar, debería ser new MessagesFragment()
-                replaceFragment(new SignUpFragment());
+                replaceFragment(new LoginFragment());
             }
             return true;
         });
