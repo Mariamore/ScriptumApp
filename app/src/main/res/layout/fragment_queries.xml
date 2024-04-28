@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QueriesFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/rectangle"
+            android:layout_width="344dp"
+            android:layout_height="579dp"
+            android:layout_marginTop="72dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rectangletwo" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/textQueries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/text_queries"
+            android:textColor="@color/buttonQueries"
+            android:fontFamily="@font/inter"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+        <Button
+            android:id="@+id/book_loan"
+            android:layout_width="267dp"
+            android:layout_height="85dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/buttonQueries"
+            android:fontFamily="@font/inter"
+            android:text="@string/book_loan"
+            android:textColor="@color/toastBackground"
+            android:textSize="26dp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textQueries" />
+
+        <Button
+            android:id="@+id/book_exchange"
+            android:layout_width="267dp"
+            android:layout_height="85dp"
+            android:layout_marginTop="18dp"
+            android:backgroundTint="@color/buttonQueries"
+            android:fontFamily="@font/inter"
+            android:text="@string/book_exchange"
+            android:textSize="26dp"
+            android:textStyle="bold"
+            android:textColor="@color/toastBackground"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_loan" />
+
+        <Button
+            android:id="@+id/gift_book"
+            android:layout_width="267dp"
+            android:layout_height="85dp"
+            android:layout_marginTop="18dp"
+            android:backgroundTint="@color/buttonQueries"
+            android:fontFamily="@font/inter"
+            android:text="@string/gift_book"
+            android:textSize="26dp"
+            android:textStyle="bold"
+            android:textColor="@color/toastBackground"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_exchange" />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="148dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="18dp"
+            android:backgroundTint="@color/buttonQueries"
+            android:fontFamily="@font/inter"
+            android:text="@string/back"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/toastBackground"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gift_book" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
