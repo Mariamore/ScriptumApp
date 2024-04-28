@@ -95,8 +95,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 LayoutInflater inflater = requireActivity().getLayoutInflater();
-                                View layout = inflater.inflate(R.layout.toast_layout,
-                                        (ViewGroup) requireActivity().findViewById(R.id.toastLayout));
+                                View layout = inflater.inflate(R.layout.toast_layout_ok,
+                                        (ViewGroup) requireActivity().findViewById(R.id.toastLayoutOk));
                                 TextView txtMsg = layout.findViewById(R.id.toastMessage);
                                 txtMsg.setText(R.string.account_created);
                                 Toast toast = new Toast(requireContext());
