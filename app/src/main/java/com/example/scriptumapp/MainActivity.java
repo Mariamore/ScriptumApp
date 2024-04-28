@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.search) {
                 replaceFragment(new SearchFragment());
             } else if (item.getItemId() == R.id.messages) {
-                replaceFragment(new MessagesFragment());
+                // Cambio por SignUpFragment para probar, debería ser new MessagesFragment()
+                replaceFragment(new SignUpFragment());
             }
             return true;
         });

@@ -2,25 +2,39 @@ package com.example.scriptumapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SignUpFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SignUpFragment extends Fragment {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+public class SignUpFragment extends Fragment implements View.OnClickListener{
+
+    // Argumentos para pasar al fragmento si fuese necesario
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+    // Variables
+    Button createAccButton;
+    TextView exit;
+    EditText emailInputEdittext, passwordInputEditText;
+    private FirebaseAuth mAuth;
+
+
+    // Argumentos para almacenar valores para pasárselos al fragmento si fuese necesario
     private String mParam1;
     private String mParam2;
 
@@ -28,15 +42,7 @@ public class SignUpFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    // Método para crear una nueva instancia del fragmento con argumentos que se le pasen, si fuese necesario
     public static SignUpFragment newInstance(String param1, String param2) {
         SignUpFragment fragment = new SignUpFragment();
         Bundle args = new Bundle();
@@ -58,7 +64,64 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        emailInputEdittext = rootView.findViewById(R.id.emailInputEditText);
+        passwordInputEditText = rootView.findViewById(R.id.passwordInputEdittext);
+        createAccButton = rootView.findViewById(R.id.createAccountButton);
+        exit = rootView.findViewById(R.id.exitText);
+
+        createAccButton.setOnClickListener(this);
+        exit.setOnClickListener(this);
+
+        return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.createAccountButton) {
+
+            String email = emailInputEdittext.getText().toString();
+            String password = emailInputEdittext.getText().toString();
+
+            //crear cuenta en firebase
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
+
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                LayoutInflater inflater = requireActivity().getLayoutInflater();
+                                View layout = inflater.inflate(R.layout.toast_layout,
+                                        (ViewGroup) requireActivity().findViewById(R.id.toastLayout));
+                                TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                                txtMsg.setText(R.string.account_created);
+                                Toast toast = new Toast(requireContext());
+                                toast.setDuration(Toast.LENGTH_LONG);
+                                toast.setView(layout);
+                                toast.show();
+                                // Cambiar Fragment a Profile
+                                replaceFragment(new ProfileFragment());
+                            } else {
+                                Toast.makeText(getContext(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } else if (id == R.id.exitText) {
+            // Cambiar Fragment a Login
+            replaceFragment(new LoginFragment());
+        }
+    }
+
+    // Método para poder cambiar de fragment
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout,fragment);
+        fragmentTransaction.commit();
     }
 }
