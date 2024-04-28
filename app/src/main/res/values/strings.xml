@@ -33,6 +33,6 @@
     <string name="edit">Edit</string>
     <string name="phone">Phone</string>
     <string name="messaging">Messaging</string>
-
-
+    <string name="recomendaci">Libros cerca de ti</string>
+    <string name="librosvistos">Libros vistos recientemente</string>
 </resources>
