@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/editTextEmailEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="1dp"
@@ -79,7 +79,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail">
 
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/editTextPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="1dp"

@@ -1,5 +1,6 @@
 package com.example.scriptumapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,13 +41,20 @@ public class UserMenu extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.userButton){
-            //Intent a activity de datos personales
+            //intent para pasar a la activity de Personal Data
+            Intent i = new Intent(UserMenu.this, PersonalData.class);
+            startActivity(i);
         } else if (id == R.id.uploadButton){
             //intent a activity de subir libro
+            Intent i = new Intent(UserMenu.this, UploadBook.class);
+            startActivity(i);
         } else if (id == R.id.consultButton){
             //intent a activity de consultar libros
+
         } else if (id == R.id.ubiButton){
             //intent a activity de ubicación
+            Intent i = new Intent(UserMenu.this, Location.class);
+            startActivity(i);
         }
     }
 }
