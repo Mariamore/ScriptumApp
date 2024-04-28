@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "344505483866",
+    "project_id": "scriptumbook-20e04",
+    "storage_bucket": "scriptumbook-20e04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344505483866:android:1e20a26566b8d08171ce63",
+        "android_client_info": {
+          "package_name": "com.example.scriptumapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR7ejunYPDhs1jfKcF2onsJW0dhtEieac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

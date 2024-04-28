@@ -15,20 +15,26 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
     Button loginButton;
     TextView signUp, forgotPassword;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
 
         loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUp);
@@ -46,6 +52,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         int id = v.getId();
         if (id == R.id.loginButton) {
             //login en Firebase
+
+
 
             LayoutInflater inflater = getLayoutInflater();
             View layout = inflater.inflate(R.layout.toast_layout,
