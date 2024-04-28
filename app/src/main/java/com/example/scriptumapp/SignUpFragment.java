@@ -87,7 +87,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
             String email = emailInputEdittext.getText().toString();
             String password = emailInputEdittext.getText().toString();
 
-            //crear cuenta en firebase
+            // Crear cuenta en firebase
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
 
@@ -106,8 +106,15 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                                 // Cambiar Fragment a Profile
                                 replaceFragment(new ProfileFragment());
                             } else {
-                                Toast.makeText(getContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                LayoutInflater inflater = requireActivity().getLayoutInflater();
+                                View layout = inflater.inflate(R.layout.toast_layout_fail,
+                                        requireActivity().findViewById(R.id.toastLayoutFail));
+                                TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                                txtMsg.setText(R.string.sign_up_failed);
+                                Toast toast = new Toast(requireContext());
+                                toast.setDuration(Toast.LENGTH_LONG);
+                                toast.setView(layout);
+                                toast.show();
                             }
                         }
                     });
