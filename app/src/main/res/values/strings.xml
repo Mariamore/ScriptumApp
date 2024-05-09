@@ -42,5 +42,8 @@
     <string name="rectangle">Rectangle</string>
     <string name="photo_button">Photo button</string>
     <string name="upload_book_button">upload book button</string>
+    <string name="reset_password">Sending password reset link (if email is registered)...</string>
+    <string name="reset">Reset password</string>
+
 
 </resources>

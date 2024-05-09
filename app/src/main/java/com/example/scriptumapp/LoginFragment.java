@@ -35,10 +35,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private static final String ARG_PARAM2 = "param2";
 
     private FirebaseAuth mAuth;
-    Button loginButton;
-    TextView signUp, forgotPassword;
-
-    EditText emailInputEdittext, passwordInputEditText;
+    private Button loginButton;
+    private TextView signUp, forgotPassword;
+    private EditText emailInputEdittext, passwordInputEditText;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -101,6 +100,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         int id = v.getId();
+
         if (id == R.id.loginButton) {
 
             String email = emailInputEdittext.getText().toString();
@@ -160,7 +160,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             replaceFragment(new SignUpFragment());
 
         } else if (id == R.id.forgotPassword){
-            //Hacer en firebase lo del olvido de contraseña
+            replaceFragment(new ResetPasswordFragment());
         }
     }
 
@@ -170,5 +170,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
+
 
 }
