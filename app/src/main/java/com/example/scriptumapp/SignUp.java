@@ -65,7 +65,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         if (id == R.id.createAccountButton) {
 
             String email = emailInputEdittext.getText().toString();
-            String password = emailInputEdittext.getText().toString();
+            String password = passwordInputEditText.getText().toString();
 
             //crear cuenta en firebase
             mAuth.createUserWithEmailAndPassword(email, password)
