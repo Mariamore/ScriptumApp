@@ -33,6 +33,17 @@
     <string name="edit">Edit</string>
     <string name="phone">Phone</string>
     <string name="messaging">Messaging</string>
+    <string name="recomendaci">Nearby books</string>
+    <string name="librosvistos">Recently viewed books</string>
+    <string name="sign_up_failed">Sign up failed</string>
+    <string name="incorrect_name_pass">Incorrect email or password</string>
+    <string name="book_added_successfully">Book added successfully</string>
+    <string name="unable_add_book">Unable to add the book</string>
+    <string name="rectangle">Rectangle</string>
+    <string name="photo_button">Photo button</string>
+    <string name="upload_book_button">upload book button</string>
+    <string name="reset_password">Sending password reset link (if email is registered)...</string>
+    <string name="reset">Reset password</string>
 
 
 </resources>
