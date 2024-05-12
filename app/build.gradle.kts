@@ -57,6 +57,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
 
     implementation ("com.squareup.picasso:picasso:2.8");
+    implementation ("com.firebaseui:firebase-ui-firestore:8.0.0");
+
 
 
 
