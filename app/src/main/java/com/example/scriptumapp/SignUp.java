@@ -53,7 +53,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         });
 
         emailInputEdittext = findViewById(R.id.emailInputEditText);
-        passwordInputEditText = findViewById(R.id.passwordInputEdittext);
+        passwordInputEditText = findViewById(R.id.passwordInputEditText);
 
 
         createAccButton = findViewById(R.id.createAccountButton);
