@@ -124,7 +124,9 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.bookuploadbutton) {
+        if(id == R.id.rectangle_photobook){
+            selectImage();
+        } else if (id == R.id.bookuploadbutton) {
             String title = titleBookEditText.getText().toString();
             String author = authorEditText.getText().toString();
             String editorial = editorialEditText.getText().toString();
@@ -178,9 +180,6 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                         }
                     });
 
-        } else if (id == R.id.rectangle_photobook) {
-            // Botón añadir imagen
-            selectImage();
         }
     }
     //selecionamos la imagen
@@ -196,7 +195,9 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         if (resultCode == RESULT_OK && requestCode == COD_SEL_IMAGE && data != null) {
             imageUri = data.getData();
             if (imageUri != null) {
+                bookId = UUID.randomUUID().toString();
                 uploadPhoto(bookId);
+                rectanglePhotoBook.setImageURI(imageUri);
             }
         }
     }
@@ -221,8 +222,8 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(requireContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
-                                                // Ahora puedes cargar y mostrar la imagen usando Picasso
-                                                Picasso.get().load(imageUrl).into(rectanglePhotoBook);
+                                                // Imagenes picasso
+                                                //Picasso.get().load(imageUrl).into(rectanglePhotoBook);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
