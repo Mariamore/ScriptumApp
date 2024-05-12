@@ -1,8 +1,13 @@
 package com.example.scriptumapp;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -18,9 +23,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +42,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int COD_SEL_IMAGE =300;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -43,6 +53,13 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String idUser;
+
+    StorageReference storageReference;
+    String storage_path = "lib/*";
+
+    private Uri imageUri;
+    String photo = "photo";
+    String idd;
 
     public UploadBookFragment() {
         // Required empty public constructor
@@ -82,7 +99,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.fragment_upload_book, container, false);
 
         bookUploadButton = rootView.findViewById(R.id.bookuploadbutton);
-        rectanglePhotoBook = rootView.findViewById(R.id.rectangle_photobook);
+        rectanglePhotoBook = rootView.findViewById(R.id.rectangle_photobook);//
         titleBookEditText = rootView.findViewById(R.id.titleEditText);
         authorEditText = rootView.findViewById(R.id.authorEditText);
         editorialEditText = rootView.findViewById(R.id.editorialEditText);
@@ -93,6 +110,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         mAuth = FirebaseAuth.getInstance();
         idUser = mAuth.getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference(); //referencia
 
         bookUploadButton.setOnClickListener(this);
         rectanglePhotoBook.setOnClickListener(this);
@@ -126,6 +144,10 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
+
+                            //Guardamos el id del libro
+                            final String bookId = documentReference.getId();
+                            uploadPhoto(bookId);
                             LayoutInflater inflater = getLayoutInflater();
                             View layout = inflater.inflate(R.layout.toast_layout_ok,
                                     requireActivity().findViewById(R.id.toastLayoutOk));
@@ -154,6 +176,67 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
         } else if (id == R.id.rectangle_photobook) {
             // Botón añadir imagen
+            selectImage();
         }
     }
-}
+    //selecionamos la imagen
+    private void selectImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, COD_SEL_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == COD_SEL_IMAGE && data != null) {
+            Uri imageUri = data.getData();
+            if (imageUri != null) {
+                uploadPhoto(String.valueOf(imageUri));
+            }
+        }
+    }
+
+    private void uploadPhoto(final String bookId) {
+        String imageName = UUID.randomUUID().toString() + ".jpg";
+        StorageReference imageRef = storageReference.child(imageName);
+
+        imageRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+
+                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String imageUrl = uri.toString();
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("photo", imageUrl);
+                                db.collection("books").document(bookId).update(map)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(requireContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(requireContext(), "Error updating 'photo' field in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(requireContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }}
+
+
