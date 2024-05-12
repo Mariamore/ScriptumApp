@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +59,8 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     String storage_path = "lib/*";
 
     private Uri imageUri;
+
+    String bookId;
     String photo = "photo";
     String idd;
 
@@ -148,6 +151,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                             //Guardamos el id del libro
                             final String bookId = documentReference.getId();
                             uploadPhoto(bookId);
+
                             LayoutInflater inflater = getLayoutInflater();
                             View layout = inflater.inflate(R.layout.toast_layout_ok,
                                     requireActivity().findViewById(R.id.toastLayoutOk));
@@ -190,9 +194,9 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == COD_SEL_IMAGE && data != null) {
-            Uri imageUri = data.getData();
+            imageUri = data.getData();
             if (imageUri != null) {
-                uploadPhoto(String.valueOf(imageUri));
+                uploadPhoto(bookId);
             }
         }
     }
@@ -205,19 +209,20 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-
                         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String imageUrl = uri.toString();
-                                Map<String, Object> map = new HashMap<>();
-                                map.put("photo", imageUrl);
-                                db.collection("books").document(bookId).update(map)
+                                Map<String, Object> update = new HashMap<>();
+                                update.put("photo", imageUrl);
+                                db.collection("books").document(bookId)
+                                        .update(update)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(requireContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
+                                                // Ahora puedes cargar y mostrar la imagen usando Picasso
+                                                Picasso.get().load(imageUrl).into(rectanglePhotoBook);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -236,7 +241,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                         Toast.makeText(requireContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-    }}
+    }
+    }
 
 
