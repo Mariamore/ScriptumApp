@@ -33,6 +33,7 @@
         android:id="@+id/nameSurname"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
+        android:maxHeight="50dp"
         android:layout_marginTop="120dp"
         android:textColorHint="@color/text"
         app:boxBackgroundMode="none"
@@ -42,7 +43,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nameSurnameInputedittext"
+            android:id="@+id/nameSurnameInputeditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
@@ -61,9 +62,10 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/address"
+        android:id="@+id/editTextAddress"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
+        android:maxHeight="50dp"
         android:layout_marginTop="200dp"
         android:textColorHint="@color/text"
         app:boxBackgroundMode="none"
@@ -95,6 +97,7 @@
         android:id="@+id/editTextEmail"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
+        android:maxHeight="50dp"
         android:layout_marginTop="280dp"
         android:textColorHint="@color/text"
         app:boxBackgroundMode="none"
@@ -126,6 +129,7 @@
         android:id="@+id/editTextPassword"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
+        android:maxHeight="50dp"
         android:layout_marginTop="360dp"
         android:textColorHint="@color/text"
         app:boxBackgroundMode="none"
@@ -135,7 +139,7 @@
         app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordInputEdittext"
+            android:id="@+id/passwordInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
