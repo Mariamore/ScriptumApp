@@ -15,17 +15,17 @@ import com.squareup.picasso.Picasso;
 
 public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.ViewHolder> {
 
+
     public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull BookAdapter.ViewHolder viewHolder, int i, @NonNull Book Book) {
-        viewHolder.title.setText(Book.getTitle());
-        viewHolder.author.setText(Book.getAuthor());
-        viewHolder.status.setText(Book.getStatus());
-
-        Picasso.get().load(Book.getPhoto()).into(viewHolder.imgBook);
+    protected void onBindViewHolder(@NonNull BookAdapter.ViewHolder viewHolder, int i, @NonNull Book book) {
+        viewHolder.titleTextView.setText(book.getTitle());
+        viewHolder.authorTextView.setText(book.getAuthor());
+        viewHolder.statusTextView.setText(book.getStatus());
+        Picasso.get().load(book.getPhoto()).into(viewHolder.photoImageView);
 
     }
 
@@ -37,20 +37,19 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.View
 
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title, author, status;
-        ImageView imgBook;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            title = itemView.findViewById(R.id.itemTitleText);
-            author = itemView.findViewById(R.id.itemAuthorText);
-            status = itemView.findViewById(R.id.itemStatusText);
-
-            imgBook = itemView.findViewById(R.id.itemImageView);
-
-    }
+        static class ViewHolder extends RecyclerView.ViewHolder {
+            TextView titleTextView;
+            TextView authorTextView;
+            TextView statusTextView;
+            ImageView photoImageView;
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                titleTextView = itemView.findViewById(R.id.itemTitleText);
+                authorTextView = itemView.findViewById(R.id.itemAuthorText);
+                statusTextView = itemView.findViewById(R.id.itemStatusText);
+                photoImageView = itemView.findViewById(R.id.itemImageView);
+            }
+        }
 }
-}
+

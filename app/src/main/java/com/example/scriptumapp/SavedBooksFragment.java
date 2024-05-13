@@ -71,7 +71,7 @@ public class SavedBooksFragment extends Fragment  {
         mRecycler = rootView.findViewById(R.id.recyclerView);
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        Query query = mFirestore.collection("books").select("title", "author", "status");
+        Query query = mFirestore.collection("books");
 
 
         // Configurar el FirestoreRecyclerOptions para tu adaptador
