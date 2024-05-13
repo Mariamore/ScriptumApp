@@ -46,7 +46,7 @@
             android:id="@+id/searchAddress"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="130dp"
             android:textColorHint="@color/text"
             app:boxBackgroundMode="none"
             app:boxStrokeWidth="0dp"
@@ -64,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <View
@@ -107,7 +107,7 @@
             android:id="@+id/searchButton"
             android:layout_width="196dp"
             android:layout_height="48dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
             android:text="Search address"
@@ -116,6 +116,20 @@
             app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toBottomOf="@+id/searchAddress" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:text="Update your address:"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/text"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toBottomOf="@+id/logo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -37,8 +37,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
     private WebView webView;
 
-    private double latitude;
-    private double longitude;
+    private float latitude;
+    private float longitude;
     private EditText addressInput;
     private String addressWithCoordinates;
     private Button searchButton, backButton, saveButton;
@@ -121,8 +121,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
             Bundle bundle = new Bundle();
             bundle.putString("address",addressInput.getText().toString());
-            bundle.putDouble("latitude", latitude);
-            bundle.putDouble("longitude", longitude);
+            bundle.putFloat("latitude", latitude);
+            bundle.putFloat("longitude", longitude);
             getParentFragmentManager().setFragmentResult("key",bundle);
 
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -145,7 +145,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         fragmentTransaction.commit();
     }
     @JavascriptInterface
-    public void setCoordinates(double latitude, double longitude) {
+    public void setCoordinates(float latitude, float longitude) {
         // Guarda las coordenadas y la dirección en variables de instancia
         this.latitude = latitude;
         this.longitude = longitude;
