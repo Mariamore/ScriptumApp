@@ -1,6 +1,7 @@
 package com.example.scriptumapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,9 +82,24 @@ public class SavedBooksFragment extends Fragment  {
 
         // Inicializar el adaptador con las opciones
         mAdapter = new BookAdapter(firestoreRecyclerOptions);
+        Log.d("SavedBooksFragment", "Configuración de RecyclerView completada");
         mAdapter.notifyDataSetChanged();
         // Establecer el adaptador en el RecyclerView
+
         mRecycler.setAdapter(mAdapter);
+        Log.d("SavedBooksFragment", "Adaptador establecido en RecyclerView");
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
     }
 }
