@@ -11,7 +11,6 @@
         android:id="@+id/constraintlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <ImageView
             android:id="@+id/rectangle"
             android:layout_width="344dp"
@@ -33,71 +32,90 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo" />
 
-        <TextView
-            android:id="@+id/textLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/inter"
-            android:text="@string/location"
-            android:textColor="@color/buttonQueries"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logo" />
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="275dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="328dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchAddress"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchAddressTextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:hint="Enter your address"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
-            android:id="@+id/backLocation"
-            android:layout_width="148dp"
+            android:id="@+id/backButton"
+            android:layout_width="100dp"
             android:layout_height="48dp"
-            android:layout_marginTop="340dp"
-            android:backgroundTint="@color/buttonQueries"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
             android:text="@string/back"
-            android:textColor="@color/toastBackground"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            app:cornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textLocation" />
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintHorizontal_bias="0.274"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toBottomOf="@+id/webView" />
 
         <Button
-            android:id="@+id/addLocation"
-            android:layout_width="120dp"
+            android:id="@+id/saveButton"
+            android:layout_width="100dp"
             android:layout_height="48dp"
-            android:layout_marginTop="272dp"
-            android:backgroundTint="@color/buttonQueries"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
-            android:text="@string/add"
-            android:textColor="@color/toastBackground"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            app:cornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.220"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textLocation" />
+            android:text="Save"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintHorizontal_bias="0.324"
+            app:layout_constraintStart_toEndOf="@+id/backButton"
+            app:layout_constraintTop_toBottomOf="@+id/webView" />
 
         <Button
-            android:id="@+id/editLocation"
-            android:layout_width="120dp"
+            android:id="@+id/searchButton"
+            android:layout_width="196dp"
             android:layout_height="48dp"
-            android:layout_marginTop="272dp"
-            android:backgroundTint="@color/buttonQueries"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
-            android:text="@string/edit"
-            android:textColor="@color/toastBackground"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            app:cornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.780"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textLocation" />
-
+            android:text="Search address"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toBottomOf="@+id/searchAddress" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

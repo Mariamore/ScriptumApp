@@ -12,9 +12,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.scriptumapp.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
     ActivityMainBinding binding;
 
     @Override
@@ -25,11 +29,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
 
+
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            mAuth = FirebaseAuth.getInstance();
+            user = mAuth.getCurrentUser();
             if (item.getItemId() == R.id.home) {
                 replaceFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.profile) {
-                replaceFragment(new LoginFragment());
+                //comprobamos si un usuario está logeado
+                if(user != null){
+                    //si está logeado, aparece su perfil
+                   replaceFragment(new ProfileFragment());
+                } else {
+                    //si no está logeado, aparece el login
+                    replaceFragment(new LoginFragment());
+                }
             } else if (item.getItemId() == R.id.search) {
                 replaceFragment(new SearchFragment());
             } else if (item.getItemId() == R.id.messages) {
