@@ -236,7 +236,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                 String imageUrl = uri.toString();
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
-                                db.collection("Users").document(idUser).collection("Books").document(category)
+                                db.collection("user").document(idUser).collection("Books").document(category)
                                         .update("photo", imageUrl)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
