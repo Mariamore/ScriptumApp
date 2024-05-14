@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -59,13 +60,10 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     private String idUser;
 
     StorageReference storageReference;
-    String storage_path = "lib/*";
+
 
     private Uri imageUri;
 
-    String bookId;
-    String photo = "photo";
-    String idd;
 
     Spinner spinner;
 
@@ -162,14 +160,15 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             data.put("status", status);
             data.put("user", idUser);
 
-            db.collection("user").document(idUser).collection("books").document(spinnerSelection).set(data)
+            DocumentReference reDocument = db.collection("user").document(idUser).collection(spinnerSelection).document();
+            reDocument.set(data)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
 
                         @Override
                         public void onSuccess(Void unused) {
 
-                            //Guardamos el id del libro
-                            //final String bookId = documentReference.getId();
+
+                            //String bookId = reDocument.getId();//extraemos la referencia del documento
                             uploadPhoto(bookId, spinnerSelection);
 
                             LayoutInflater inflater = getLayoutInflater();
@@ -221,10 +220,14 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void uploadPhoto(final String bookId, String category) {
-        String imageName = bookId + ".jpg";
-        StorageReference imageRef = storageReference.child("user/" + idUser + "/books/" + category + "/" + imageName);
+    private void uploadPhoto(String bookId, String category) {
 
+        if (imageUri == null) { // Asegurarse de que la imagen se ha seleccionado
+            Toast.makeText(getContext(), "Please select an image", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String imageName = bookId + ".jpg";
+        StorageReference imageRef = storageReference.child("user/" + idUser + "/" + category + "/" + imageName);
 
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -234,16 +237,16 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                             @Override
                             public void onSuccess(Uri uri) {
                                 String imageUrl = uri.toString();
+
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
-                                db.collection("user").document(idUser).collection("books").document(category)
-                                        .update("photo", imageUrl)
+                                db.collection("user").document(idUser).collection(category).document(bookId)
+                                        .update(update)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(getContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
-                                                // Imagenes picasso
-                                                //Picasso.get().load(imageUrl).into(rectanglePhotoBook);
+                                                replaceFragment(new SavedBooksFragment());
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -253,16 +256,23 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                             }
                                         });
                             }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Error getting download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(requireContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+
 
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getParentFragmentManager(); // Obtiene el FragmentManager del padre
