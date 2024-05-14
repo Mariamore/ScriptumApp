@@ -223,7 +223,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
     private void uploadPhoto(final String bookId, String category) {
         String imageName = bookId + ".jpg";
-        StorageReference imageRef = storageReference.child("Users/" + idUser + "/Books/" + category + "/" + imageName);
+        StorageReference imageRef = storageReference.child("user/" + idUser + "/books/" + category + "/" + imageName);
 
 
         imageRef.putFile(imageUri)
@@ -236,12 +236,12 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                 String imageUrl = uri.toString();
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
-                                db.collection("user").document(idUser).collection("Books").document(category)
+                                db.collection("user").document(idUser).collection("books").document(category)
                                         .update("photo", imageUrl)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(requireContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
                                                 // Imagenes picasso
                                                 //Picasso.get().load(imageUrl).into(rectanglePhotoBook);
                                             }
@@ -249,7 +249,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(requireContext(), "Error updating 'photo' field in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "Error updating 'photo' field in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
@@ -272,7 +272,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         fragmentTransaction.commit();
     }
 
-    //Spinner
+
 
     }
 
