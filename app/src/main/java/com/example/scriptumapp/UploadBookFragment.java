@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -63,6 +67,8 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     String bookId;
     String photo = "photo";
     String idd;
+
+    Spinner spinner;
 
     public UploadBookFragment() {
         // Required empty public constructor
@@ -109,6 +115,18 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         publicationYearEditText = rootView.findViewById(R.id.yearEditText);
         currentStatus = rootView.findViewById(R.id.currentStatusEditText);
 
+        spinner = rootView.findViewById(R.id.spinner);//spinner
+        //Opciones Spinner
+        List<String> spinnnerOp = new ArrayList<>();
+        spinnnerOp.add("loan");
+        spinnnerOp.add("exchange");
+        spinnnerOp.add("gif");
+        //utilizamos ArrayAdpter para adaptar los datos de Spinner
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, spinnnerOp);
+        //Diseño del despliegue
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapterSpinner);
+
 
         mAuth = FirebaseAuth.getInstance();
         idUser = mAuth.getCurrentUser().getUid();
@@ -133,6 +151,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             String publicationYear = publicationYearEditText.getText().toString();
             String status = currentStatus.getText().toString();
             String comments = commentsEditText.getText().toString();
+            String spinnerSelection = spinner.getSelectedItem().toString();//Seleccionamos la opcion
 
             // Add a new document with a generated id.
             Map<String, Object> data = new HashMap<>();
@@ -141,12 +160,11 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             data.put("editorial", editorial);
             data.put("year", publicationYear);
             data.put("status", status);
-            data.put("comments", comments);
             data.put("user", idUser);
 
-            db.collection("books")
-                    .add(data)
+            db.collection("user").document(idUser).collection("books").document(spinnerSelection).add(data)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
 
@@ -253,6 +271,8 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    //Spinner
 
     }
 
