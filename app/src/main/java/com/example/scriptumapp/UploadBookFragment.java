@@ -108,7 +108,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         editorialEditText = rootView.findViewById(R.id.editorialEditText);
         publicationYearEditText = rootView.findViewById(R.id.yearEditText);
         currentStatus = rootView.findViewById(R.id.currentStatusEditText);
-        commentsEditText = rootView.findViewById(R.id.commentsEditText);
+
 
         mAuth = FirebaseAuth.getInstance();
         idUser = mAuth.getCurrentUser().getUid();
