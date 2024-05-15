@@ -137,7 +137,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                     toast.setView(layout);
                                     toast.show();
                                     //Cambio ProfileFragment por UploadBookFragment para probar
-                                    replaceFragment(new UploadBookFragment());
+                                    replaceFragment(new ProfileFragment());
                                 } else {
                                     LayoutInflater inflater = getLayoutInflater();
                                     View layout = inflater.inflate(R.layout.toast_layout_fail,

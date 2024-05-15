@@ -53,7 +53,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String idUser, addressReceived;
-    private Double latitude, longitude;
+    private Float latitude, longitude;
 
 
     // Argumentos para almacenar valores para pasárselos al fragmento si fuese necesario
@@ -86,8 +86,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     if (addressInputEditText != null) {
                         addressInputEditText.setText(addressReceived);
                     }
-                    latitude = bundle.getDouble("latitude");
-                    longitude = bundle.getDouble("longitude");
+                    latitude = bundle.getFloat("latitude");
+                    longitude = bundle.getFloat("longitude");
                     String addressWithCoordinates = String.format(Locale.getDefault(), "%.6f, %.6f", latitude, longitude);
                     LayoutInflater inflater = requireActivity().getLayoutInflater();
                     View layout = inflater.inflate(R.layout.toast_layout_ok,
@@ -122,7 +122,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         addressInputEditText = rootView.findViewById(R.id.addressInputEditText);
         createAccButton = rootView.findViewById(R.id.createAccountButton);
         exit = rootView.findViewById(R.id.exitText);
-        idUser = mAuth.getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
 
 
@@ -184,7 +183,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                         data.put("latitude", latitude);
                                         data.put("longitude", longitude);
                                         data.put("user", idUser);
-                                        db.collection("users")
+                                        data.put("address", address);
+                                        db.collection("usersData")
                                                 .add(data)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
