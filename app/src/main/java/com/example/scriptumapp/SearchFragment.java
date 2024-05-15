@@ -120,17 +120,17 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 queryText = searchEditText.getText().toString();
                 //textViewPruebas.setText(queryText);
-                query = booksCollection.whereEqualTo("title", queryText);
+                query = booksCollection.whereGreaterThanOrEqualTo("title", queryText.toLowerCase());
 
                 query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                if(document.contains("title") && document.contains("author") && document.contains("photo")){
+                                if(document.contains("title") && document.contains("author")){
                                 titleBook = document.getString("title");
                                 authorBook = document.getString("author");
-                                photoBook = document.getString("photo");
+                                //photoBook = document.getString("photo");
 
                                 //Prueba para ver arriba el título que ha encontrado
                                 textViewPruebas.setText(titleBook);
@@ -163,17 +163,13 @@ public class SearchFragment extends Fragment {
                         toast.show();
                     }
                 });
-
             }
         });
-
         return rootView;
     }
 
     private void updateUi(){
         db.collection("books")
-                .whereGreaterThanOrEqualTo("title", queryText)
-                .whereLessThanOrEqualTo("title", queryText + "\uf8ff")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -186,9 +182,12 @@ public class SearchFragment extends Fragment {
                         authorsList.clear();
                         //photosList.clear();
                         for (QueryDocumentSnapshot doc : value) {
-                            titlesList.add(doc.getString("title"));
-                            authorsList.add(doc.getString("author"));
-                            //photosList.add(doc.getString("photo"));
+                            String titleString = doc.getString("title");
+                            if (titleString != null && titleString.toLowerCase().contains(queryText.toLowerCase())){
+                                titlesList.add(doc.getString("title"));
+                                authorsList.add(doc.getString("author"));
+                                //photosList.add(doc.getString("photo"));
+                            }
                         }
 
                         //Rellenar el listview con el adapter
