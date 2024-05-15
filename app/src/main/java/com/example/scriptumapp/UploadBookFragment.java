@@ -103,7 +103,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         mAuth = FirebaseAuth.getInstance();
         idUser = mAuth.getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
-        usersRef = db.collection("users");
+        usersRef = db.collection("usersData");
         query = usersRef.whereEqualTo("user", idUser);
 
         // Guardar en dos Strings la ubicación obtenida de Firebase con addOnCompleteListener
