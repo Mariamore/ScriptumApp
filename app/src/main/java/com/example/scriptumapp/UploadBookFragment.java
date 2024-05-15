@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -171,15 +170,6 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                             //String bookId = reDocument.getId();//extraemos la referencia del documento
                             uploadPhoto(bookId, spinnerSelection);
 
-                            LayoutInflater inflater = getLayoutInflater();
-                            View layout = inflater.inflate(R.layout.toast_layout_ok,
-                                    requireActivity().findViewById(R.id.toastLayoutOk));
-                            TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                            txtMsg.setText(R.string.book_added_successfully);
-                            Toast toast = new Toast(requireContext());
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.setView(layout);
-                            toast.show();
 
                             replaceFragment(new SavedBooksFragment());
                         }
@@ -187,15 +177,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            LayoutInflater inflater = getLayoutInflater();
-                            View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                    requireActivity().findViewById(R.id.toastLayoutFail));
-                            TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                            txtMsg.setText(R.string.unable_add_book);
-                            Toast toast = new Toast(requireContext());
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.setView(layout);
-                            toast.show();
+
                         }
                     });
 
@@ -241,7 +223,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
                                 db.collection("user").document(idUser).collection(category).document(bookId)
-                                        .update(update)
+                                        .update("photo",bookId)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
