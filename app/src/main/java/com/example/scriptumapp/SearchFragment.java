@@ -47,20 +47,17 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button searchButton;
-    EditText searchEditText;
-    TextView textViewPruebas;
-    ListView searchListView;
-    List<String> titlesList = new ArrayList<String>();
-    List<String> authorsList = new ArrayList<>();
-    List<String> photosList = new ArrayList<>();
-    private List<Book> books;
-    private List<String> titles;
+    private Button searchButton;
+    private EditText searchEditText;
+    private ListView searchListView;
+    private List<String> titlesList = new ArrayList<String>();
+    private List<String> authorsList = new ArrayList<>();
+    private List<String> photosList = new ArrayList<>();
     private CollectionReference booksCollection;
     private Query query;
     private String queryText, titleBook, authorBook, photoBook;
     private FirebaseFirestore db;
-    View rootView;
+    private View rootView;
 
     //Añadimos binding para cargar otro fragment
     //FragmentSearchBinding binding;
@@ -106,22 +103,17 @@ public class SearchFragment extends Fragment {
         //binding = FragmentSearchBinding.inflate(inflater, container, false);
         //return binding.getRoot();
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
-
         searchEditText = rootView.findViewById(R.id.search_edit_text);
         db = FirebaseFirestore.getInstance();
         booksCollection = db.collection("books");
-        books = new ArrayList<>();
         searchButton = rootView.findViewById((R.id.searchButton));
-        textViewPruebas = rootView.findViewById(R.id.textViewPruebas);
         searchListView = rootView.findViewById(R.id.searchListView);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 queryText = searchEditText.getText().toString();
-                //textViewPruebas.setText(queryText);
                 query = booksCollection.whereGreaterThanOrEqualTo("title", queryText.toLowerCase());
-
                 query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -130,37 +122,18 @@ public class SearchFragment extends Fragment {
                                 if(document.contains("title") && document.contains("author")){
                                 titleBook = document.getString("title");
                                 authorBook = document.getString("author");
-                                //photoBook = document.getString("photo");
-
-                                //Prueba para ver arriba el título que ha encontrado
-                                textViewPruebas.setText(titleBook);
+                                photoBook = document.getString("photo");
                                 }
                             }
                             updateUi();
                         } else {
-                            LayoutInflater inflater = getLayoutInflater();
-                            View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                    requireActivity().findViewById(R.id.toastLayoutFail));
-                            TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                            txtMsg.setText(R.string.no_results_found);
-                            Toast toast = new Toast(requireContext());
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.setView(layout);
-                            toast.show();
+                            toastNoResultsFound();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        LayoutInflater inflater = getLayoutInflater();
-                        View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                requireActivity().findViewById(R.id.toastLayoutFail));
-                        TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                        txtMsg.setText("Error");
-                        Toast toast = new Toast(requireContext());
-                        toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
-                        toast.show();
+                        toastNoResultsFound();
                     }
                 });
             }
@@ -177,28 +150,39 @@ public class SearchFragment extends Fragment {
                         if (e != null) {
                             return;
                         }
-
                         titlesList.clear();
                         authorsList.clear();
-                        //photosList.clear();
+                        photosList.clear();
                         for (QueryDocumentSnapshot doc : value) {
                             String titleString = doc.getString("title");
                             if (titleString != null && titleString.toLowerCase().contains(queryText.toLowerCase())){
                                 titlesList.add(doc.getString("title"));
                                 authorsList.add(doc.getString("author"));
-                                //photosList.add(doc.getString("photo"));
+                                photosList.add(doc.getString("photo"));
                             }
                         }
-
                         //Rellenar el listview con el adapter
                         if(titlesList.isEmpty()){
                             searchListView.setAdapter(null);
+                            toastNoResultsFound();
                         }else{
-                            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), titlesList, authorsList);
+                            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), titlesList, authorsList, photosList);
                             searchListView.setAdapter(bookAdapter);
                         }
                     }
                 });
+    }
+
+    private void toastNoResultsFound() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout_fail,
+                requireActivity().findViewById(R.id.toastLayoutFail));
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        txtMsg.setText(R.string.no_results_found);
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 
     // Añadir este método para poder cambiar de fragment

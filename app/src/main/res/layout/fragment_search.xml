@@ -38,14 +38,13 @@
 
         <ListView
             android:id="@+id/searchListView"
-            android:layout_width="339dp"
-            android:layout_height="404dp"
+            android:layout_width="323dp"
+            android:layout_height="386dp"
             app:layout_constraintBottom_toTopOf="@+id/search_bar"
             app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toBottomOf="@+id/logo"
-            app:layout_constraintVertical_bias="0.473" >
+            app:layout_constraintVertical_bias="0.4">
 
         </ListView>
 
@@ -73,11 +72,11 @@
                 android:drawableTint="@color/text"
                 android:ems="10"
                 android:fontFamily="@font/inter"
-                android:hint="@string/search"
+                android:hint="@string/search_title"
                 android:imeOptions="actionDone"
                 android:inputType="textAutoCorrect"
                 android:textColor="@color/text"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -94,19 +93,10 @@
             android:layout_weight="0"
             android:backgroundTint="@color/buttons"
             android:text="@string/search"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@+id/rectangle"
             app:layout_constraintStart_toEndOf="@+id/search_bar"
             app:layout_constraintTop_toTopOf="@+id/rectangle" />
-
-        <TextView
-            android:id="@+id/textViewPruebas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
