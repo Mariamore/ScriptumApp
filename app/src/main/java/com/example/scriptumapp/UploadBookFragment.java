@@ -169,7 +169,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
                             uploadPhoto(bookId, spinnerSelection);
 
-                           // replaceFragment(new SavedBooksFragment());
+                           replaceFragment(new QueriesFragment());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -226,7 +226,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(getContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
-                                                replaceFragment(new SavedBooksFragment());
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {

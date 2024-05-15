@@ -2,15 +2,23 @@ package com.example.scriptumapp;
 
 public class Book {
 
-    String author, comments, editorial, photo, status, title, user, year;
+    private String title, author, status, photo;
 
     public Book() {
     }
 
-    public Book(String author, String photo, String status, String title) {
+    public Book(String title, String author, String status, String photo) {
+        this.title = title;
         this.author = author;
-        this.photo = photo;
         this.status = status;
+        this.photo = photo;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -22,14 +30,6 @@ public class Book {
         this.author = author;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -38,11 +38,11 @@ public class Book {
         this.status = status;
     }
 
-    public String getTitle() {
-        return title;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

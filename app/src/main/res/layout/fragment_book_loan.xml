@@ -100,12 +100,14 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSingle"
-            android:layout_width="100dp"
-            android:layout_height="195dp"
+            android:layout_width="280dp"
+            android:layout_height="234dp"
+            android:layout_marginBottom="248dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.135"
+            app:layout_constraintHorizontal_bias="0.511"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="244dp" />
+            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
