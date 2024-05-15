@@ -86,7 +86,7 @@ public class QueriesFragment extends Fragment implements View.OnClickListener  {
         } else if (v.getId() == R.id.book_exchange) {
             //Exchange
             Toast.makeText(getContext(), "Exchange", Toast.LENGTH_SHORT).show();
-            replaceFragment(new BookLoanFragment());
+            replaceFragment(new BookExchangeFragment());
         } else if (v.getId() == R.id.gift_book) {
             //Gift
             Toast.makeText(getContext(), "Gift", Toast.LENGTH_SHORT).show();

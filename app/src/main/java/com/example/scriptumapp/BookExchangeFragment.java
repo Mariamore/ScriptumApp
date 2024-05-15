@@ -19,10 +19,10 @@ import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link GiftBookFragment#newInstance} factory method to
+ * Use the {@link BookLoanFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GiftBookFragment extends Fragment {
+public class BookExchangeFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,16 +33,16 @@ public class GiftBookFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button backGiftBook;
+    Button backBookLoan;
 
     RecyclerView mRecycler;
-    BookAdapterGift giftAdapterBook;
+    BookAdapterExchange exchangeAdapterBook;
     FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
     FirebaseUser authUser;
     Query query;
 
-    public GiftBookFragment() {
+    public BookExchangeFragment() {
         // Required empty public constructor
     }
 
@@ -52,11 +52,11 @@ public class GiftBookFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment GiftBookFragment.
+     * @return A new instance of fragment BookLoanFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GiftBookFragment newInstance(String param1, String param2) {
-        GiftBookFragment fragment = new GiftBookFragment();
+    public static BookLoanFragment newInstance(String param1, String param2) {
+        BookLoanFragment fragment = new BookLoanFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,7 +77,7 @@ public class GiftBookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_gift_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_book_exchange, container, false);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -86,33 +86,33 @@ public class GiftBookFragment extends Fragment {
 
         //Inicializamos
         mFirestore = FirebaseFirestore.getInstance();
-        mRecycler = rootView.findViewById(R.id.recyclerViewSingle2);
+        mRecycler = rootView.findViewById(R.id.recyclerViewSingle3);
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         //query para la coleccion Loan de la BBDD
-        query = mFirestore.collection("users").document(idUser).collection("gift");
+        query = mFirestore.collection("users").document(idUser).collection("exchange");
 
         //Crear opciones de la consulta
-        FirestoreRecyclerOptions<Book> giftOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
+        FirestoreRecyclerOptions<Book> exchangeOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
 
         //Inicializar el adaptador con las opciones
-        giftAdapterBook = new BookAdapterGift(giftOp);
-        mRecycler.setAdapter(giftAdapterBook);
+        exchangeAdapterBook = new BookAdapterExchange(exchangeOp);
+        mRecycler.setAdapter(exchangeAdapterBook);
 
         return rootView;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
-        giftAdapterBook.startListening();
+        exchangeAdapterBook.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        giftAdapterBook.stopListening();
+        exchangeAdapterBook.stopListening();
     }
+
 
 }
