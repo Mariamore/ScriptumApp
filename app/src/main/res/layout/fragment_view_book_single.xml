@@ -48,6 +48,8 @@
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="10dp"
                 android:text="Status:" />
+
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
