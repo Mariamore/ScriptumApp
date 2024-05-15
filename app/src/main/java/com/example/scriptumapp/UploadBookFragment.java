@@ -13,11 +13,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +49,10 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String idUser;
+    private double latitudeUser = 0;
+    private double longitudeUser = 0;
+    private CollectionReference usersRef;
+    private Query query;
 
     public UploadBookFragment() {
         // Required empty public constructor
@@ -93,6 +103,34 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         mAuth = FirebaseAuth.getInstance();
         idUser = mAuth.getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
+        usersRef = db.collection("users");
+        query = usersRef.whereEqualTo("user", idUser);
+
+        // Guardar en dos Strings la ubicación obtenida de Firebase con addOnCompleteListener
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.contains("latitude") && document.contains("longitude")){
+                            latitudeUser = document.getDouble("latitude");
+                            longitudeUser = document.getDouble("longitude");
+                        }
+                    }
+                } else {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View layout = inflater.inflate(R.layout.toast_layout_fail,
+                            requireActivity().findViewById(R.id.toastLayoutFail));
+                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                    txtMsg.setText(R.string.location_not_found);
+                    Toast toast = new Toast(requireContext());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout);
+                    toast.show();
+                }
+            }
+        });
+
 
         bookUploadButton.setOnClickListener(this);
         rectanglePhotoBook.setOnClickListener(this);
@@ -120,6 +158,10 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             data.put("status", status);
             data.put("comments", comments);
             data.put("user", idUser);
+            if (latitudeUser != 0 && longitudeUser != 0){
+                data.put("latitude", latitudeUser);
+                data.put("longitude", longitudeUser);
+            }
 
             db.collection("books")
                     .add(data)
