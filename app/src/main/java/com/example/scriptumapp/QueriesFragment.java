@@ -81,15 +81,15 @@ public class QueriesFragment extends Fragment implements View.OnClickListener  {
 
         if (v.getId() == R.id.book_loan) {
             //Loan
-            Toast.makeText(getContext(), "Error Loan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Loan", Toast.LENGTH_SHORT).show();
             replaceFragment(new BookLoanFragment());
         } else if (v.getId() == R.id.book_exchange) {
             //Exchange
-            Toast.makeText(getContext(), "Error Exchange", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Exchange", Toast.LENGTH_SHORT).show();
             replaceFragment(new BookLoanFragment());
         } else if (v.getId() == R.id.gift_book) {
             //Gift
-            Toast.makeText(getContext(), "Error Gift", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Gift", Toast.LENGTH_SHORT).show();
             replaceFragment(new GiftBookFragment());
         } else if (v.getId() == R.id.back) {
             //Exit

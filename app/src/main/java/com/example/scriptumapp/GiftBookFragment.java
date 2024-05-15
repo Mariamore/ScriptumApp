@@ -36,7 +36,7 @@ public class GiftBookFragment extends Fragment {
     Button backGiftBook;
 
     RecyclerView mRecycler;
-    BookAdapterLoan loanAdapterBook;
+    BookAdapterGift giftAdapterBook;
     FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
     FirebaseUser authUser;
@@ -90,14 +90,14 @@ public class GiftBookFragment extends Fragment {
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         //query para la coleccion Loan de la BBDD
-        query = mFirestore.collection("users").document(idUser).collection("loan");
+        query = mFirestore.collection("users").document(idUser).collection("gift");
 
         //Crear opciones de la consulta
         FirestoreRecyclerOptions<Book> loanOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
 
         //Inicializar el adaptador con las opciones
-        loanAdapterBook = new BookAdapterLoan(loanOp);
-        mRecycler.setAdapter(loanAdapterBook);
+        giftAdapterBook = new BookAdapterGift(loanOp);
+        mRecycler.setAdapter(giftAdapterBook);
 
         return rootView;
     }
