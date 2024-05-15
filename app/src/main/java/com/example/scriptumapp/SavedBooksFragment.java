@@ -39,6 +39,8 @@ public class SavedBooksFragment extends Fragment  {
     //
     FirebaseAuth mAuth;
     FirebaseUser authUser;
+
+    Query loanQ, exchangeQ, giftQ;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -82,17 +84,25 @@ public class SavedBooksFragment extends Fragment  {
         mRecycler = rootView.findViewById(R.id.recyclerView);
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        //Query query = mFirestore.collection("user");
-        Query query = mFirestore.collection("user")
-                .document(idUser).collection("");
+        //consultas a la base de datos
+        loanQ = mFirestore.collection("users").document(idUser).collection("loan");
+        exchangeQ = mFirestore.collection("users").document(idUser).collection("exchange");
+        giftQ = mFirestore.collection("users").document(idUser).collection("gift");
+
 
         //Contruimos la query
-        FirestoreRecyclerOptions<Book> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(query, Book.class)
+        FirestoreRecyclerOptions<Book> loanReOp = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(loanQ, Book.class)
+                .build();
+        FirestoreRecyclerOptions<Book> exchangeReOp = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(exchangeQ, Book.class)
+                .build();
+        FirestoreRecyclerOptions<Book> gifReOp = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(giftQ, Book.class)
                 .build();
 
-        //inicializamos el adaptador
-        mAdapter = new BookAdapter(firestoreRecyclerOptions);
+        //inicializamos el adaptador con la combinacion de las consultas
+        mAdapter = new BookAdapter(loanReOp,exchangeReOp,gifReOp);
         Log.d("SavedBooksFragment", "Configuración de RecyclerView completada");
         mAdapter.notifyDataSetChanged();
         //Establecemos el adaptador en el RecyclerView

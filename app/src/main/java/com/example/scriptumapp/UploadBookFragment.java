@@ -169,7 +169,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
                             uploadPhoto(bookId, spinnerSelection);
 
-                           // replaceFragment(new SavedBooksFragment());
+                           replaceFragment(new SavedBooksFragment());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
