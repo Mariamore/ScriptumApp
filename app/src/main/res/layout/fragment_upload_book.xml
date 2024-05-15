@@ -158,6 +158,8 @@
                 android:layout_height="1dp"
                 android:background="@color/text" />
 
+
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -201,26 +203,16 @@
             app:boxStrokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="@+id/rectangle"
             app:layout_constraintStart_toStartOf="@+id/rectangle"
-            app:layout_constraintTop_toTopOf="@+id/rectangle">
+            app:layout_constraintTop_toTopOf="@+id/rectangle"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-
-                android:id="@+id/commentsEditText"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:ems="10"
-                android:fontFamily="@font/inter"
-                android:hint="@string/comments"
-                android:inputType="text"
-                android:textColor="@color/text"
-                android:textSize="16sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="260dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="75dp"
+            android:layout_marginBottom="204dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageButton
             android:id="@+id/bookuploadbutton"
@@ -234,6 +226,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/bookuploadbutton"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

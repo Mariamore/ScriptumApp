@@ -45,7 +45,6 @@
     <string name="reset_password">Sending password reset link (if email is registered)...</string>
     <string name="reset">Reset password</string>
     <string name="enter_an_address">Enter an address</string>
-    <string name="location_not_found">Location not found</string>
 
 
 </resources>
