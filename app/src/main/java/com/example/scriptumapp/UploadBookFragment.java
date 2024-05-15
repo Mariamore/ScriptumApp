@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -159,15 +158,17 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             data.put("status", status);
             data.put("user", idUser);
 
-            DocumentReference reDocument = db.collection("user").document(idUser).collection(spinnerSelection).document();
-            reDocument.set(data)
+            db.collection("user").document(idUser).collection(spinnerSelection).document(bookId).
+            set(data)
+            //DocumentReference reDocument = db.collection("user").document(idUser).collection(spinnerSelection).document();
+            //reDocument.set(data)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
 
                         @Override
                         public void onSuccess(Void unused) {
 
 
-                            String bookId = reDocument.getId().toString();//extraemos la referencia del documento
+                            //String bookId = reDocument.getId().toString();//extraemos la referencia del documento
                             uploadPhoto(bookId, spinnerSelection);
 
 
@@ -209,7 +210,9 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             return;
         }
         String imageName = bookId + ".jpg";
-        StorageReference imageRef = storageReference.child("user/" + idUser + "/" + category + "/" + imageName);
+        //StorageReference imageRef = storageReference.child("user/" + idUser + "/" + category + "/" + imageName);
+        //StorageReference imageRef = storageReference.child("user/" + idUser + "/" + category + "/" + imageName);
+        StorageReference imageRef = storageReference.child("Users/" + idUser + "/" + category + "/bookId/" + imageName);
 
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -223,7 +226,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
                                 db.collection("user").document(idUser).collection(category).document(bookId)
-                                        .update(update)
+                                        .update("photo", imageUrl)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
