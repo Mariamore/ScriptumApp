@@ -173,6 +173,7 @@ public class SearchFragment extends Fragment {
     private void updateUi(){
         db.collection("books")
                 .whereGreaterThanOrEqualTo("title", queryText)
+                .whereLessThanOrEqualTo("title", queryText + "\uf8ff")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
