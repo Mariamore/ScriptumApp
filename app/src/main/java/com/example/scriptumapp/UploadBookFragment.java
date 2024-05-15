@@ -167,7 +167,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                         public void onSuccess(Void unused) {
 
 
-                            //String bookId = reDocument.getId();//extraemos la referencia del documento
+                            String bookId = reDocument.getId().toString();//extraemos la referencia del documento
                             uploadPhoto(bookId, spinnerSelection);
 
 
@@ -223,7 +223,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
                                 db.collection("user").document(idUser).collection(category).document(bookId)
-                                        .update("photo",bookId)
+                                        .update(update)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
