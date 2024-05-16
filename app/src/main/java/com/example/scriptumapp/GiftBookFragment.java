@@ -1,12 +1,21 @@
 package com.example.scriptumapp;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +32,15 @@ public class GiftBookFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    Button backGiftBook;
+
+    RecyclerView mRecycler;
+    BookAdapterGift giftAdapterBook;
+    FirebaseFirestore mFirestore;
+    FirebaseAuth mAuth;
+    FirebaseUser authUser;
+    Query query;
 
     public GiftBookFragment() {
         // Required empty public constructor
@@ -55,10 +73,32 @@ public class GiftBookFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gift_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gift_book, container, false);
+
+
+        mAuth = FirebaseAuth.getInstance();
+        authUser = mAuth.getCurrentUser();
+        String idUser = authUser.getUid();
+
+        //Inicializamos
+        mFirestore = FirebaseFirestore.getInstance();
+        mRecycler = rootView.findViewById(R.id.recyclerViewSingle2);
+        mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        //query para la coleccion Loan de la BBDD
+        query = mFirestore.collection("users").document(idUser).collection("gift");
+
+        //Crear opciones de la consulta
+        FirestoreRecyclerOptions<Book> giftOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
+
+        //Inicializar el adaptador con las opciones
+        giftAdapterBook = new BookAdapterGift(giftOp);
+        mRecycler.setAdapter(giftAdapterBook);
+
+        return rootView;
     }
 }

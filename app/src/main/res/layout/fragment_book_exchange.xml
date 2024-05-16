@@ -37,11 +37,11 @@
             android:id="@+id/textBookExchange"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/inter"
             android:text="@string/book_exchange"
             android:textColor="@color/buttonQueries"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textBookExchange" />
-
+        <!--
         <Button
             android:id="@+id/addBookExchange"
             android:layout_width="120dp"
@@ -97,6 +97,17 @@
             app:layout_constraintHorizontal_bias="0.780"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textBookExchange" />
+            -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSingle3"
+            android:layout_width="299dp"
+            android:layout_height="328dp"
+            android:layout_marginBottom="180dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.511"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

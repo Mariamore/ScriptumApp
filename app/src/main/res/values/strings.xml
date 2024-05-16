@@ -47,6 +47,9 @@
     <string name="enter_an_address">Enter an address</string>
     <string name="location_not_found">Location not found</string>
     <string name="save">Save</string>
+    <string name="no_results_found">No results found</string>
+    <string name="title">Title</string>
+    <string name="search_title">Search title</string>
 
 
 </resources>

@@ -47,12 +47,20 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation ("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-firestore")
+    implementation ("com.firebaseui:firebase-ui-database:8.0.2")
     implementation ("com.google.android.gms:play-services-location:20.0.0")
     implementation ("com.google.android.gms:play-services-analytics:18.0.2")
 
     // Also add the dependency for the Google Play services library and specify its version
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("androidx.fragment:fragment:1.7.0")
+
+    implementation("com.google.firebase:firebase-storage-ktx")
+
+    implementation ("com.squareup.picasso:picasso:2.8");
+    implementation ("com.firebaseui:firebase-ui-firestore:8.0.0");
+
+
 
 
 }
