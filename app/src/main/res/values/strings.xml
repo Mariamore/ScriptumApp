@@ -46,6 +46,7 @@
     <string name="reset">Reset password</string>
     <string name="enter_an_address">Enter an address</string>
     <string name="location_not_found">Location not found</string>
+    <string name="save">Save</string>
 
 
 </resources>

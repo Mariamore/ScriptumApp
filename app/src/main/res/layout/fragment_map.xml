@@ -79,13 +79,13 @@
             android:id="@+id/backButton"
             android:layout_width="100dp"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
             android:text="@string/back"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintHorizontal_bias="0.274"
+            app:layout_constraintHorizontal_bias="0.827"
             app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toBottomOf="@+id/webView" />
 
@@ -93,14 +93,13 @@
             android:id="@+id/saveButton"
             android:layout_width="100dp"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
-            android:text="Save"
+            android:text="@string/save"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintHorizontal_bias="0.324"
-            app:layout_constraintStart_toEndOf="@+id/backButton"
+            app:layout_constraintEnd_toStartOf="@+id/backButton"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toBottomOf="@+id/webView" />
 
         <Button
