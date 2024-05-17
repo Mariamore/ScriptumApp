@@ -23,8 +23,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/rectangle" />
 
-        <ImageButton
-            android:id="@+id/rectangle_photobook"
+        <ImageView
+            android:id="@+id/rectangle_bookEdit"
             android:layout_width="193dp"
             android:layout_height="147dp"
             android:layout_marginTop="25dp"
@@ -37,7 +37,7 @@
             app:srcCompat="@drawable/photobook" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/titleLayout"
+            android:id="@+id/titleLayout_bookEdit"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
@@ -50,7 +50,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
 
-                android:id="@+id/titleEditText"
+                android:id="@+id/titleEditText_bookEdit"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:ems="10"
@@ -68,7 +68,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/authorLayout"
+            android:id="@+id/authorLayout_bookEdit"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="160dp"
@@ -81,7 +81,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
 
-                android:id="@+id/authorEditText"
+                android:id="@+id/authorEditText_bookEdit"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:ems="10"
@@ -99,7 +99,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editorialLayout"
+            android:id="@+id/editorialLayout_bookEdit"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="220dp"
@@ -112,7 +112,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
 
-                android:id="@+id/editorialEditText"
+                android:id="@+id/editorialEditText_bookEdit"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:ems="10"
@@ -130,7 +130,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/publicationYearLayout"
+            android:id="@+id/publicationYearLayout_bookEdit"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="280dp"
@@ -143,7 +143,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
 
-                android:id="@+id/yearEditText"
+                android:id="@+id/yearEditText_bookEdit"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:ems="10"
@@ -163,7 +163,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/current_statusLayout"
+            android:id="@+id/current_statusLayout_bookEdit"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="340dp"
@@ -176,7 +176,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
 
-                android:id="@+id/currentStatusEditText"
+                android:id="@+id/currentStatusEditText_bookEdit"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:ems="10"
@@ -194,7 +194,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/commentsLayout"
+            android:id="@+id/commentsLayout_bookEdit"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="400dp"
@@ -204,6 +204,16 @@
             app:layout_constraintEnd_toEndOf="@+id/rectangle"
             app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toTopOf="@+id/rectangle"/>
+
+        <Button
+            android:id="@+id/button_bookEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="150dp"
+            android:text="OK"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
