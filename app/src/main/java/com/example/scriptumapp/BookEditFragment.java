@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -16,32 +17,23 @@ import androidx.fragment.app.Fragment;
  */
 public class BookEditFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private EditText authorEditText_bookEdit, titleEditText_bookEdit, editorialEditText_bookEdit, yearEditText_bookEdit, statusEditText_bookEdit;
     private ImageView imageBook_bookEdit;
+    private Button button_bookEdit;
+
+    private Book book;
+
 
     public BookEditFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BookEditFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BookEditFragment newInstance(String param1, String param2) {
+
+    public static BookEditFragment newInstance(Book book) {
         BookEditFragment fragment = new BookEditFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -65,10 +57,17 @@ public class BookEditFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_book_edit, container, false);
 
 
-
-
+        authorEditText_bookEdit = rootView.findViewById(R.id.authorEditText_bookEdit);
+        titleEditText_bookEdit  = rootView.findViewById(R.id.titleEditText_bookEdit);
+        yearEditText_bookEdit = rootView.findViewById(R.id.yearEditText_bookEdit);
+        imageBook_bookEdit = rootView.findViewById(R.id.rectangle_bookEditImage);
+        button_bookEdit = rootView.findViewById(R.id.button_bookEdit);
+        statusEditText_bookEdit = rootView.findViewById(R.id.currentStatusEditText_bookEdit);
+        editorialEditText_bookEdit= rootView.findViewById(R.id.editorialEditText_bookEdit);
 
 
         return rootView;
     }
+
+
 }
