@@ -3,10 +3,12 @@ package com.example.scriptumapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -15,6 +17,12 @@ import com.squareup.picasso.Picasso;
 
 public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterGift.ViewHolder> {
 
+    private FragmentManager fragmentManager; //Instanciamos para cambiar de Fragment
+    //Le pasamos el parametro al constructor
+    public BookAdapterGift(@NonNull FirestoreRecyclerOptions<Book> options, FragmentManager fragmentManager) {
+        super(options);
+        this.fragmentManager = fragmentManager;
+    }
 
     public BookAdapterGift(@NonNull FirestoreRecyclerOptions<Book> options) {
         super(options);
@@ -26,6 +34,14 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
         viewHolder.author.setText(Book.getAuthor());
         viewHolder.status.setText(Book.getStatus());
         Picasso.get().load(Book.getPhoto()).into(viewHolder.photo);
+
+        viewHolder.imageButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //cambiamos de fragment
+
+            }
+        });
     }
 
     //mostrar datos
@@ -40,6 +56,8 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
 
         TextView title, author, status;
         ImageView photo;
+        ImageButton imageButtonEdit, imageButtonDelete;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -48,6 +66,10 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
             status = itemView.findViewById(R.id.itemStatusText);
             photo = itemView.findViewById(R.id.itemImageView);
 
+            imageButtonEdit = itemView.findViewById(R.id.imageButtonEditBook);
+            imageButtonDelete = itemView.findViewById(R.id.imageButtonDeleteBook);
+
         }
     }
+
 }

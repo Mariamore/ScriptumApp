@@ -21,8 +21,9 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -48,8 +49,29 @@
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="10dp"
                 android:text="Status:" />
-
-
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/imageButtonEditBook"
+                android:layout_width="78dp"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/edit_buttton_"
+                />
+
+            <ImageButton
+                android:id="@+id/imageButtonDeleteBook"
+                android:layout_width="78dp"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/delete_button" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
