@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/rectangletwo"
+            android:id="@+id/rectangleMessaging"
             android:layout_width="344dp"
             android:layout_height="579dp"
             android:layout_marginTop="72dp"
@@ -37,21 +37,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:fontFamily="@font/inter"
-            android:text="@string/messaging"
+            android:text="@string/messages"
             android:textColor="@color/buttonQueries"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ListView
-            android:layout_width="280dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="130dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/usersListView"
+            android:layout_width="341dp"
+            android:layout_height="503dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rectangleMessaging"
+            app:layout_constraintEnd_toEndOf="@+id/rectangleMessaging"
+            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintStart_toStartOf="@+id/rectangleMessaging"
+            app:layout_constraintTop_toBottomOf="@+id/imagenRectagle"
+            app:layout_constraintVertical_bias="0.023" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

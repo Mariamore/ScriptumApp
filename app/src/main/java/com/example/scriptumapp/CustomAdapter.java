@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,13 +20,22 @@ public class CustomAdapter extends ArrayAdapter<String> {
     private final List<String> titlesList;
     private final List<String> authorsList;
     private final List<String> photosList;
+    private final List<String> usersList;
+    private final OnMessageButtonClickListener listener;
 
-    public CustomAdapter(Context context, List<String> titlesList, List<String> authorsList, List<String> photosList) {
+    public interface OnMessageButtonClickListener {
+        void onMessageButtonClick(int position);
+    }
+
+    public CustomAdapter(Context context, List<String> titlesList, List<String> authorsList,
+                         List<String> photosList, List<String> usersList, OnMessageButtonClickListener listener) {
         super(context, R.layout.item_book, titlesList);
         this.context = context;
         this.titlesList = titlesList;
         this.authorsList = authorsList;
         this.photosList = photosList;
+        this.usersList = usersList;
+        this.listener = listener;
     }
 
     @Override
@@ -36,9 +46,12 @@ public class CustomAdapter extends ArrayAdapter<String> {
         TextView titleTextView = rowView.findViewById(R.id.titleTextView);
         TextView authorTextView = rowView.findViewById(R.id.authorTextView);
         ImageView photoImageView = rowView.findViewById(R.id.BookImageView);
+        TextView userTextView = rowView.findViewById(R.id.userTextView);
+        ImageButton messageButton = rowView.findViewById(R.id.messageButton);
 
         titleTextView.setText(titlesList.get(position));
         authorTextView.setText(authorsList.get(position));
+        userTextView.setText(usersList.get(position));
 
         // Cargar imagen usando Picasso desde la URL
         String imageUrl = photosList.get(position);
@@ -46,6 +59,15 @@ public class CustomAdapter extends ArrayAdapter<String> {
                 .placeholder(R.drawable.libro) // Placeholder en caso de que la carga falle
                 .error(R.drawable.libro) // Imagen a mostrar si hay un error al cargar la imagen
                 .into(photoImageView);
+
+        messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onMessageButtonClick(position);
+                }
+            }
+        });
 
         return rowView;
     }

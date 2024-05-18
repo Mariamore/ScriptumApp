@@ -32,7 +32,7 @@
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="phone">Phone</string>
-    <string name="messaging">Messaging</string>
+    <string name="messages">Messages</string>
     <string name="recomendaci">Nearby books</string>
     <string name="librosvistos">Recently viewed books</string>
     <string name="sign_up_failed">Sign up failed</string>

@@ -60,6 +60,7 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.8");
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.0");
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-database-ktx")
 
 
 

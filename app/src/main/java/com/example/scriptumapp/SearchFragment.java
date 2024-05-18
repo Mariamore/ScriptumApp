@@ -36,7 +36,7 @@ import java.util.List;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements CustomAdapter.OnMessageButtonClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,15 +47,16 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Button searchButton;
+    private Button searchButton, messageButton;
     private EditText searchEditText;
     private ListView searchListView;
     private List<String> titlesList = new ArrayList<String>();
     private List<String> authorsList = new ArrayList<>();
     private List<String> photosList = new ArrayList<>();
+    private List<String> usersList = new ArrayList<>();
     private CollectionReference booksCollection;
     private Query query;
-    private String queryText, titleBook, authorBook, photoBook;
+    private String queryText, titleBook, authorBook, photoBook, userBook;
     private FirebaseFirestore db;
     private View rootView;
 
@@ -123,6 +124,7 @@ public class SearchFragment extends Fragment {
                                 titleBook = document.getString("title");
                                 authorBook = document.getString("author");
                                 photoBook = document.getString("photo");
+                                userBook = document.getString("user");
                                 }
                             }
                             updateUi();
@@ -153,12 +155,14 @@ public class SearchFragment extends Fragment {
                         titlesList.clear();
                         authorsList.clear();
                         photosList.clear();
+                        usersList.clear();
                         for (QueryDocumentSnapshot doc : value) {
                             String titleString = doc.getString("title");
                             if (titleString != null && titleString.toLowerCase().contains(queryText.toLowerCase())){
                                 titlesList.add(doc.getString("title"));
                                 authorsList.add(doc.getString("author"));
                                 photosList.add(doc.getString("photo"));
+                                usersList.add(doc.getString("user"));
                             }
                         }
                         //Rellenar el listview con el adapter
@@ -166,11 +170,18 @@ public class SearchFragment extends Fragment {
                             searchListView.setAdapter(null);
                             toastNoResultsFound();
                         }else{
-                            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), titlesList, authorsList, photosList);
+                            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), titlesList,
+                                    authorsList, photosList, usersList, SearchFragment.this);
                             searchListView.setAdapter(bookAdapter);
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onMessageButtonClick(int position) {
+        // Abrir mensaje con usuario cuando se implemente
+        Toast.makeText(getActivity(), "Button clicked for contact: " + usersList.get(position), Toast.LENGTH_SHORT).show();
     }
 
     private void toastNoResultsFound() {
