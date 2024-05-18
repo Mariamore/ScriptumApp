@@ -1,6 +1,11 @@
 package com.example.scriptumapp;
 
-public class Book {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Book implements Parcelable {
 
     private String title, author, status, photo;
 
@@ -44,5 +49,15 @@ public class Book {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+
     }
 }
