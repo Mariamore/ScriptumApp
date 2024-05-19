@@ -137,6 +137,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             replaceFragment(new UploadBookFragment());
         } else if (id == R.id.consultButton){
             //fragment de consultar libros
+            replaceFragment(new QueriesFragment());
         } else if (id == R.id.ubiButton){
             replaceFragment(new LocationFragment());
         } else if (id == R.id.logoutButton){
@@ -146,6 +147,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 // Cerrar sesión del usuario actual
                 mAuth.signOut();
                 positiveToast("User logged out");
+                replaceFragment(new LoginFragment());
             } else {
                 negativeToast("No user is logged in");
             }
