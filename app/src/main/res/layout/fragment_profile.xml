@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="@+id/rectangle"
             app:srcCompat="@drawable/userbutton" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userLogo"
             android:layout_width="220dp"
             android:layout_height="200dp"
@@ -40,7 +40,8 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/userlogo" />
+            android:src="@drawable/userlogo" />
+
 
         <ImageView
             android:id="@+id/logoutButton"
