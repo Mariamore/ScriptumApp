@@ -94,7 +94,7 @@ public class BookLoanFragment extends Fragment {
         FirestoreRecyclerOptions<Book> loanOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
 
         //Inicializar el adaptador con las opciones
-        loanAdapterBook = new BookAdapterLoan(loanOp);
+        loanAdapterBook = new BookAdapterLoan(loanOp, this, new Object());
         mRecycler.setAdapter(loanAdapterBook);
 
         return rootView;

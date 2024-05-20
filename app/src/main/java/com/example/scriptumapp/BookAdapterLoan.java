@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 public class BookAdapterLoan extends FirestoreRecyclerAdapter<Book, BookAdapterLoan.ViewHolder> {
 
 
-    public BookAdapterLoan(@NonNull FirestoreRecyclerOptions<Book> options) {
+    public BookAdapterLoan(@NonNull FirestoreRecyclerOptions<Book> options, BookLoanFragment searchFragment, Object supportFragmentManager) {
         super(options);
     }
 
