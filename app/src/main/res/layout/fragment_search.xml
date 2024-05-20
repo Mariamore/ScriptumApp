@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
+            android:layout_marginEnd="12dp"
             android:contentDescription="@string/logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -35,21 +36,33 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo" />
 
+        <ListView
+            android:id="@+id/searchListView"
+            android:layout_width="323dp"
+            android:layout_height="386dp"
+            app:layout_constraintBottom_toTopOf="@+id/search_bar"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:layout_constraintVertical_bias="0.4">
+
+        </ListView>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/search_bar"
-            android:layout_width="270dp"
+            android:layout_width="225dp"
             android:layout_height="74dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="490dp"
             android:textColorHint="@color/text"
             app:boxBackgroundMode="none"
             app:boxStrokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toTopOf="@+id/rectangle">
 
             <com.google.android.material.textfield.TextInputEditText
 
+                android:id="@+id/search_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="1dp"
@@ -59,16 +72,32 @@
                 android:drawableTint="@color/text"
                 android:ems="10"
                 android:fontFamily="@font/inter"
-                android:hint="@string/search"
+                android:hint="@string/search_title"
+                android:imeOptions="actionDone"
                 android:inputType="textAutoCorrect"
                 android:textColor="@color/text"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp" />
 
+
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="500dp"
+            android:layout_weight="0"
+            android:backgroundTint="@color/buttons"
+            android:text="@string/search"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toEndOf="@+id/search_bar"
+            app:layout_constraintTop_toTopOf="@+id/rectangle" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

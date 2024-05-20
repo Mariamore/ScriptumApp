@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:fontFamily="@font/inter"
-        android:text="@string/messaging"
+        android:text="@string/messages"
         android:textColor="@color/buttonQueries"
         android:textSize="20dp"
         android:textStyle="bold"
