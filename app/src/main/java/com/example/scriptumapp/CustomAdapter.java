@@ -41,13 +41,13 @@ public class CustomAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.item_book, parent, false);
+        View rootView = inflater.inflate(R.layout.item_book, parent, false);
 
-        TextView titleTextView = rowView.findViewById(R.id.titleTextView);
-        TextView authorTextView = rowView.findViewById(R.id.authorTextView);
-        ImageView photoImageView = rowView.findViewById(R.id.BookImageView);
-        TextView userTextView = rowView.findViewById(R.id.userTextView);
-        ImageButton messageButton = rowView.findViewById(R.id.messageButton);
+        TextView titleTextView = rootView.findViewById(R.id.titleTextView);
+        TextView authorTextView = rootView.findViewById(R.id.authorTextView);
+        ImageView photoImageView = rootView.findViewById(R.id.BookImageView);
+        TextView userTextView = rootView.findViewById(R.id.userTextView);
+        ImageButton messageButton = rootView.findViewById(R.id.messageButton);
 
         titleTextView.setText(titlesList.get(position));
         authorTextView.setText(authorsList.get(position));
@@ -69,6 +69,6 @@ public class CustomAdapter extends ArrayAdapter<String> {
             }
         });
 
-        return rowView;
+        return rootView;
     }
 }
