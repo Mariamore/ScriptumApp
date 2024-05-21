@@ -19,7 +19,7 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
 
     private FragmentManager fragmentManager; //Instanciamos para cambiar de Fragment
     //Le pasamos el parametro al constructor
-    public BookAdapterGift(@NonNull FirestoreRecyclerOptions<Book> options, FragmentManager fragmentManager) {
+    public BookAdapterGift(@NonNull FirestoreRecyclerOptions<Book> options, FragmentManager fragmentManager, String idUser ) {
         super(options);
         this.fragmentManager = fragmentManager;
     }
@@ -39,6 +39,7 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
             @Override
             public void onClick(View v) {
                 //cambiamos de fragment
+
 
             }
         });
@@ -70,6 +71,20 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
             imageButtonDelete = itemView.findViewById(R.id.imageButtonDeleteBook);
 
         }
+
+        /*
+        viewHolder.imageButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cambiamos de fragment a BookEditFragment
+                BookEditFragment bookEditFragment = BookEditFragment.newInstance(Book , idUser, getSnapshots().getSnapshot(i).getId());
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, bookEditFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+            */
     }
 
 }

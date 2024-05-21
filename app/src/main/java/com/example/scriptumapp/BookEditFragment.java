@@ -1,32 +1,6 @@
 package com.example.scriptumapp;
 
-import static com.example.scriptumapp.UploadBookFragment.COD_SEL_IMAGE;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +8,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class BookEditFragment extends Fragment {
-
+    /*
 
     private String mParam1;
     private String mParam2;
@@ -49,7 +23,7 @@ public class BookEditFragment extends Fragment {
     private String idUser;
 
     private Uri imageUri;
-    private String bookId;
+    //private String bookId;
 
     public BookEditFragment() {
         // Required empty public constructor
@@ -71,7 +45,7 @@ public class BookEditFragment extends Fragment {
         if (getArguments() != null) {
             book = getArguments().getParcelable("book");
             idUser = getArguments().getString("idUser");
-            bookId = getArguments().getString("bookId");
+
 
         }
         // Instanciamos la base de datos
@@ -101,6 +75,8 @@ public class BookEditFragment extends Fragment {
         //editorialEditText_bookEdit.setText(book.get);
 
         button_bookEdit.setOnClickListener(new View.OnClickListener() {
+            private String bookId;
+
             @Override
             public void onClick(View v) {
 
@@ -110,7 +86,8 @@ public class BookEditFragment extends Fragment {
                 //Faltan parametros del libro
 
                 //Lógica base datos
-                String bookId = book.getTitle(); //usamos el titulo como campo
+                //String bookId = book.getTitle(); //usamos el titulo como campo
+                String bookId = this.bookId;
                 Map<String, Object> data = new HashMap<>();
                 data.put("title", book.getTitle());
                 data.put("author", book.getAuthor());
@@ -163,7 +140,7 @@ public class BookEditFragment extends Fragment {
 
 public void uploadPhoto(String TitleBookId){
         
-        StorageReference imageRef = stRe.child("users/" + idUser + "/gift/" + bookId + ".jpg");
+        StorageReference imageRef = stRe.child("users/" + idUser + "/gift/" +  + ".jpg");
         imageRef.putFile(imageUri)
             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
         @Override
@@ -203,7 +180,11 @@ public void uploadPhoto(String TitleBookId){
                     Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+
+
 }
+*/
+
 }
 
 

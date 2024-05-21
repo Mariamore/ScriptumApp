@@ -156,18 +156,17 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             data.put("editorial", editorial);
             data.put("year", publicationYear);
             data.put("status", status);
+            data.put("type", spinnerSelection);
             data.put("user", idUser);
 
-            db.collection("users").document(idUser).collection(spinnerSelection).document(bookId).
-            set(data)
-            //DocumentReference reDocument = db.collection("user").document(idUser).collection(spinnerSelection).document();
-            //reDocument.set(data)
+            db.collection("booksData").document(idUser).set(data)
+
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
 
                         @Override
                         public void onSuccess(Void unused) {
 
-                            uploadPhoto(bookId, spinnerSelection);
+                            uploadPhoto(idUser);
 
                            // replaceFragment(new SavedBooksFragment());
                         }
@@ -200,14 +199,15 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void uploadPhoto(String bookId, String category) {
+    private void uploadPhoto(String idUser) {
 
         if (imageUri == null) { // Asegurarse de que la imagen se ha seleccionado
             Toast.makeText(getContext(), "Please select an image", Toast.LENGTH_SHORT).show();
             return;
         }
-        String imageName = bookId + ".jpg";
-        StorageReference imageRef = storageReference.child("users/" + idUser + "/" + category + "/" + imageName);
+        String imageName = idUser + ".jpg";
+        StorageReference imageRef = storageReference.child("booksData/" + idUser + "/" + imageName);
+
 
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -220,7 +220,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
-                                db.collection("users").document(idUser).collection(category).document(bookId)
+                                db.collection("booksData").document(idUser)
                                         .update(update)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
