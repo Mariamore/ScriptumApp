@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -159,16 +160,12 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             data.put("type", spinnerSelection);
             data.put("user", idUser);
 
-            db.collection("booksData").document(idUser).set(data)
-
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-
+            db.collection("booksData")
+                    .add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
-                        public void onSuccess(Void unused) {
-
-                            uploadPhoto(idUser);
-
-                           // replaceFragment(new SavedBooksFragment());
+                        public void onSuccess(DocumentReference documentReference) {
+                            uploadPhoto(documentReference.getId());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -177,7 +174,6 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                             Toast.makeText(getContext(), "Error saving book data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-
         }
     }
     //selecionamos la imagen

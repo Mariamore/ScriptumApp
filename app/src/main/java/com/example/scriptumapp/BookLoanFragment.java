@@ -88,7 +88,7 @@ public class BookLoanFragment extends Fragment {
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         //query para la coleccion Loan de la BBDD
-        query = mFirestore.collection("users").document(idUser).collection("loan");
+        query = mFirestore.collection("booksData").whereEqualTo("user", idUser).whereEqualTo("type", "loan");
 
         //Crear opciones de la consulta
         FirestoreRecyclerOptions<Book> loanOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
