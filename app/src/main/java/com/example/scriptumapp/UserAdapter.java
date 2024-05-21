@@ -50,6 +50,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         String imageUrl = photoList.get(position);
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Picasso.get().load(imageUrl)
+                    .transform(new ImageCircle())
                     .resize(200,200)
                     .centerCrop()
                     .placeholder(R.drawable.buttonimagecontact) // Placeholder en caso de que la carga falle

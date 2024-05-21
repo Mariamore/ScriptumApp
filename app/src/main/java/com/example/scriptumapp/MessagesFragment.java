@@ -1,5 +1,7 @@
 package com.example.scriptumapp;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,32 +63,26 @@ public class MessagesFragment extends Fragment {
     }
 
     private void allUsers(){
-        db.collection("usersData").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("usersData").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    userIdList.clear();
-                    userNameList.clear();
-                    photoList.clear();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        if(document.contains("user") && document.contains("nameSurname")){
-                            String user = document.getString("user");
-                            String nameSurname = document.getString("nameSurname");
-                            String profileImageUrl = document.getString("profileImageUrl");
-                            userIdList.add(user);
-                            userNameList.add(nameSurname);
-                            photoList.add(profileImageUrl);
-                        }
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                @Nullable FirebaseFirestoreException e) {
+
+                userIdList.clear();
+                userNameList.clear();
+                photoList.clear();
+
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    if(document.contains("user") && document.contains("nameSurname")){
+                        String user = document.getString("user");
+                        String nameSurname = document.getString("nameSurname");
+                        String profileImageUrl = document.getString("profileImageUrl");
+                        userIdList.add(user);
+                        userNameList.add(nameSurname);
+                        photoList.add(profileImageUrl);
                     }
-                    updateUi();
-                } else {
-                    toastNoResultsFound();
                 }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                toastNoResultsFound();
+                updateUi();
             }
         });
     }
