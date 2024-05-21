@@ -1,6 +1,33 @@
 package com.example.scriptumapp;
 
+import static com.example.scriptumapp.UploadBookFragment.COD_SEL_IMAGE;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -8,19 +35,20 @@ import androidx.fragment.app.Fragment;
  * create an instance of this fragment.
  */
 public class BookEditFragment extends Fragment {
-    /*
+
 
     private String mParam1;
     private String mParam2;
 
     private EditText authorEditText_bookEdit, titleEditText_bookEdit, editorialEditText_bookEdit, yearEditText_bookEdit, statusEditText_bookEdit;
     private ImageView imageBook_bookEdit;
-    private Button button_bookEdit;
+    private ImageButton button_bookEdit;
 
     private Book book;
     private FirebaseFirestore db;
     StorageReference stRe;
     private String idUser;
+    private static final String DOC_ID = "docId";
 
     private Uri imageUri;
     //private String bookId;
@@ -29,12 +57,10 @@ public class BookEditFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static BookEditFragment newInstance(Book book, String idUser, String bookId) {
+    public static BookEditFragment newInstance(String docId) {
         BookEditFragment fragment = new BookEditFragment();
         Bundle args = new Bundle();
-        args.putParcelable("book", book); // pasar datos entre fragments
-        args.putString("idUser", idUser);
-        args.putString("bookId", bookId);
+        args.putString(DOC_ID, docId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,10 +69,7 @@ public class BookEditFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            book = getArguments().getParcelable("book");
-            idUser = getArguments().getString("idUser");
-
-
+            docId = getArguments().getString(DOC_ID);
         }
         // Instanciamos la base de datos
         db = FirebaseFirestore.getInstance();
@@ -62,9 +85,13 @@ public class BookEditFragment extends Fragment {
         titleEditText_bookEdit  = rootView.findViewById(R.id.titleEditText_bookEdit);
         yearEditText_bookEdit = rootView.findViewById(R.id.yearEditText_bookEdit);
         imageBook_bookEdit = rootView.findViewById(R.id.rectangle_bookEditImage);
-        button_bookEdit = rootView.findViewById(R.id.button_bookEdit);
         statusEditText_bookEdit = rootView.findViewById(R.id.currentStatusEditText_bookEdit);
         editorialEditText_bookEdit= rootView.findViewById(R.id.editorialEditText_bookEdit);
+
+        //extraemos los datos
+        dataBook();
+
+
 
         //Extraemos los datos del libro
         authorEditText_bookEdit.setText(book.getAuthor());
@@ -73,6 +100,7 @@ public class BookEditFragment extends Fragment {
         statusEditText_bookEdit.setText(book.getStatus());
         Picasso.get().load(book.getPhoto()).into(imageBook_bookEdit);
         //editorialEditText_bookEdit.setText(book.get);
+
 
         button_bookEdit.setOnClickListener(new View.OnClickListener() {
             private String bookId;
@@ -138,7 +166,14 @@ public class BookEditFragment extends Fragment {
         }
     }
 
-public void uploadPhoto(String TitleBookId){
+    public void dataBook(){
+
+
+
+
+
+    }
+    public void uploadPhoto(String TitleBookId){
         
         StorageReference imageRef = stRe.child("users/" + idUser + "/gift/" +  + ".jpg");
         imageRef.putFile(imageUri)
@@ -183,7 +218,7 @@ public void uploadPhoto(String TitleBookId){
 
 
 }
-*/
+
 
 }
 

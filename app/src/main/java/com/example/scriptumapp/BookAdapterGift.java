@@ -8,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -39,7 +42,11 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
             @Override
             public void onClick(View v) {
                 //cambiamos de fragment
-
+                Fragment fragment = BookEditFragment.newInstance(getSnapshots().getSnapshot(position).getId());
+                FragmentTransaction transaction = ((FragmentActivity) v.getContext()).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment); // Asegúrate de tener el ID correcto de tu contenedor de fragmentos
+                transaction.addToBackStack(null);
+                transaction.commit();
 
             }
         });
@@ -72,19 +79,9 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
 
         }
 
-        /*
-        viewHolder.imageButtonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Cambiamos de fragment a BookEditFragment
-                BookEditFragment bookEditFragment = BookEditFragment.newInstance(Book , idUser, getSnapshots().getSnapshot(i).getId());
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, bookEditFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-            */
+
+
+
     }
 
 }

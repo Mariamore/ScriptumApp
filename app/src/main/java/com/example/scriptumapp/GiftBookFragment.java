@@ -100,5 +100,20 @@ public class GiftBookFragment extends Fragment {
         mRecycler.setAdapter(giftAdapterBook);
 
         return rootView;
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        giftAdapterBook.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        giftAdapterBook.stopListening();
     }
 }
+
+
+
