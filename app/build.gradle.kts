@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-    
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -61,8 +60,5 @@ dependencies {
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.0");
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database-ktx")
-
-
-
 
 }

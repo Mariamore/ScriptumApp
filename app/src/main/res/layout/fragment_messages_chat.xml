@@ -32,23 +32,40 @@
             app:srcCompat="@drawable/rectanglemessage" />
 
         <TextView
-            android:id="@+id/textMess"
+            android:id="@+id/textViewReceiver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="26dp"
+            android:paddingStart="30dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
             android:fontFamily="@font/inter"
             android:text="@string/user"
             android:textColor="@color/buttonQueries"
-            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/imagenMess"
+            app:layout_constraintStart_toStartOf="@+id/imagenMess"
+            app:layout_constraintTop_toTopOf="@+id/imagenMess" />
+
+        <ImageView
+            android:id="@+id/imageViewReceiver"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorTransparent"
+            android:scaleType="centerInside"
+            app:layout_constraintStart_toStartOf="@+id/imagenMess"
+            app:layout_constraintTop_toTopOf="@+id/imagenMess"
+            app:srcCompat="@drawable/buttonimagecontact" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyler_view"
-            android:layout_width="335dp"
-            android:layout_height="455dp"
+            android:id="@+id/recylerViewMessages"
+            android:layout_width="330dp"
+            android:layout_height="445dp"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="@+id/rectangleMess"
             app:layout_constraintEnd_toEndOf="@+id/rectangleMess"
@@ -60,9 +77,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/message_bar"
             android:layout_width="225dp"
-            android:layout_height="52dp"
+            android:layout_height="74dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="505dp"
+            android:layout_marginTop="490dp"
             android:textColorHint="@color/text"
             app:boxBackgroundMode="none"
             app:boxStrokeWidth="0dp"
@@ -73,8 +90,8 @@
 
                 android:id="@+id/message_edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
                 android:background="@drawable/rounded_background"
                 android:backgroundTint="@color/toastBackground"
                 android:drawableStart="@drawable/search_white"
@@ -93,7 +110,7 @@
             android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginTop="510dp"
+            android:layout_marginTop="500dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="0"
             android:backgroundTint="@color/buttons"

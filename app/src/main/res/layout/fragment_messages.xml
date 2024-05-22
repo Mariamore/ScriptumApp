@@ -41,6 +41,8 @@
             android:textColor="@color/buttonQueries"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:drawablePadding="12dp"
+            app:drawableStartCompat="@drawable/mensaje"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
