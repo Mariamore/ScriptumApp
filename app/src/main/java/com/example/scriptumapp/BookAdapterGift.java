@@ -1,5 +1,6 @@
 package com.example.scriptumapp;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +32,7 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Book Book) {
+    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position, @NonNull Book Book) {
         viewHolder.title.setText(Book.getTitle());
         viewHolder.author.setText(Book.getAuthor());
         viewHolder.status.setText(Book.getStatus());
@@ -41,18 +41,16 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
         viewHolder.imageButtonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //cambiamos de fragment
-                Fragment fragment = BookEditFragment.newInstance(getSnapshots().getSnapshot(position).getId());
-                FragmentTransaction transaction = ((FragmentActivity) v.getContext()).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment); // Asegúrate de tener el ID correcto de tu contenedor de fragmentos
-                transaction.addToBackStack(null);
-                transaction.commit();
+                //Obtenemos id
+                String docId = getSnapshots().getSnapshot(position).getId();
+                BookEditFragment bookEditFragment = BookEditFragment.newInstance(docId);
+                viewHolder.replaceFragment(bookEditFragment);
 
             }
         });
     }
 
-    //mostrar datos
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -79,6 +77,13 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
 
         }
 
+    //cambiar de fragment
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment); // Usa el ID del contenedor de fragmentos
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
 
 

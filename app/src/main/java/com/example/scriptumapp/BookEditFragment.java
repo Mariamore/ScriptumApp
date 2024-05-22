@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -44,12 +45,15 @@ public class BookEditFragment extends Fragment {
     private ImageView imageBook_bookEdit;
     private ImageButton button_bookEdit;
 
+    private Button button_saveBookEdit;
+
     private Book book;
     private FirebaseFirestore db;
     StorageReference stRe;
     private String idUser;
     private static final String DOC_ID = "docId";
 
+    private String docId;
     private Uri imageUri;
     //private String bookId;
 
@@ -87,60 +91,11 @@ public class BookEditFragment extends Fragment {
         imageBook_bookEdit = rootView.findViewById(R.id.rectangle_bookEditImage);
         statusEditText_bookEdit = rootView.findViewById(R.id.currentStatusEditText_bookEdit);
         editorialEditText_bookEdit= rootView.findViewById(R.id.editorialEditText_bookEdit);
+        button_saveBookEdit = rootView.findViewById(R.id.button_saveBookEdit);
 
         //extraemos los datos
         dataBook();
 
-
-
-        //Extraemos los datos del libro
-        authorEditText_bookEdit.setText(book.getAuthor());
-        titleEditText_bookEdit.setText(book.getTitle());
-        //yearEditText_bookEdit.setText(book.get);
-        statusEditText_bookEdit.setText(book.getStatus());
-        Picasso.get().load(book.getPhoto()).into(imageBook_bookEdit);
-        //editorialEditText_bookEdit.setText(book.get);
-
-
-        button_bookEdit.setOnClickListener(new View.OnClickListener() {
-            private String bookId;
-
-            @Override
-            public void onClick(View v) {
-
-                book.setTitle(titleEditText_bookEdit.getText().toString());
-                book.setAuthor(authorEditText_bookEdit.getText().toString());
-                book.setStatus(statusEditText_bookEdit.getText().toString());
-                //Faltan parametros del libro
-
-                //Lógica base datos
-                //String bookId = book.getTitle(); //usamos el titulo como campo
-                String bookId = this.bookId;
-                Map<String, Object> data = new HashMap<>();
-                data.put("title", book.getTitle());
-                data.put("author", book.getAuthor());
-                //data.put("year", book.getYear());
-                data.put("status", book.getStatus());
-                //data.put("editorial", book.getEditorial());
-                data.put("photo", book.getPhoto());
-
-                db.collection("users").document(idUser).collection("gift").document(bookId)
-                        .set(data)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-
-                                uploadPhoto(bookId);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Error saving book data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
 
         //Selecinar Imagen nueva en la edicion
         imageBook_bookEdit.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +107,15 @@ public class BookEditFragment extends Fragment {
                 startActivityForResult(intent, COD_SEL_IMAGE);//deprecado
             }
         });
+
+        //Guardamos los nuevos datos al pulsar en el boton
+        button_saveBookEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveBookEdit();
+            }
+        });
+
 
         return rootView;
 
@@ -168,14 +132,75 @@ public class BookEditFragment extends Fragment {
 
     public void dataBook(){
 
-
-
-
-
+        db.collection("bookData").document(docId).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            titleEditText_bookEdit.setText(documentSnapshot.getString("title"));
+                            authorEditText_bookEdit.setText(documentSnapshot.getString("author"));
+                            editorialEditText_bookEdit.setText(documentSnapshot.getString("editorial"));
+                            yearEditText_bookEdit.setText(documentSnapshot.getString("year"));
+                            statusEditText_bookEdit.setText(documentSnapshot.getString("status"));
+                            String imageUrl = documentSnapshot.getString("photo");
+                            if (imageUrl != null && !imageUrl.isEmpty()) {
+                                Picasso.get().load(imageUrl).into(imageBook_bookEdit);
+                            }
+                        } else {
+                            Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "Failed to load document", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
-    public void uploadPhoto(String TitleBookId){
-        
-        StorageReference imageRef = stRe.child("users/" + idUser + "/gift/" +  + ".jpg");
+    //guardamos los datos nuevos
+    public void saveBookEdit(){
+
+        String title = titleEditText_bookEdit.getText().toString();
+        String author = authorEditText_bookEdit.getText().toString();
+        String editorial = editorialEditText_bookEdit.getText().toString();
+        String year = yearEditText_bookEdit.getText().toString();
+        String status = statusEditText_bookEdit.getText().toString();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("title", title);
+        data.put("author", author);
+        data.put("editorial", editorial);
+        data.put("year", year);
+        data.put("status", status);
+
+        db.collection("bookData").document(docId)
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (imageUri != null) {
+                            uploadPhoto(docId);
+                        } else {
+                            Toast.makeText(getContext(), "Book updated", Toast.LENGTH_SHORT).show();
+                            getParentFragmentManager().popBackStack();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "Error updating book", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    public void uploadPhoto(String docId){
+
+        String imageName= docId + ".jpg";
+        StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
+
         imageRef.putFile(imageUri)
             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
         @Override
@@ -186,7 +211,7 @@ public class BookEditFragment extends Fragment {
                     String imageUrl = uri.toString();
 
                     // Actualizar la URL de la imagen en Firestore
-                    db.collection("users").document(idUser).collection("gift").document(bookId)
+                    db.collection("booksData").document(docId)
                             .update("photo", imageUrl)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
