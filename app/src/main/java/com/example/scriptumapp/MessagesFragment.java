@@ -49,7 +49,7 @@ public class MessagesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_messages, container, false);
         db = FirebaseFirestore.getInstance();
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        recyclerView = rootView.findViewById(R.id.search_user_recycler_view);
+        recyclerView = rootView.findViewById(R.id.userlist_recycler_view);
         // Asignamos un LayoutManager al RecyclerView
         try {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
