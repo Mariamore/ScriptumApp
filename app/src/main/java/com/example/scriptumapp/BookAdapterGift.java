@@ -22,14 +22,11 @@ public class BookAdapterGift extends FirestoreRecyclerAdapter<Book, BookAdapterG
 
     private FragmentManager fragmentManager; //Instanciamos para cambiar de Fragment
     //Le pasamos el parametro al constructor
-    public BookAdapterGift(@NonNull FirestoreRecyclerOptions<Book> options, FragmentManager fragmentManager, String idUser ) {
+    public BookAdapterGift(@NonNull FirestoreRecyclerOptions<Book> options, FragmentManager fragmentManager ) {
         super(options);
         this.fragmentManager = fragmentManager;
     }
 
-    public BookAdapterGift(@NonNull FirestoreRecyclerOptions<Book> options) {
-        super(options);
-    }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position, @NonNull Book Book) {

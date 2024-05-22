@@ -96,7 +96,7 @@ public class GiftBookFragment extends Fragment {
         FirestoreRecyclerOptions<Book> giftOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
 
         //Inicializar el adaptador con las opciones
-        giftAdapterBook = new BookAdapterGift(giftOp);
+        giftAdapterBook = new BookAdapterGift(giftOp, getParentFragmentManager());
         mRecycler.setAdapter(giftAdapterBook);
 
         return rootView;
