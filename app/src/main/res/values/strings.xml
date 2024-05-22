@@ -50,6 +50,15 @@
     <string name="no_results_found">No results found</string>
     <string name="title">Title</string>
     <string name="search_title">Search title</string>
+    <string name="user">User</string>
+    <string name="message">Message</string>
+    <string name="send">Send</string>
+    <string name="message_empty">The message cannot be empty</string>
+    <string name="message_error">Error sending message</string>
+    <string name="error_loading_user_data">Error loading user data</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="encryption_error">Encryption error</string>
+    <string name="decryption_error">Decryption error</string>
 
 
 </resources>

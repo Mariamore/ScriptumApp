@@ -36,7 +36,7 @@ import java.util.List;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment implements CustomAdapter.OnMessageButtonClickListener {
+public class SearchFragment extends Fragment implements BookAdapterSearch.OnMessageButtonClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -170,7 +170,7 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
                             searchListView.setAdapter(null);
                             toastNoResultsFound();
                         }else{
-                            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), titlesList,
+                            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), titlesList,
                                     authorsList, photosList, usersList, SearchFragment.this);
                             searchListView.setAdapter(bookAdapter);
                         }
@@ -180,8 +180,13 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
 
     @Override
     public void onMessageButtonClick(int position) {
-        // Abrir mensaje con usuario cuando se implemente
-        Toast.makeText(getActivity(), "Button clicked for contact: " + usersList.get(position), Toast.LENGTH_SHORT).show();
+        //Enviamos el usuario al fragment de messagesChatFragment
+        String textToSend = usersList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putString("userIdReceptor", textToSend);
+        MessagesChatFragment messagesChatFragment = new MessagesChatFragment();
+        messagesChatFragment.setArguments(bundle);
+        replaceFragment(messagesChatFragment);
     }
 
     private void toastNoResultsFound() {

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MessagesChatFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/rectangleMess"
+            android:layout_width="344dp"
+            android:layout_height="579dp"
+            android:layout_marginTop="72dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rectangletwo" />
+
+        <ImageView
+            android:id="@+id/imagenMess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rectanglemessage" />
+
+        <TextView
+            android:id="@+id/textViewReceiver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:paddingStart="30dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/inter"
+            android:text="@string/user"
+            android:textColor="@color/buttonQueries"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/imagenMess"
+            app:layout_constraintStart_toStartOf="@+id/imagenMess"
+            app:layout_constraintTop_toTopOf="@+id/imagenMess" />
+
+        <ImageView
+            android:id="@+id/imageViewReceiver"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorTransparent"
+            android:scaleType="centerInside"
+            app:layout_constraintStart_toStartOf="@+id/imagenMess"
+            app:layout_constraintTop_toTopOf="@+id/imagenMess"
+            app:srcCompat="@drawable/buttonimagecontact" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recylerViewMessages"
+            android:layout_width="330dp"
+            android:layout_height="445dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="@+id/rectangleMess"
+            app:layout_constraintEnd_toEndOf="@+id/rectangleMess"
+            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintStart_toStartOf="@+id/rectangleMess"
+            app:layout_constraintTop_toBottomOf="@+id/imagenMess"
+            app:layout_constraintVertical_bias="0.023" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/message_bar"
+            android:layout_width="225dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="490dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintStart_toStartOf="@+id/rectangleMess"
+            app:layout_constraintTop_toTopOf="@+id/rectangleMess">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/message_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/toastBackground"
+                android:drawableStart="@drawable/search_white"
+                android:drawableTint="@color/text"
+                android:ems="10"
+                android:fontFamily="@font/inter"
+                android:hint="@string/message"
+                android:imeOptions="actionDone"
+                android:inputType="textAutoCorrect"
+                android:textColor="@color/text"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="500dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="0"
+            android:backgroundTint="@color/buttons"
+            android:text="@string/send"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangleMess"
+            app:layout_constraintStart_toEndOf="@+id/message_bar"
+            app:layout_constraintTop_toTopOf="@+id/rectangleMess" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
