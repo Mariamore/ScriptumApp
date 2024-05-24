@@ -38,7 +38,7 @@ import java.util.List;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
 */
-public class SearchFragment extends Fragment implements CustomAdapter.OnMessageButtonClickListener {
+public class SearchFragment extends Fragment implements BookAdapterSearch.OnMessageButtonClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -118,7 +118,8 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
         db = FirebaseFirestore.getInstance();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-//hay que pensar si queremos que usuarios no autenticados puedan buscar o no
+
+        //hay que pensar si queremos que usuarios no autenticados puedan buscar o no
         if (user != null) {
             idUser = user.getUid();
             // Resto del código que utiliza el UID del usuario
@@ -126,13 +127,13 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
            idUser = "non_authenticated_user_id";
 
         }
-*/
+        */
         booksCollection = db.collection("booksData");
         searchButton = rootView.findViewById((R.id.searchButton));
         searchListView = rootView.findViewById(R.id.searchListView);
 
         if (savedTitlesList.size() > 0) {
-            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), savedTitlesList,
+            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), savedTitlesList,
                     savedAuthorsList, savedPhotosList, savedUsersList, this);
             searchListView.setAdapter(bookAdapter);
         }
@@ -207,17 +208,19 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
 
                             }
                         }
+                        //Para poder recuperar la búsqueda anterior al volver del BookInfoFragment
                         savedTitlesList.addAll(titlesList);
                         savedAuthorsList.addAll(authorsList);
                         savedPhotosList.addAll(photosList);
                         savedUsersList.addAll(usersList);
                         savedBooksIdList.addAll(booksIdList);
+
                         //Rellenar el listview con el adapter
                         if(titlesList.isEmpty()){
                             searchListView.setAdapter(null);
                             toastNoResultsFound();
                         }else{
-                            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), titlesList,
+                            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), titlesList,
                                     authorsList, photosList, usersList,SearchFragment.this);
                             searchListView.setAdapter(bookAdapter);
                         }
@@ -255,6 +258,7 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
 
 
     @Override

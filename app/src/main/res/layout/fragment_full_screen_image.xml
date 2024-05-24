@@ -9,27 +9,39 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/fullScreenImageView"
-            android:layout_width="match_parent"
-            android:layout_height="442dp"
-            android:contentDescription="Full screen image"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/rectangle"
+            android:layout_width="344dp"
+            android:layout_height="579dp"
+            android:layout_marginTop="72dp"
+            android:hint="@string/rectangle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.337" />
+            app:srcCompat="@drawable/rectangle"/>
+
+        <ImageView
+            android:id="@+id/fullScreenImageView"
+            android:layout_width="303dp"
+            android:layout_height="418dp"
+            android:contentDescription="Full screen image"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/rectangle"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintHorizontal_bias="0.487"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle"
+            app:layout_constraintVertical_bias="0.496" />
 
         <Button
             android:id="@+id/backButton"
             android:layout_width="100dp"
             android:layout_height="48dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
             android:text="@string/back"
