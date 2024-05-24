@@ -141,7 +141,7 @@ public class BookEditFragment extends Fragment {
                         imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(getContext(), "Book Deleted successfully", Toast.LENGTH_SHORT).show();)
+                                Toast.makeText(getContext(), "Book Deleted successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
