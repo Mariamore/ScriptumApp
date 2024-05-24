@@ -132,7 +132,7 @@ public class BookEditFragment extends Fragment {
 
     public void dataBook(){
 
-        db.collection("bookData").document(docId).get()
+        db.collection("booksData").document(docId).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -174,7 +174,7 @@ public class BookEditFragment extends Fragment {
         data.put("year", year);
         data.put("status", status);
 
-        db.collection("bookData").document(docId)
+        db.collection("booksData").document(docId)
                 .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
