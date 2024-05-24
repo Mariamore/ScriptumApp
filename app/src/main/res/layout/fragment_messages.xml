@@ -41,20 +41,24 @@
             android:textColor="@color/buttonQueries"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:drawablePadding="12dp"
+            app:drawableStartCompat="@drawable/mensaje"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/usersListView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userlist_recycler_view"
             android:layout_width="341dp"
             android:layout_height="503dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/rectangleMessaging"
             app:layout_constraintEnd_toEndOf="@+id/rectangleMessaging"
             app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintStart_toStartOf="@+id/rectangleMessaging"
             app:layout_constraintTop_toBottomOf="@+id/imagenRectagle"
             app:layout_constraintVertical_bias="0.023" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<String> {
+public class BookAdapterSearch extends ArrayAdapter<String> {
 
     private final Context context;
     private final List<String> titlesList;
@@ -28,8 +28,8 @@ public class CustomAdapter extends ArrayAdapter<String> {
         void onItemClick(int position, String user);
     }
 
-    public CustomAdapter(Context context, List<String> titlesList, List<String> authorsList,
-                         List<String> photosList, List<String> usersList, OnMessageButtonClickListener listener) {
+    public BookAdapterSearch(Context context, List<String> titlesList, List<String> authorsList,
+                             List<String> photosList, List<String> usersList, OnMessageButtonClickListener listener) {
         super(context, R.layout.item_book, titlesList);
         this.context = context;
         this.titlesList = titlesList;
@@ -42,13 +42,13 @@ public class CustomAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.item_book, parent, false);
+        View rootView = inflater.inflate(R.layout.item_book, parent, false);
 
-        TextView titleTextView = rowView.findViewById(R.id.titleTextView);
-        TextView authorTextView = rowView.findViewById(R.id.authorTextView);
-        ImageView photoImageView = rowView.findViewById(R.id.BookImageView);
-        TextView userTextView = rowView.findViewById(R.id.userTextView);
-        ImageButton messageButton = rowView.findViewById(R.id.messageButton);
+        TextView titleTextView = rootView.findViewById(R.id.titleTextView);
+        TextView authorTextView = rootView.findViewById(R.id.authorTextView);
+        ImageView photoImageView = rootView.findViewById(R.id.BookImageView);
+        TextView userTextView = rootView.findViewById(R.id.userTextView);
+        ImageButton messageButton = rootView.findViewById(R.id.messageButton);
 
         titleTextView.setText(titlesList.get(position));
         authorTextView.setText(authorsList.get(position));
@@ -57,6 +57,8 @@ public class CustomAdapter extends ArrayAdapter<String> {
         // Cargar imagen usando Picasso desde la URL
         String imageUrl = photosList.get(position);
         Picasso.get().load(imageUrl)
+                .resize(200,300)
+                .centerCrop()
                 .placeholder(R.drawable.libro) // Placeholder en caso de que la carga falle
                 .error(R.drawable.libro) // Imagen a mostrar si hay un error al cargar la imagen
                 .into(photoImageView);
@@ -70,7 +72,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
             }
         });
 
-        rowView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String user = userTextView.toString();
@@ -80,6 +82,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
             }
         });
 
-        return rowView;
+
+        return rootView;
     }
 }

@@ -107,8 +107,6 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
         //replaceFragment(new HomeFragment());
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -173,8 +171,6 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
                 });
             }
         });
-
-
         return rootView;
     }
 
@@ -225,15 +221,19 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
                                     authorsList, photosList, usersList,SearchFragment.this);
                             searchListView.setAdapter(bookAdapter);
                         }
-
                     }
                 });
     }
 
     @Override
     public void onMessageButtonClick(int position) {
-        // Abrir mensaje con usuario cuando se implemente
-        Toast.makeText(getActivity(), "Button clicked for contact: " + usersList.get(position), Toast.LENGTH_SHORT).show();
+        //Enviamos el usuario al fragment de messagesChatFragment
+        String textToSend = usersList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putString("userIdReceptor", textToSend);
+        MessagesChatFragment messagesChatFragment = new MessagesChatFragment();
+        messagesChatFragment.setArguments(bundle);
+        replaceFragment(messagesChatFragment);
     }
 
     private void toastNoResultsFound() {
