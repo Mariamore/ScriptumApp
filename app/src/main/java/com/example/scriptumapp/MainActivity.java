@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.home) {
                 replaceFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.profile) {
-                //comprobamos si un usuario está logeado
+                //Comprobamos si un usuario está logeado
                 if(user != null){
-                    //si está logeado, aparece su perfil
+                    //Si está logeado, aparece su perfil
                    replaceFragment(new ProfileFragment());
                 } else {
                     //si no está logeado, aparece el login
@@ -48,7 +48,14 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.search) {
                 replaceFragment(new SearchFragment());
             } else if (item.getItemId() == R.id.messages) {
-                replaceFragment(new MessagesFragment());
+                //Comprobamos si un usuario está logeado
+                if(user != null){
+                    //Si está logeado, aparece la lista de usuarios
+                    replaceFragment(new MessagesFragment());
+                } else {
+                    //Si no está logeado, aparece el login
+                    replaceFragment(new LoginFragment());
+                }
             }
             return true;
         });

@@ -57,8 +57,7 @@
     <string name="message_error">Error sending message</string>
     <string name="error_loading_user_data">Error loading user data</string>
     <string name="timestamp">Timestamp</string>
-    <string name="encryption_error">Encryption error</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="sensitive_information">"Do not share sensitive information, like passwords"</string>
 
 
 </resources>

@@ -76,6 +76,8 @@ public class MessagesChatFragment extends Fragment {
         imageViewReceiver = rootView.findViewById(R.id.imageViewReceiver);
         recyclerView = rootView.findViewById(R.id.recylerViewMessages);
 
+        createToastError(getString(R.string.sensitive_information));
+
         getUserProfile();
 
         // Inicializamos la lista de mensajes y el adaptador
