@@ -103,29 +103,23 @@ public class MessagesChatFragment extends Fragment {
     }
 
     public void sendMessage(String chatId, String senderId, String receiverId, String messageText) {
+        // Probar sin String ni long
         messageId = db.collection("messages").document().getId(); // Generar un ID único para el mensaje
         timestamp = System.currentTimeMillis();
+        Message message = new Message(messageId, chatId, senderId, receiverId, messageText, timestamp);
 
-        // Añadimos el mensaje sin encriptar a la lista local
-        Message localMessage = new Message(messageId, chatId, senderId, receiverId, messageText, timestamp);
-        messageList.add(localMessage);
-        adapter.notifyItemInserted(messageList.size() - 1);
-        recyclerView.scrollToPosition(messageList.size() - 1);
-        messageEditText.setText("");
-
-        try {
-            String encryptedMessage = AESCipher.encrypt(requireContext(), messageText);
-            Message encryptedMessageObject = new Message(messageId, chatId, senderId, receiverId, encryptedMessage, timestamp);
-
-            db.collection("messages").document(messageId).set(encryptedMessageObject)
-                    .addOnSuccessListener(aVoid -> {
-                        messageEditText.setText("");
-                    })
-                    .addOnFailureListener(e -> createToastError(getString(R.string.message_error)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            createToastError(getString(R.string.encryption_error));
-        }
+        db.collection("messages").document(messageId).set(message)
+                .addOnSuccessListener(aVoid -> {
+                    // Éxito
+                    messageEditText.setText(""); //Limpiamos el EditText de contenido
+                    //messageList.add(message);
+                    //adapter.notifyItemInserted(messageList.size() - 1); // Notificar al adaptador de la nueva inserción
+                    //recyclerView.scrollToPosition(messageList.size() - 1); // Desplazar al último mensaje
+                })
+                .addOnFailureListener(e -> {
+                    // Error
+                    createToastError(getString(R.string.message_error));
+                });
     }
 
     public void receiveMessages(String chatId) {
@@ -139,14 +133,6 @@ public class MessagesChatFragment extends Fragment {
                         messageList.clear();
                         for (QueryDocumentSnapshot document : snapshots) {
                             Message message = document.toObject(Message.class);
-                            //Desencriptamos el mensaje recibido
-                            try {
-                                String decryptedMessage = AESCipher.decrypt(requireContext(), message.getMessageText());
-                                message.setMessageText(decryptedMessage);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                createToastError(getString(R.string.decryption_error));
-                            }
                             messageList.add(message);
                         }
                         adapter.notifyDataSetChanged();
