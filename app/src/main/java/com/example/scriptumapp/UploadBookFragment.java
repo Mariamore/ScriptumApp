@@ -152,6 +152,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
             // Add a new document with a generated id.
             Map<String, Object> data = new HashMap<>();
+            data.put("bookId", bookId);
             data.put("title", title);
             data.put("author", author);
             data.put("editorial", editorial);
