@@ -85,7 +85,7 @@
             android:text="@string/back"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintHorizontal_bias="0.274"
+            app:layout_constraintHorizontal_bias="0.827"
             app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toBottomOf="@+id/webView" />
 
@@ -98,16 +98,16 @@
             android:fontFamily="@font/inter"
             android:text="Save"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintHorizontal_bias="0.324"
-            app:layout_constraintStart_toEndOf="@+id/backButton"
+            app:layout_constraintEnd_toStartOf="@+id/backButton"
+            app:layout_constraintHorizontal_bias="0.415"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
             app:layout_constraintTop_toBottomOf="@+id/webView" />
 
         <Button
             android:id="@+id/searchButton"
             android:layout_width="196dp"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:backgroundTint="@color/buttons"
             android:fontFamily="@font/inter"
             android:text="Search address"

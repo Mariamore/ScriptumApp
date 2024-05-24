@@ -41,6 +41,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     private float longitude;
     private EditText addressInput;
     private String addressWithCoordinates;
+    private String lastSearchedAddress = "";
     private Button searchButton, backButton, saveButton;
 
     // TODO: Rename and change types of parameters
@@ -115,9 +116,27 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                 addressInput.setError("Enter an address");
 
             }
+            // Almacenar el contenido del addressInput
+            lastSearchedAddress = address;
             webView.evaluateJavascript("searchAddress('" + address + "')", null);
 
         } else if (id == R.id.saveButton){
+            // Obtener el contenido actual del addressInput
+            String currentAddress = addressInput.getText().toString();
+
+            // Comparar el contenido actual con el último contenido buscado
+            if (!currentAddress.equals(lastSearchedAddress)) {
+                // Mostrar un toast indicando que el contenido ha cambiado desde la última búsqueda
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_layout_fail,
+                        requireActivity().findViewById(R.id.toastLayoutFail));
+                TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                txtMsg.setText("You must search the address first");
+                Toast toast = new Toast(requireContext());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+            } else {
 
             Bundle bundle = new Bundle();
             bundle.putString("address",addressInput.getText().toString());
@@ -129,6 +148,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
             // Retroceder al fragmento anterior en la pila de retroceso
             fragmentManager.popBackStack();
+            }
         } else if (id == R.id.backButton){
             replaceFragment(new SignUpFragment());
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -150,7 +170,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         this.latitude = latitude;
         this.longitude = longitude;
         addressWithCoordinates = String.format(Locale.getDefault(), "%.6f, %.6f", latitude, longitude);
-        if (latitude == 999.999999 && longitude == -999.999999){
+        if (latitude == 0 && longitude == 0){
             LayoutInflater inflater = requireActivity().getLayoutInflater();
             View layout = inflater.inflate(R.layout.toast_layout_fail,
                     (ViewGroup) requireActivity().findViewById(R.id.toastLayoutFail));

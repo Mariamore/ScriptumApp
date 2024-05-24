@@ -49,6 +49,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
     public double longitude, latitude;
     private FirebaseFirestore db;
 
+    private String lastSearchedAddress = "";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -96,6 +97,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
         idUser = mAuth.getCurrentUser().getUid();
         webView = rootView.findViewById(R.id.webView);
         addressInput = rootView.findViewById(R.id.searchAddressTextInput);
+
         db = FirebaseFirestore.getInstance();
         db.collection("usersData")
                 .whereEqualTo("user", idUser)
@@ -128,6 +130,8 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
                     searchButton = rootView.findViewById(R.id.searchButton);
                     backButton = rootView.findViewById(R.id.backButton);
                     saveButton = rootView.findViewById(R.id.saveButton);
+
+
 
                     searchButton.setOnClickListener(LocationFragment.this);
                     saveButton.setOnClickListener(LocationFragment.this);
@@ -185,42 +189,62 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
                 addressInput.setError("Enter an address");
 
             }
+            // Almacenar el contenido del addressInput
+            lastSearchedAddress = address;
             webView.evaluateJavascript("searchAddress('" + address + "')", null);
 
         } else if (id == R.id.saveButton){
+            // Obtener el contenido actual del addressInput
+            String currentAddress = addressInput.getText().toString();
 
-            db.collection("usersData")
-                    .whereEqualTo("user", idUser)
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            // Comparar el contenido actual con el último contenido buscado
+            if (!currentAddress.equals(lastSearchedAddress)) {
+                // Mostrar un toast indicando que el contenido ha cambiado desde la última búsqueda
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_layout_fail,
+                        requireActivity().findViewById(R.id.toastLayoutFail));
+                TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                txtMsg.setText("You must search the address first");
+                Toast toast = new Toast(requireContext());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+            } else {
+                db.collection("usersData")
+                        .whereEqualTo("user", idUser)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                // Aquí tendrás acceso al documento que cumple con la condición
-                                // Puedes obtener su ID y luego actualizarlo
-                                String documentId = documentSnapshot.getId();
-                                updateDocument(documentId);
+                                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    // Aquí tendrás acceso al documento que cumple con la condición
+                                    // Puedes obtener su ID y luego actualizarlo
+                                    String documentId = documentSnapshot.getId();
+                                    updateDocument(documentId);
+                                }
                             }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Maneja cualquier error que pueda ocurrir al obtener el documento
-                            LayoutInflater inflater = getLayoutInflater();
-                            View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                    requireActivity().findViewById(R.id.toastLayoutFail));
-                            TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                            txtMsg.setText("No existe el documento");
-                            Toast toast = new Toast(requireContext());
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.setView(layout);
-                            toast.show();
-                        }
-                    });
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Maneja cualquier error que pueda ocurrir al obtener el documento
+                                LayoutInflater inflater = getLayoutInflater();
+                                View layout = inflater.inflate(R.layout.toast_layout_fail,
+                                        requireActivity().findViewById(R.id.toastLayoutFail));
+                                TextView txtMsg = layout.findViewById(R.id.toastMessage);
+                                txtMsg.setText("No existe el documento");
+                                Toast toast = new Toast(requireContext());
+                                toast.setDuration(Toast.LENGTH_LONG);
+                                toast.setView(layout);
+                                toast.show();
+                            }
+                        });
 
 
-            replaceFragment(new ProfileFragment());
+                replaceFragment(new ProfileFragment());
+            }
+
+
         } else if (id == R.id.backButton){
             replaceFragment(new ProfileFragment());
 
@@ -236,12 +260,15 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
     }
 
     @JavascriptInterface
-    public void setCoordinates(double latitudeNueva, double longitudeNueva) {
+    public void setCoordinates(double newLatitude, double newLongitude) {
         // Guarda las coordenadas y la dirección en variables de instancia
-        this.latitude = latitudeNueva;
-        this.longitude = longitudeNueva;
+        this.latitude = newLatitude;
+        this.longitude = newLongitude;
+
+
        String addressWithCoordinates = String.format(Locale.getDefault(), "%.6f, %.6f", latitude, longitude);
-        if (latitude == 999.999999 && longitude == -999.999999){
+        if (latitude == 0 && longitude == 0){
+
             LayoutInflater inflater = requireActivity().getLayoutInflater();
             View layout = inflater.inflate(R.layout.toast_layout_fail,
                     (ViewGroup) requireActivity().findViewById(R.id.toastLayoutFail));
@@ -253,6 +280,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
             toast.show();
             addressInput.setText("");
             addressInput.requestFocus();
+
 
         }
 
