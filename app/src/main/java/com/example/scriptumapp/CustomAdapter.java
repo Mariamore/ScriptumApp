@@ -25,6 +25,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
     public interface OnMessageButtonClickListener {
         void onMessageButtonClick(int position);
+        void onItemClick(int position, String user);
     }
 
     public CustomAdapter(Context context, List<String> titlesList, List<String> authorsList,
@@ -65,6 +66,16 @@ public class CustomAdapter extends ArrayAdapter<String> {
             public void onClick(View v) {
                 if (listener != null) {
                     listener.onMessageButtonClick(position);
+                }
+            }
+        });
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String user = userTextView.toString();
+                if (listener != null) {
+                    listener.onItemClick(position, user);
                 }
             }
         });

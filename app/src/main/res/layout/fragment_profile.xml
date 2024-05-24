@@ -40,7 +40,9 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/userlogo" />
+            android:src="@drawable/userlogo"
+            app:civ_border_width="8dp"
+            app:civ_border_color="@color/text"/>
 
 
         <ImageView

@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,7 +37,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
- */
+*/
 public class SearchFragment extends Fragment implements CustomAdapter.OnMessageButtonClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -54,9 +56,17 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
     private List<String> authorsList = new ArrayList<>();
     private List<String> photosList = new ArrayList<>();
     private List<String> usersList = new ArrayList<>();
+    private List<String> booksIdList = new ArrayList<>();
+    private List<String> savedTitlesList = new ArrayList<>();
+    private List<String> savedAuthorsList = new ArrayList<>();
+    private List<String> savedPhotosList = new ArrayList<>();
+    private List<String> savedUsersList = new ArrayList<>();
+    private List<String> savedBooksIdList = new ArrayList<>();
     private CollectionReference booksCollection;
     private Query query;
-    private String queryText, titleBook, authorBook, photoBook, userBook;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private String queryText, titleBook, authorBook, photoBook, userBook, idUser, bookId;
     private FirebaseFirestore db;
     private View rootView;
 
@@ -74,7 +84,7 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment SearchFragment.
-     */
+*/
     // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
@@ -97,6 +107,8 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
         //replaceFragment(new HomeFragment());
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -106,25 +118,46 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         searchEditText = rootView.findViewById(R.id.search_edit_text);
         db = FirebaseFirestore.getInstance();
-        booksCollection = db.collection("books");
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+//hay que pensar si queremos que usuarios no autenticados puedan buscar o no
+        if (user != null) {
+            idUser = user.getUid();
+            // Resto del código que utiliza el UID del usuario
+        } /*else {
+           idUser = "non_authenticated_user_id";
+
+        }
+*/
+        booksCollection = db.collection("booksData");
         searchButton = rootView.findViewById((R.id.searchButton));
         searchListView = rootView.findViewById(R.id.searchListView);
 
+        if (savedTitlesList.size() > 0) {
+            CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), savedTitlesList,
+                    savedAuthorsList, savedPhotosList, savedUsersList, this);
+            searchListView.setAdapter(bookAdapter);
+        }
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 queryText = searchEditText.getText().toString();
-                query = booksCollection.whereGreaterThanOrEqualTo("title", queryText.toLowerCase());
+                query = booksCollection.whereGreaterThanOrEqualTo("title", queryText.toLowerCase())
+                        .whereLessThanOrEqualTo("title", queryText + "\uf8ff")
+                        ;
                 query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                if(document.contains("title") && document.contains("author")){
-                                titleBook = document.getString("title");
-                                authorBook = document.getString("author");
-                                photoBook = document.getString("photo");
-                                userBook = document.getString("user");
+                                if(!document.getString("user").equals(idUser)){
+                                    if(document.contains("title") && document.contains("author")){
+                                    titleBook = document.getString("title");
+                                    authorBook = document.getString("author");
+                                    photoBook = document.getString("photo");
+                                    userBook = document.getString("user");
+                                    bookId = document.getId();
+                                    }
                                 }
                             }
                             updateUi();
@@ -140,11 +173,13 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
                 });
             }
         });
+
+
         return rootView;
     }
 
     private void updateUi(){
-        db.collection("books")
+        db.collection("booksData")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -156,6 +191,14 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
                         authorsList.clear();
                         photosList.clear();
                         usersList.clear();
+                        booksIdList.clear();
+
+                        savedTitlesList.clear();
+                        savedAuthorsList.clear();
+                        savedPhotosList.clear();
+                        savedUsersList.clear();
+                        savedBooksIdList.clear();
+
                         for (QueryDocumentSnapshot doc : value) {
                             String titleString = doc.getString("title");
                             if (titleString != null && titleString.toLowerCase().contains(queryText.toLowerCase())){
@@ -163,17 +206,26 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
                                 authorsList.add(doc.getString("author"));
                                 photosList.add(doc.getString("photo"));
                                 usersList.add(doc.getString("user"));
+                                booksIdList.add(doc.getId());
+
+
                             }
                         }
+                        savedTitlesList.addAll(titlesList);
+                        savedAuthorsList.addAll(authorsList);
+                        savedPhotosList.addAll(photosList);
+                        savedUsersList.addAll(usersList);
+                        savedBooksIdList.addAll(booksIdList);
                         //Rellenar el listview con el adapter
                         if(titlesList.isEmpty()){
                             searchListView.setAdapter(null);
                             toastNoResultsFound();
                         }else{
                             CustomAdapter bookAdapter = new CustomAdapter(requireActivity(), titlesList,
-                                    authorsList, photosList, usersList, SearchFragment.this);
+                                    authorsList, photosList, usersList,SearchFragment.this);
                             searchListView.setAdapter(bookAdapter);
                         }
+
                     }
                 });
     }
@@ -203,4 +255,27 @@ public class SearchFragment extends Fragment implements CustomAdapter.OnMessageB
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
+
+    @Override
+    public void onItemClick(int position, String user) {
+        String bookId = booksIdList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putString("bookId",bookId);
+        // Crear una instancia de BookInfoFragment y asignar el Bundle
+        BookInfoFragment fragment = new BookInfoFragment();
+        fragment.setArguments(bundle);
+
+        // Reemplazar el fragmento actual con BookInfoFragment
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+    }
+
+
 }
+
+
