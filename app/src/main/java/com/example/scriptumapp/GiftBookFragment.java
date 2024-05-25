@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -99,6 +101,16 @@ public class GiftBookFragment extends Fragment {
         giftAdapterBook = new BookAdapterGift(giftOp, getParentFragmentManager());
         mRecycler.setAdapter(giftAdapterBook);
 
+        //boton para salir
+        backGiftBook = rootView.findViewById(R.id.backGiftBook);
+        backGiftBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new QueriesFragment());
+
+            }
+        });
+
         return rootView;
 
     }
@@ -112,6 +124,14 @@ public class GiftBookFragment extends Fragment {
     public void onStop() {
         super.onStop();
         giftAdapterBook.stopListening();
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getParentFragmentManager(); // Obtiene el FragmentManager del padre
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(this.getId(), fragment); // Reemplaza el fragmento actual con el nuevo fragmento
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
 
