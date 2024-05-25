@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -90,15 +92,48 @@ public class GiftBookFragment extends Fragment {
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         //query para la coleccion Loan de la BBDD
-        query = mFirestore.collection("users").document(idUser).collection("gift");
+        query = mFirestore.collection("booksData").whereEqualTo("user", idUser).whereEqualTo("type", "gift");
 
         //Crear opciones de la consulta
         FirestoreRecyclerOptions<Book> giftOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
 
-        //Inicializar el adaptador con las opciones
-        giftAdapterBook = new BookAdapterGift(giftOp);
+        //Inicializamos el adaptador con las opciones
+        giftAdapterBook = new BookAdapterGift(giftOp, getParentFragmentManager());
         mRecycler.setAdapter(giftAdapterBook);
 
+        //boton para salir
+        backGiftBook = rootView.findViewById(R.id.backGiftBook);
+        backGiftBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new QueriesFragment());
+
+            }
+        });
+
         return rootView;
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        giftAdapterBook.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        giftAdapterBook.stopListening();
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getParentFragmentManager(); // Obtiene el FragmentManager del padre
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(this.getId(), fragment); // Reemplaza el fragmento actual con el nuevo fragmento
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
+
+
+

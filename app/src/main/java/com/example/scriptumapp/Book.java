@@ -1,6 +1,11 @@
 package com.example.scriptumapp;
 
-public class Book {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Book implements Parcelable {
 
     private String title, author, status, photo;
 
@@ -13,6 +18,25 @@ public class Book {
         this.status = status;
         this.photo = photo;
     }
+
+    protected Book(Parcel in) {
+        title = in.readString();
+        author = in.readString();
+        status = in.readString();
+        photo = in.readString();
+    }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -44,5 +68,18 @@ public class Book {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(author);
+        dest.writeString(status);
+        dest.writeString(photo);
     }
 }

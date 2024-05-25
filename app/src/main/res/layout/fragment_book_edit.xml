@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UploadBookFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/rectangle"
+            android:layout_width="344dp"
+            android:layout_height="579dp"
+            android:layout_marginTop="72dp"
+            android:hint="@string/rectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rectangle" />
+
+        <ImageView
+            android:id="@+id/rectangle_bookEditImage"
+            android:layout_width="193dp"
+            android:layout_height="147dp"
+            android:layout_marginTop="25dp"
+            android:background="@color/colorTransparent"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/photo_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/photobook" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/titleLayout_bookEdit"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/titleEditText_bookEdit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:ems="10"
+                android:fontFamily="@font/inter"
+                android:hint="@string/book_title"
+                android:inputType="text"
+                android:textColor="@color/text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/authorLayout_bookEdit"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="160dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/authorEditText_bookEdit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:ems="10"
+                android:fontFamily="@font/inter"
+                android:hint="@string/author"
+                android:inputType="text"
+                android:textColor="@color/text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editorialLayout_bookEdit"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="220dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/editorialEditText_bookEdit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:ems="10"
+                android:fontFamily="@font/inter"
+                android:hint="@string/editorial"
+                android:inputType="text"
+                android:textColor="@color/text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/publicationYearLayout_bookEdit"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="280dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/yearEditText_bookEdit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:ems="10"
+                android:fontFamily="@font/inter"
+                android:hint="@string/publication_year"
+                android:inputType="text"
+                android:textColor="@color/text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text" />
+
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/current_statusLayout_bookEdit"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="340dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/currentStatusEditText_bookEdit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:ems="10"
+                android:fontFamily="@font/inter"
+                android:hint="@string/current_status_book"
+                android:inputType="text"
+                android:textColor="@color/text"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/commentsLayout_bookEdit"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="400dp"
+            android:textColorHint="@color/text"
+            app:boxBackgroundMode="none"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/rectangle"
+            app:layout_constraintTop_toTopOf="@+id/rectangle"/>
+
+        <Button
+            android:id="@+id/button_saveBookEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="150dp"
+            android:text="OK"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

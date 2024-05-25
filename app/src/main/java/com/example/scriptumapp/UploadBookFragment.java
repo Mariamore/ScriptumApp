@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -45,7 +46,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final int COD_SEL_IMAGE =300;
+    static final int COD_SEL_IMAGE =300;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -151,25 +152,21 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
             // Add a new document with a generated id.
             Map<String, Object> data = new HashMap<>();
+            data.put("bookId", bookId);
             data.put("title", title);
             data.put("author", author);
             data.put("editorial", editorial);
             data.put("year", publicationYear);
             data.put("status", status);
+            data.put("type", spinnerSelection);
             data.put("user", idUser);
 
-            db.collection("users").document(idUser).collection(spinnerSelection).document(bookId).
-            set(data)
-            //DocumentReference reDocument = db.collection("user").document(idUser).collection(spinnerSelection).document();
-            //reDocument.set(data)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-
+            db.collection("booksData")
+                    .add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
-                        public void onSuccess(Void unused) {
-
-                            uploadPhoto(bookId, spinnerSelection);
-
-                           // replaceFragment(new SavedBooksFragment());
+                        public void onSuccess(DocumentReference documentReference) {
+                            uploadPhoto(documentReference.getId());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -178,7 +175,6 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                             Toast.makeText(getContext(), "Error saving book data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-
         }
     }
     //selecionamos la imagen
@@ -200,14 +196,15 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void uploadPhoto(String bookId, String category) {
+    private void uploadPhoto(String idUser) {
 
         if (imageUri == null) { // Asegurarse de que la imagen se ha seleccionado
             Toast.makeText(getContext(), "Please select an image", Toast.LENGTH_SHORT).show();
             return;
         }
-        String imageName = bookId + ".jpg";
-        StorageReference imageRef = storageReference.child("users/" + idUser + "/" + category + "/" + imageName);
+        String imageName = idUser + ".jpg";
+        StorageReference imageRef = storageReference.child("booksData/" + idUser + "/" + imageName);
+
 
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -220,7 +217,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
                                 Map<String, Object> update = new HashMap<>();
                                 update.put("photo", imageUrl);
-                                db.collection("users").document(idUser).collection(category).document(bookId)
+                                db.collection("booksData").document(idUser)
                                         .update(update)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
