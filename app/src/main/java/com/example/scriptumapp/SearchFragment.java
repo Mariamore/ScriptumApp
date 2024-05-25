@@ -20,9 +20,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,22 +35,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
-*/
+
 public class SearchFragment extends Fragment implements BookAdapterSearch.OnMessageButtonClickListener {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private Button searchButton, messageButton;
     private EditText searchEditText;
@@ -57,62 +48,20 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
     private List<String> photosList = new ArrayList<>();
     private List<String> usersList = new ArrayList<>();
     private List<String> booksIdList = new ArrayList<>();
-    private List<String> savedTitlesList = new ArrayList<>();
-    private List<String> savedAuthorsList = new ArrayList<>();
-    private List<String> savedPhotosList = new ArrayList<>();
-    private List<String> savedUsersList = new ArrayList<>();
-    private List<String> savedBooksIdList = new ArrayList<>();
+    private List<Integer> relevanceScores = new ArrayList<>();
     private CollectionReference booksCollection;
-    private Query query;
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
     private String queryText, titleBook, authorBook, photoBook, userBook, idUser, bookId;
     private FirebaseFirestore db;
     private View rootView;
 
-    //Añadimos binding para cargar otro fragment
-    //FragmentSearchBinding binding;
-
     public SearchFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchFragment.
-*/
-    // TODO: Rename and change types and number of parameters
-    public static SearchFragment newInstance(String param1, String param2) {
-        SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        // Estas dos líneas cambiarían el fragment
-        //binding = FragmentSearchBinding.inflate(getLayoutInflater());
-        //replaceFragment(new HomeFragment());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Añadir estas dos líneas siguientes
-        //binding = FragmentSearchBinding.inflate(inflater, container, false);
-        //return binding.getRoot();
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         searchEditText = rootView.findViewById(R.id.search_edit_text);
         db = FirebaseFirestore.getInstance();
@@ -132,50 +81,17 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         searchButton = rootView.findViewById((R.id.searchButton));
         searchListView = rootView.findViewById(R.id.searchListView);
 
-        if (savedTitlesList.size() > 0) {
-            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), savedTitlesList,
-                    savedAuthorsList, savedPhotosList, savedUsersList, this);
-            searchListView.setAdapter(bookAdapter);
-        }
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                queryText = searchEditText.getText().toString();
-                query = booksCollection.whereGreaterThanOrEqualTo("title", queryText.toLowerCase())
-                        .whereLessThanOrEqualTo("title", queryText + "\uf8ff")
-                        ;
-                query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                if(!document.getString("user").equals(idUser)){
-                                    if(document.contains("title") && document.contains("author")){
-                                    titleBook = document.getString("title");
-                                    authorBook = document.getString("author");
-                                    photoBook = document.getString("photo");
-                                    userBook = document.getString("user");
-                                    bookId = document.getId();
-                                    }
-                                }
-                            }
-                            updateUi();
-                        } else {
-                            toastNoResultsFound();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        toastNoResultsFound();
-                    }
-                });
+                queryText = searchEditText.getText().toString().toLowerCase().trim();
+                searchAndUpdateUi(queryText);
             }
         });
         return rootView;
     }
 
-    private void updateUi(){
+    private void searchAndUpdateUi(String query){
         db.collection("booksData")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -189,43 +105,85 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                         photosList.clear();
                         usersList.clear();
                         booksIdList.clear();
+                        relevanceScores.clear();
 
-                        savedTitlesList.clear();
-                        savedAuthorsList.clear();
-                        savedPhotosList.clear();
-                        savedUsersList.clear();
-                        savedBooksIdList.clear();
+                        if (value != null) {
+                            for (QueryDocumentSnapshot doc : value) {
+                                String titleString = doc.getString("title");
+                                String authorString = doc.getString("author");
 
-                        for (QueryDocumentSnapshot doc : value) {
-                            String titleString = doc.getString("title");
-                            if (titleString != null && titleString.toLowerCase().contains(queryText.toLowerCase())){
-                                titlesList.add(doc.getString("title"));
-                                authorsList.add(doc.getString("author"));
-                                photosList.add(doc.getString("photo"));
-                                usersList.add(doc.getString("user"));
-                                booksIdList.add(doc.getId());
+                                if (containsAllWord(titleString, query) || containsAllWord(authorString, query)) {
+                                    int relevanceScore = calculateRelevance(titleString, authorString, query);
 
-
+                                    titlesList.add(doc.getString("title"));
+                                    authorsList.add(doc.getString("author"));
+                                    photosList.add(doc.getString("photo"));
+                                    usersList.add(doc.getString("user"));
+                                    booksIdList.add(doc.getId());
+                                    relevanceScores.add(relevanceScore);
+                                }
                             }
                         }
-                        //Para poder recuperar la búsqueda anterior al volver del BookInfoFragment
-                        savedTitlesList.addAll(titlesList);
-                        savedAuthorsList.addAll(authorsList);
-                        savedPhotosList.addAll(photosList);
-                        savedUsersList.addAll(usersList);
-                        savedBooksIdList.addAll(booksIdList);
 
-                        //Rellenar el listview con el adapter
-                        if(titlesList.isEmpty()){
+                        // Ordenamos los resultados en función de la puntuación de relevancia
+                        int[] sortedIndices = IntStream.range(0, relevanceScores.size())
+                                .boxed()
+                                .sorted((i, j) -> Integer.compare(relevanceScores.get(j), relevanceScores.get(i)))
+                                .mapToInt(ele -> ele)
+                                .toArray();
+
+                        List<String> sortedTitles = new ArrayList<>();
+                        List<String> sortedAuthors = new ArrayList<>();
+                        List<String> sortedPhotos = new ArrayList<>();
+                        List<String> sortedUsers = new ArrayList<>();
+                        List<String> sortedBooksIds = new ArrayList<>();
+
+                        for (int i : sortedIndices) {
+                            sortedTitles.add(titlesList.get(i));
+                            sortedAuthors.add(authorsList.get(i));
+                            sortedPhotos.add(photosList.get(i));
+                            sortedUsers.add(usersList.get(i));
+                            sortedBooksIds.add(booksIdList.get(i));
+                        }
+
+                        if (sortedTitles.isEmpty()) {
                             searchListView.setAdapter(null);
                             toastNoResultsFound();
-                        }else{
-                            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), titlesList,
-                                    authorsList, photosList, usersList,SearchFragment.this);
+                        } else {
+                            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), sortedTitles, sortedAuthors, sortedPhotos, sortedUsers, SearchFragment.this);
                             searchListView.setAdapter(bookAdapter);
                         }
                     }
                 });
+    }
+
+    // Método que verifica que estén todas las palabras en el documento
+    private boolean containsAllWord(String text, String query) {
+        if (text == null || query.isEmpty()) {
+            return false;
+        }
+        String[] queryWords = query.toLowerCase().split("\\s+");
+        for (String word : queryWords) {
+            if (text.toLowerCase().contains(word.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Calculamos la relevancia de los resultados con puntuación
+    private int calculateRelevance(String title, String author, String query) {
+        int score = 0;
+        String[] queryWords = query.toLowerCase().split("\\s+");
+        for (String word : queryWords) {
+            if (title.toLowerCase().contains(word.toLowerCase())) {
+                score++;
+            }
+            if (author.toLowerCase().contains(word.toLowerCase())) {
+                score++;
+            }
+        }
+        return score;
     }
 
     @Override
