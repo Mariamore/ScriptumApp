@@ -81,6 +81,7 @@
     <string name="user_logged_out">User logged out</string>
     <string name="user_photo_uploaded">User photo uploaded</string>
     <string name="error_uploading_user_photo">Error uploading user photo</string>
+    <string name="error_retrieving_document">Error retrieving document</string>
 
 
 </resources>

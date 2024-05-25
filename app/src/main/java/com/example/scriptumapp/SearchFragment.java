@@ -139,8 +139,6 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
 
                                 if (containsAllWord(titleString, query) || containsAllWord(authorString, query)) {
 
-
-
                                     int relevanceScore = calculateRelevance(titleString, authorString, query);
 
                                     titlesList.add(doc.getString("title"));
@@ -219,7 +217,7 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
             }
         }
 
-       return score;
+        return score;
     }
 
     @Override

@@ -318,7 +318,15 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
                                     bookPhoto.setImageResource(R.drawable.photobook);
                                 }
 
+                            } else {
+                                negativeToast(getString(R.string.the_document_does_not_exist));
                             }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            negativeToast(getString(R.string.error_retrieving_document));
                         }
                     });
 
