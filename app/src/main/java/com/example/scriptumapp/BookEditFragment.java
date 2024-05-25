@@ -112,6 +112,7 @@ public class BookEditFragment extends Fragment {
         button_saveBookEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 saveBookEdit();
             }
         });

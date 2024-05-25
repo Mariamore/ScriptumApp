@@ -1,5 +1,6 @@
 package com.example.scriptumapp;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,7 @@ public class BookLoanFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,7 +96,7 @@ public class BookLoanFragment extends Fragment {
         FirestoreRecyclerOptions<Book> loanOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
 
         //Inicializar el adaptador con las opciones
-        loanAdapterBook = new BookAdapterLoan(loanOp, this, new Object());
+        loanAdapterBook = new BookAdapterLoan(loanOp, getParentFragmentManager());
         mRecycler.setAdapter(loanAdapterBook);
 
         return rootView;
