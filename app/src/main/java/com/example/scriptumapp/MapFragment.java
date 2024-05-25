@@ -34,13 +34,10 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     private WebView webView;
-
     private float latitude;
     private float longitude;
     private EditText addressInput;
-    private String addressWithCoordinates;
     private String lastSearchedAddress = "";
     private Button searchButton, backButton, saveButton;
 
@@ -51,10 +48,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     public MapFragment() {
         // Required empty public constructor
     }
-
-
-
-
 
     /**
      * Use this factory method to create a new instance of
@@ -89,21 +82,9 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
-        webView = rootView.findViewById(R.id.webView);
-        addressInput = rootView.findViewById(R.id.searchAddressTextInput);
-        searchButton = rootView.findViewById(R.id.searchButton);
-        backButton = rootView.findViewById(R.id.backButton);
-        saveButton = rootView.findViewById(R.id.saveButton);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.addJavascriptInterface(this, "Android");
-        webView.setWebViewClient(new WebViewClient());
+        initializeVariables(rootView);
+        setListeners();
 
-
-        webView.loadUrl("file:///android_res/raw/map.html"); // Ruta al archivo HTML del mapa
-
-        searchButton.setOnClickListener(this);
-        saveButton.setOnClickListener(this);
-        backButton.setOnClickListener(this);
         return rootView;
     }
 
@@ -113,10 +94,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         if (id == R.id.searchButton){
             String address = addressInput.getText().toString();
             if (address.isEmpty()){
-                addressInput.setError("Enter an address");
-
+                addressInput.setError(getString(R.string.enter_an_address));
             }
-            // Almacenar el contenido del addressInput
             lastSearchedAddress = address;
             webView.evaluateJavascript("searchAddress('" + address + "')", null);
 
@@ -126,16 +105,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
             // Comparar el contenido actual con el último contenido buscado
             if (!currentAddress.equals(lastSearchedAddress)) {
-                // Mostrar un toast indicando que el contenido ha cambiado desde la última búsqueda
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.toast_layout_fail,
-                        requireActivity().findViewById(R.id.toastLayoutFail));
-                TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                txtMsg.setText("You must search the address first");
-                Toast toast = new Toast(requireContext());
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
+                negativeToast(getString(R.string.you_must_search_the_address_first));
             } else {
 
             Bundle bundle = new Bundle();
@@ -150,7 +120,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
             fragmentManager.popBackStack();
             }
         } else if (id == R.id.backButton){
-            replaceFragment(new SignUpFragment());
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
             // Retroceder al fragmento anterior en la pila de retroceso
@@ -164,35 +133,58 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
     @JavascriptInterface
     public void setCoordinates(float latitude, float longitude) {
         // Guarda las coordenadas y la dirección en variables de instancia
         this.latitude = latitude;
         this.longitude = longitude;
-        addressWithCoordinates = String.format(Locale.getDefault(), "%.6f, %.6f", latitude, longitude);
         if (latitude == 0 && longitude == 0){
-            LayoutInflater inflater = requireActivity().getLayoutInflater();
-            View layout = inflater.inflate(R.layout.toast_layout_fail,
-                    (ViewGroup) requireActivity().findViewById(R.id.toastLayoutFail));
-            TextView txtMsg = layout.findViewById(R.id.toastMessage);
-            txtMsg.setText("Enter a valid address");
-            Toast toast = new Toast(requireContext());
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show();
-            addressInput.setText("");
-            addressInput.requestFocus();
-
+            negativeToast(getString(R.string.enter_a_valid_address));
         }
-
-
-        //showToast("Coordenadas: " + addressWithCoordinates);
     }
 
+    /**
+     * Inicializa las variables de la interfaz de usuario.
+     *
+     * @param rootView La vista raíz del fragmento.
+     */
+    private void initializeVariables(View rootView){
+        webView = rootView.findViewById(R.id.webView);
+        addressInput = rootView.findViewById(R.id.searchAddressTextInput);
+        searchButton = rootView.findViewById(R.id.searchButton);
+        backButton = rootView.findViewById(R.id.backButton);
+        saveButton = rootView.findViewById(R.id.saveButton);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(this, "Android");
+        webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl("file:///android_res/raw/map.html");
+    }
 
-    private void showToast(String message) {
-        // Crea un nuevo Toast con el mensaje especificado
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    /**
+     * Establece los listeners para los botones.
+     */
+    private void setListeners(){
+        searchButton.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
+        backButton.setOnClickListener(this);
+    }
+
+    /**
+     * Muestra un mensaje de toast negativo.
+     *
+     * @param message El mensaje a mostrar.
+     */
+    private void negativeToast(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout_fail,
+                requireActivity().findViewById(R.id.toastLayoutFail));
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        txtMsg.setText(message);
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 
 }

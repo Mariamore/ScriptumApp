@@ -89,24 +89,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     }
                     latitude = bundle.getFloat("latitude");
                     longitude = bundle.getFloat("longitude");
-                    String addressWithCoordinates = String.format(Locale.getDefault(), "%.6f, %.6f", latitude, longitude);
-                    LayoutInflater inflater = requireActivity().getLayoutInflater();
-                    View layout = inflater.inflate(R.layout.toast_layout_ok,
-                            (ViewGroup) requireActivity().findViewById(R.id.toastLayoutOk));
-                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                    txtMsg.setText(addressWithCoordinates);
-                    Toast toast = new Toast(requireContext());
-                    toast.setDuration(Toast.LENGTH_LONG);
-                    toast.setView(layout);
-                    toast.show();
                 }
             });
-
-
-
-
-
-
 
     }
 
@@ -114,28 +98,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
 
-        emailInputEdittext = rootView.findViewById(R.id.emailInputEditText);
-        passwordInputEditText = rootView.findViewById(R.id.passwordInputEditText);
-        nameInputEditText = rootView.findViewById(R.id.nameSurnameInputeditText);
-        addressInputEditText = rootView.findViewById(R.id.addressInputEditText);
-        createAccButton = rootView.findViewById(R.id.createAccountButton);
-        exit = rootView.findViewById(R.id.exitText);
-        db = FirebaseFirestore.getInstance();
-
-
-        createAccButton.setOnClickListener(this);
-        exit.setOnClickListener(this);
-        addressInputEditText.setOnClickListener(this);
-
-
+        initializeVariables(rootView);
+        setListeners();
 
         return rootView;
     }
-
-
 
 
     @Override
@@ -149,22 +117,22 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             String nameSurname = nameInputEditText.getText().toString();
 
             if (nameSurname.isEmpty()){
-                nameInputEditText.setError("Required field");
+                nameInputEditText.setError(getString(R.string.required_field));
                 nameInputEditText.requestFocus();
             } else if (address.isEmpty()){
-                addressInputEditText.setError("Required field");
+                addressInputEditText.setError(getString(R.string.required_field));
 
             } else if(email.isEmpty()){
-                emailInputEdittext.setError("Required field");
+                emailInputEdittext.setError(getString(R.string.required_field));
                 emailInputEdittext.requestFocus();
             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                emailInputEdittext.setError("Enter a valid email");
+                emailInputEdittext.setError(getString(R.string.enter_a_valid_email));
                 emailInputEdittext.requestFocus();
             } else if (password.isEmpty()){
-                passwordInputEditText.setError("Required field");
+                passwordInputEditText.setError(getString(R.string.required_field));
                 passwordInputEditText.requestFocus();
             } else if(password.length() < 6){
-                passwordInputEditText.setError("6 characters minimum");
+                passwordInputEditText.setError(getString(R.string._6_characters_minimum));
                 passwordInputEditText.requestFocus();
 
             }else {
@@ -175,8 +143,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-
-
                                         idUser = mAuth.getCurrentUser().getUid();
                                         //Guardar datos en colección
                                         Map<String, Object> data = new HashMap<>();
@@ -190,52 +156,24 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        LayoutInflater inflater = requireActivity().getLayoutInflater();
-                                                        View layout = inflater.inflate(R.layout.toast_layout_ok,
-                                                                (ViewGroup) requireActivity().findViewById(R.id.toastLayoutOk));
-                                                        TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                                                        txtMsg.setText(R.string.account_created);
-                                                        Toast toast = new Toast(requireContext());
-                                                        toast.setDuration(Toast.LENGTH_LONG);
-                                                        toast.setView(layout);
-                                                        toast.show();
+                                                        positiveToast(getString(R.string.account_created));
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        LayoutInflater inflater = getLayoutInflater();
-                                                        View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                                                requireActivity().findViewById(R.id.toastLayoutFail));
-                                                        TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                                                        txtMsg.setText(R.string.sign_up_failed);
-                                                        Toast toast = new Toast(requireContext());
-                                                        toast.setDuration(Toast.LENGTH_LONG);
-                                                        toast.setView(layout);
-                                                        toast.show();
+                                                        negativeToast(getString(R.string.sign_up_failed));
                                                     }
                                                 });
-
-
-                                        // Cambiar Fragment a Profile
                                         replaceFragment(new ProfileFragment());
                                     } else {
-                                        LayoutInflater inflater = getLayoutInflater();
-                                        View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                                requireActivity().findViewById(R.id.toastLayoutFail));
-                                        TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                                        txtMsg.setText(R.string.sign_up_failed);
-                                        Toast toast = new Toast(requireContext());
-                                        toast.setDuration(Toast.LENGTH_LONG);
-                                        toast.setView(layout);
-                                        toast.show();
+                                        negativeToast(getString(R.string.sign_up_failed));
                                     }
                                 }
                             });
                 }
 
         } else if (id == R.id.exitText) {
-            // Cambiar Fragment a Login
             replaceFragment(new LoginFragment());
         } else if (id == R.id.addressInputEditText){
             replaceFragment(new MapFragment());
@@ -254,5 +192,67 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
 
 
+    /**
+     * Muestra un mensaje de notificación positivo (toast) en la pantalla.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
+    private void positiveToast(String message) {
+        // Obtiene el servicio de inflater para inflar el diseño del toast
+        LayoutInflater inflater = getLayoutInflater();
+        // Infla el diseño personalizado del toast
+        View layout = inflater.inflate(R.layout.toast_layout_ok,
+                requireActivity().findViewById(R.id.toastLayoutOk));
+        // Busca el TextView dentro del diseño del toast
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        // Establece el mensaje proporcionado en el TextView
+        txtMsg.setText(message);
+        // Crea y muestra el toast
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    /**
+     * Muestra un mensaje de notificación negativo (toast) en la pantalla.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
+    private void negativeToast(String message) {
+        // Usa inflater para inflar el diseño del toast
+        LayoutInflater inflater = getLayoutInflater();
+        // Infla el diseño personalizado del toast
+        View layout = inflater.inflate(R.layout.toast_layout_fail,
+                requireActivity().findViewById(R.id.toastLayoutFail));
+        // Busca el TextView dentro del diseño del toast
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        // Establece el mensaje proporcionado en el TextView
+        txtMsg.setText(message);
+        // Crea y muestra el toast
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    private void initializeVariables(View rootView){
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        emailInputEdittext = rootView.findViewById(R.id.emailInputEditText);
+        passwordInputEditText = rootView.findViewById(R.id.passwordInputEditText);
+        nameInputEditText = rootView.findViewById(R.id.nameSurnameInputeditText);
+        addressInputEditText = rootView.findViewById(R.id.addressInputEditText);
+        createAccButton = rootView.findViewById(R.id.createAccountButton);
+        exit = rootView.findViewById(R.id.exitText);
+        db = FirebaseFirestore.getInstance();
+    }
+
+    private void setListeners(){
+        createAccButton.setOnClickListener(this);
+        exit.setOnClickListener(this);
+        addressInputEditText.setOnClickListener(this);
+    }
 
 }

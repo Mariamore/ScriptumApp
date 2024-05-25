@@ -33,7 +33,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     private FirebaseAuth mAuth;
     private Button loginButton;
     private TextView signUp, forgotPassword;
@@ -80,18 +79,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
-
-        loginButton = rootView.findViewById(R.id.loginButton);
-        signUp = rootView.findViewById(R.id.signUp);
-        forgotPassword = rootView.findViewById(R.id.forgotPassword);
-        emailInputEdittext = rootView.findViewById(R.id.emailEditText);
-        passwordInputEditText = rootView.findViewById(R.id.passEditText);
-
-
-        loginButton.setOnClickListener(this);
-        signUp.setOnClickListener(this);
-        forgotPassword.setOnClickListener(this);
+        initializeVariables(rootView);
+        setListeners();
 
         return rootView;
 
@@ -107,19 +96,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             String password = passwordInputEditText.getText().toString();
 
             if(email.isEmpty()){
-                emailInputEdittext.setError("Required field");
+                emailInputEdittext.setError(getString(R.string.required_field));
                 emailInputEdittext.requestFocus();
             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                emailInputEdittext.setError("Enter a valid email");
+                emailInputEdittext.setError(getString(R.string.enter_a_valid_email));
                 emailInputEdittext.requestFocus();
             } else if (password.isEmpty()){
-                passwordInputEditText.setError("Required field");
+                passwordInputEditText.setError(getString(R.string.required_field));
                 passwordInputEditText.requestFocus();
-            } else if(password.length() < 6){
-                passwordInputEditText.setError("6 characters minimum");
+            } else if (password.length() < 6){
+                passwordInputEditText.setError(getString(R.string._6_characters_minimum));
                 passwordInputEditText.requestFocus();
-            } else{
-
+            } else {
                 //login en Firebase
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
@@ -136,7 +124,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                     toast.setDuration(Toast.LENGTH_LONG);
                                     toast.setView(layout);
                                     toast.show();
-                                    //Cambio ProfileFragment por UploadBookFragment para probar
+
                                     replaceFragment(new ProfileFragment());
                                 } else {
                                     LayoutInflater inflater = getLayoutInflater();
@@ -151,10 +139,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                                 }
                             }
                         });
-
-
             }
-            // Hacer un intent para pasar a la MainActivity
 
         } else if (id == R.id.signUp) {
             replaceFragment(new SignUpFragment());
@@ -171,6 +156,27 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         fragmentTransaction.commit();
     }
 
+    /**
+     * Inicializa las variables de la interfaz de usuario.
+     *
+     * @param rootView La vista raíz del fragmento.
+     */
+    private void initializeVariables(View rootView){
+        mAuth = FirebaseAuth.getInstance();
+        loginButton = rootView.findViewById(R.id.loginButton);
+        signUp = rootView.findViewById(R.id.signUp);
+        forgotPassword = rootView.findViewById(R.id.forgotPassword);
+        emailInputEdittext = rootView.findViewById(R.id.emailEditText);
+        passwordInputEditText = rootView.findViewById(R.id.passEditText);
+    }
 
+    /**
+     * Establece los listeners para los elementos de la interfaz de usuario.
+     */
+    private void setListeners(){
+        loginButton.setOnClickListener(this);
+        signUp.setOnClickListener(this);
+        forgotPassword.setOnClickListener(this);
+    }
 
 }

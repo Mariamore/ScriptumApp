@@ -146,10 +146,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             if (currentUser != null) {
                 // Cerrar sesión del usuario actual
                 mAuth.signOut();
-                positiveToast("User logged out");
+                positiveToast(getString(R.string.user_logged_out));
                 replaceFragment(new LoginFragment());
             } else {
-                negativeToast("No user is logged in");
+                negativeToast(getString(R.string.no_user_is_logged_in));
             }
         } else if (id == R.id.userLogo){
             openFileChooser();
@@ -215,14 +215,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                                                                     @Override
                                                                     public void onSuccess(Void aVoid) {
                                                                         // Muestra un mensaje de éxito si la actualización fue exitosa
-                                                                        positiveToast("User photo uploaded");
+                                                                        positiveToast(getString(R.string.user_photo_uploaded));
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(@NonNull Exception e) {
                                                                         // Muestra un mensaje de error si la actualización falla
-                                                                        negativeToast("Error uploading user photo");
+                                                                        negativeToast(getString(R.string.error_uploading_user_photo));
                                                                     }
                                                                 });
                                                     }

@@ -78,32 +78,24 @@ public class FullScreenImageFragment extends Fragment {
         fullScreenImageView = rootview.findViewById(R.id.fullScreenImageView);
         backButton = rootview.findViewById(R.id.backButton);
 
+        //recuperamos la imagen del fragment anterior
         Bundle bundle = getArguments();
         if (bundle != null) {
            String photoUrl= bundle.getString("photoUrl");
 
            if (photoUrl !=null && !photoUrl.isEmpty()) {
                FirebaseStorage storage = FirebaseStorage.getInstance();
-
-               // Aquí debes proporcionar la URL de tu imagen en el storage
                StorageReference storageRef = storage.getReferenceFromUrl(photoUrl);
-
-               // Descarga la imagen y muestra en el ImageView
                storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                    @Override
                    public void onSuccess(Uri uri) {
                        // Uri de la imagen descargada
                        String imageUrl = uri.toString();
-
-                       // Usar una biblioteca de carga de imágenes como Picasso o Glide para cargar la imagen en el ImageView
-                       // Por ejemplo, con Picasso:
                        Picasso.get().load(imageUrl).into(fullScreenImageView);
                    }
                }).addOnFailureListener(new OnFailureListener() {
                    @Override
                    public void onFailure(@NonNull Exception e) {
-                       // Manejo de errores al descargar la imagen
-                       // Por ejemplo, puedes mostrar una imagen de carga predeterminada o un mensaje de error en el ImageView
                        fullScreenImageView.setImageResource(R.drawable.photobook);
                    }
                });
@@ -111,14 +103,12 @@ public class FullScreenImageFragment extends Fragment {
                fullScreenImageView.setImageResource(R.drawable.photobook);
            }
 
-
         }
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
                 // Retroceder al fragmento anterior en la pila de retroceso
                 fragmentManager.popBackStack();
             }

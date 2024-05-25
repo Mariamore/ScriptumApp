@@ -58,6 +58,29 @@
     <string name="error_loading_user_data">Error loading user data</string>
     <string name="timestamp">Timestamp</string>
     <string name="sensitive_information">"Do not share sensitive information, like passwords"</string>
+    <string name="there_s_no_image">There\'s no image</string>
+    <string name="error_updating_address">Error updating address</string>
+    <string name="address_updated">Address updated!</string>
+    <string name="enter_a_valid_address">Enter a valid address</string>
+    <string name="the_document_does_not_exist">The document does not exist</string>
+    <string name="you_must_search_the_address_first">You must search the address first</string>
+    <string name="required_field">Required field</string>
+    <string name="enter_a_valid_email">Enter a valid email</string>
+    <string name="_6_characters_minimum">6 characters minimum</string>
+    <string name="password_should_be_at_least_6_characters">Password should be at least 6 characters</string>
+    <string name="name_updated">Name updated</string>
+    <string name="error_updating_name">Error updating name</string>
+    <string name="password_updated">Password updated!</string>
+    <string name="error_updating_password">"Error updating password: "</string>
+    <string name="error_try_logging_in">Error updating password. Please try logging in again.</string>
+    <string name="verify_new_email">Email updated. Please verify your new email address.</string>
+    <string name="use_new_credentials">User logged out. Please log in with your new credentials.</string>
+    <string name="no_user_is_logged_in">No user is logged in.</string>
+    <string name="error_updating_email">"Error updating email: "</string>
+    <string name="pass">pass</string>
+    <string name="user_logged_out">User logged out</string>
+    <string name="user_photo_uploaded">User photo uploaded</string>
+    <string name="error_uploading_user_photo">Error uploading user photo</string>
 
 
 </resources>

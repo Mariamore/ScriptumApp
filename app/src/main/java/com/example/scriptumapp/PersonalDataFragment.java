@@ -98,92 +98,10 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_personal_data, container, false);
-        //definimos las variables
-        editNameButton = rootView.findViewById(R.id.editNameButton);
-        editEmailButton = rootView.findViewById(R.id.editEmailButton);
-        editPasswordButton = rootView.findViewById(R.id.editPasswordButton);
 
-        nameEditText = rootView.findViewById(R.id.nameSurnameEditText);
-        emailEditText = rootView.findViewById(R.id.emailEditText);
-        passwordEditText = rootView.findViewById(R.id.passwordEditText);
-
-        emailEditText.setFocusable(false);
-        nameEditText.setFocusable(false);
-        passwordEditText.setFocusable(false);
-
-        saveButton = rootView.findViewById(R.id.saveButton);
-        backButton = rootView.findViewById(R.id.backButton);
-        //establecemos llos listeners
-        editPasswordButton.setOnClickListener(this);
-        editEmailButton.setOnClickListener(this);
-        editNameButton.setOnClickListener(this);
-        saveButton.setOnClickListener(this);
-        backButton.setOnClickListener(this);
-
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        idUser = user.getUid();
-        db = FirebaseFirestore.getInstance();
-
-        //extraemos los datos del usuario
-        db.collection("usersData")
-                .whereEqualTo("user", idUser)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if(!queryDocumentSnapshots.isEmpty()){
-                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                            nameSurnameString = documentSnapshot.getString("nameSurname");
-                            emailString = user.getEmail();
-                            //como no vamos a poner la contraseña en hardcode, ponemos un string cualquiera, que además sea menor
-                            //de 6 caracteres de longitud para que no pueda coincidir con la contraseña real
-                            passwordString = "pass";
-
-                            //rellenamos los edittext con los datos del usuario
-                            nameEditText.setText(nameSurnameString);
-                            emailEditText.setText(emailString);
-                            passwordEditText.setText(passwordString);
-
-                        }
-                    }
-                });
-
-        /*
-         * Establece un OnTouchListener en la vista raíz para manejar eventos táctiles.
-         * Cuando el usuario toca la pantalla, este listener verifica si alguno de los
-         * campos EditText (nameEditText, emailEditText o passwordEditText) tiene el foco y el
-         * usuario toca/hace click en otro lugar de la pantalla, le quita el foco.
-         */
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (nameEditText.hasFocus()) {
-                        nameEditText.clearFocus();
-
-                    } else if (emailEditText.hasFocus()) {
-                        emailEditText.clearFocus();
-
-                    } else if (passwordEditText.hasFocus()) {
-                        newPasswordString = passwordEditText.getText().toString();
-                        if (newPasswordString.isEmpty()) {
-                            passwordEditText.setText(passwordString);
-                        } else if(newPasswordString.length()<6){
-                            //si la contraseña tiene menos de 6 caracteres, devuelve el foco al
-                            passwordEditText.setError("6 characters minimum");
-                            negativeToast("Password should be at least 6 characters");
-                            passwordEditText.requestFocus();
-                            return false;
-                        }
-
-                        passwordEditText.clearFocus();
-
-                    }
-                }
-                return true;
-            }
-        });
+        initializeVariables(rootView);
+        setListeners(rootView);
+        loadUserData();
         return rootView;
     }
 
@@ -223,11 +141,12 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
             newEmailString = emailEditText.getText().toString();
 
             //comprobamos que la contraseña no sea menor de 6 caracteres
-            if (passwordEditText.length()<6 && !newPasswordString.equals("pass")){
+            if (passwordEditText.length()<6 && !newPasswordString.equals(getString(R.string.pass))){
                 editPasswordButton.performClick();
+                passwordEditText.setError(getString(R.string._6_characters_minimum));
             } else {
                 //si la contraseña es distinta al string de muestra que fijamos al principio, la cambiamos
-                if(!newPasswordString.equals("pass")){
+                if(!newPasswordString.equals(getString(R.string.pass))){
                     updatePassword(newPasswordString);
                 }
                 //si el string del edittext del nombre y/o el email es diferente al inicial, lo actualizamos
@@ -336,14 +255,14 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             // Muestra un mensaje de éxito si la actualización fue exitosa
-                                            positiveToast("Nombre actualizado");
+                                            positiveToast(getString(R.string.name_updated));
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             // Muestra un mensaje de error si la actualización falla
-                                            negativeToast("Error actualizando el nombre");
+                                            negativeToast(getString(R.string.error_updating_name));
                                         }
                                     }
                             );
@@ -370,16 +289,16 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
                         // Verifica si la actualización de la contraseña se completó con éxito
                         if (task.isSuccessful()) {
                             // Muestra un mensaje de éxito si la contraseña se actualizó correctamente
-                            positiveToast("¡Contraseña actualizada!");
+                            positiveToast(getString(R.string.password_updated));
                         } else {
                             // Si hay un error al actualizar la contraseña
                             Exception e = task.getException();
                             if (e != null) {
                                 // Registra el error en los registros si está disponible
-                                Log.e("Firebase", "Error al actualizar la contraseña: " + e.getMessage());
+                                Log.e("Firebase", getString(R.string.error_updating_password) + e.getMessage());
                             }
                             // Muestra un mensaje de error si la actualización de la contraseña falla
-                            negativeToast("Error al actualizar la contraseña. Intente iniciar sesión nuevamente.");
+                            negativeToast(getString(R.string.error_try_logging_in));
                         }
                     }
                 }
@@ -401,7 +320,7 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
                         // Verifica si la solicitud de actualización se completa con éxito
                         if (task.isSuccessful()) {
                             // Muestra un mensaje indicando que el correo electrónico se ha actualizado y que se debe verificar
-                            positiveToast("Correo electrónico actualizado. Verifica tu nuevo correo electrónico.");
+                            positiveToast(getString(R.string.verify_new_email));
 
                             // Obtiene la instancia de Firebase Authentication
                             FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -413,12 +332,12 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
                                 // Cierra la sesión del usuario actual
                                 mAuth.signOut();
                                 // Muestra un mensaje indicando que el usuario ha cerrado sesión y debe iniciar sesión con las nuevas credenciales
-                                positiveToast("Usuario desconectado. Inicia sesión con tus nuevas credenciales.");
+                                positiveToast(getString(R.string.use_new_credentials));
                                 // Reemplaza el fragmento actual con el fragmento de inicio de sesión
                                 replaceFragment(new LoginFragment());
                             } else {
                                 // Muestra un mensaje indicando que no hay ningún usuario autenticado
-                                negativeToast("No hay ningún usuario conectado.");
+                                negativeToast(getString(R.string.no_user_is_logged_in));
                             }
 
                         } else {
@@ -426,10 +345,10 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
                             Exception e = task.getException();
                             if (e != null) {
                                 // Registra el error en los registros si está disponible
-                                Log.e("Firebase", "Error al actualizar el correo electrónico: " + e.getMessage());
+                                Log.e("Firebase", getString(R.string.error_updating_email) + e.getMessage());
                             }
                             // Muestra un mensaje de error si la actualización del correo electrónico falla
-                            negativeToast("Error al actualizar el correo electrónico.");
+                            negativeToast(getString(R.string.error_updating_email));
                         }
 
                     }
@@ -479,6 +398,102 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
+    }
+
+    private void initializeVariables(View rootView){
+        //definimos las variables
+        editNameButton = rootView.findViewById(R.id.editNameButton);
+        editEmailButton = rootView.findViewById(R.id.editEmailButton);
+        editPasswordButton = rootView.findViewById(R.id.editPasswordButton);
+
+        nameEditText = rootView.findViewById(R.id.nameSurnameEditText);
+        emailEditText = rootView.findViewById(R.id.emailEditText);
+        passwordEditText = rootView.findViewById(R.id.passwordEditText);
+
+        emailEditText.setFocusable(false);
+        nameEditText.setFocusable(false);
+        passwordEditText.setFocusable(false);
+
+        saveButton = rootView.findViewById(R.id.saveButton);
+        backButton = rootView.findViewById(R.id.backButton);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        idUser = user.getUid();
+        db = FirebaseFirestore.getInstance();
+    }
+
+    private void setListeners(View rootView){
+        //establecemos llos listeners
+        editPasswordButton.setOnClickListener(this);
+        editEmailButton.setOnClickListener(this);
+        editNameButton.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
+        backButton.setOnClickListener(this);
+
+
+        /*
+         * Establece un OnTouchListener en la vista raíz para manejar eventos táctiles.
+         * Cuando el usuario toca la pantalla, este listener verifica si alguno de los
+         * campos EditText (nameEditText, emailEditText o passwordEditText) tiene el foco y el
+         * usuario toca/hace click en otro lugar de la pantalla, le quita el foco.
+         */
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (nameEditText.hasFocus()) {
+                        nameEditText.clearFocus();
+
+                    } else if (emailEditText.hasFocus()) {
+                        emailEditText.clearFocus();
+
+                    } else if (passwordEditText.hasFocus()) {
+                        newPasswordString = passwordEditText.getText().toString();
+                        if (newPasswordString.isEmpty()) {
+                            passwordEditText.setText(passwordString);
+                        } else if(newPasswordString.length()<6){
+                            //si la contraseña tiene menos de 6 caracteres, devuelve el foco al
+                            negativeToast(getString(R.string.password_should_be_at_least_6_characters));
+                            passwordEditText.requestFocus();
+                            return false;
+                        }
+
+                        passwordEditText.clearFocus();
+
+                    }
+                }
+                return true;
+            }
+        });
+
+    }
+
+    private void loadUserData(){
+        //extraemos los datos del usuario
+        db.collection("usersData")
+                .whereEqualTo("user", idUser)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if(!queryDocumentSnapshots.isEmpty()){
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                            nameSurnameString = documentSnapshot.getString("nameSurname");
+                            emailString = user.getEmail();
+                            //como no vamos a poner la contraseña en hardcode, ponemos un string cualquiera, que además sea menor
+                            //de 6 caracteres de longitud para que no pueda coincidir con la contraseña real
+                            passwordString = getString(R.string.pass);
+
+                            //rellenamos los edittext con los datos del usuario
+                            nameEditText.setText(nameSurnameString);
+                            emailEditText.setText(emailString);
+                            passwordEditText.setText(passwordString);
+
+                        }
+                    }
+                });
+
     }
 
 }

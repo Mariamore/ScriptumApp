@@ -120,31 +120,26 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
         if(id == R.id.backButton){
+            //Para volver al fragment anterior
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
-            // Retroceder al fragmento anterior en la pila de retroceso
             fragmentManager.popBackStack();
         } else if (id == R.id.contactButton){
             //fragment de chat individual con el usuario
         } else if (id == R.id.bookPhoto){
             if (photoUrl != null && !photoUrl.isEmpty()) {
-                // Abrir un nuevo fragmento o actividad para mostrar la imagen en su tamaño completo
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                // Aquí debes reemplazar "FullScreenImageFragment" con el nombre de tu fragmento o actividad que mostrará la imagen en su tamaño completo
                 FullScreenImageFragment fullScreenImageFragment = new FullScreenImageFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("photoUrl", photoUrl); // Pasa la URL de la foto al nuevo fragmento o actividad
+                bundle.putString("photoUrl", photoUrl);
                 fullScreenImageFragment.setArguments(bundle);
 
                 fragmentTransaction.replace(R.id.frame_layout, fullScreenImageFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             } else {
-                negativeToast("There's no image");
+                negativeToast(getString(R.string.there_s_no_image));
             }
 
 
@@ -256,8 +251,6 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
         if (bundle != null) {
             String bookId = bundle.getString("bookId");
             DocumentReference docRef = db.collection("booksData").document(bookId);
-
-
             docRef.get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -302,30 +295,21 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
                                 bookStatusEditText.setText(bookStatusString);
                                 bookYearEditText.setText(bookYearString);
 
-                                // Obtén la referencia al storage de Firebase
                                 FirebaseStorage storage = FirebaseStorage.getInstance();
+
                                 photoUrl = documentSnapshot.getString("photo");
                                 if (photoUrl != null && !photoUrl.isEmpty()) {
-                                    // Obtén la referencia a tu imagen en el storage de Firebase
-
                                     StorageReference storageRef = storage.getReferenceFromUrl(photoUrl);
-
-                                    // Descarga la imagen y muestra en el ImageView
                                     storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
                                             // Uri de la imagen descargada
                                             String imageUrl = uri.toString();
-
-                                            // Usar una biblioteca de carga de imágenes como Picasso o Glide para cargar la imagen en el ImageView
-                                            // Por ejemplo, con Picasso:
                                             Picasso.get().load(imageUrl).into(bookPhoto);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            // Manejo de errores al descargar la imagen
-                                            // Por ejemplo, puedes mostrar una imagen de carga predeterminada o un mensaje de error en el ImageView
                                             bookPhoto.setImageResource(R.drawable.photobook);
                                         }
                                     });

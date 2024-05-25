@@ -104,10 +104,10 @@ public class ResetPasswordFragment extends Fragment implements View.OnClickListe
             String email = emailInputEdittext.getText().toString();
 
             if(email.isEmpty()){
-                emailInputEdittext.setError("Required field");
+                emailInputEdittext.setError(getString(R.string.required_field));
                 emailInputEdittext.requestFocus();
             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                emailInputEdittext.setError("Enter a valid email");
+                emailInputEdittext.setError(getString(R.string.enter_a_valid_email));
                 emailInputEdittext.requestFocus();
             } else {
                 //Llamamos al método para resetear la contraseña

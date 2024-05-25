@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -49,6 +50,14 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
     private List<String> usersList = new ArrayList<>();
     private List<String> booksIdList = new ArrayList<>();
     private List<Integer> relevanceScores = new ArrayList<>();
+
+    private List<String> savedTitlesList = new ArrayList<>();
+    private List<String> savedAuthorsList = new ArrayList<>();
+    private List<String> savedPhotosList = new ArrayList<>();
+    private List<String> savedUsersList = new ArrayList<>();
+    private List<String> savedBooksIdList = new ArrayList<>();
+    private List<String> sortedBooksIds = new ArrayList<>();
+
     private CollectionReference booksCollection;
     private FirebaseUser user;
     private String queryText, titleBook, authorBook, photoBook, userBook, idUser, bookId;
@@ -81,6 +90,11 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         searchButton = rootView.findViewById((R.id.searchButton));
         searchListView = rootView.findViewById(R.id.searchListView);
 
+        if (savedTitlesList.size() > 0) {
+            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), savedTitlesList,
+                    savedAuthorsList, savedPhotosList, savedUsersList, this);
+            searchListView.setAdapter(bookAdapter);
+        }
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,12 +121,26 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                         booksIdList.clear();
                         relevanceScores.clear();
 
+                        savedTitlesList.clear();
+                        savedAuthorsList.clear();
+                        savedPhotosList.clear();
+                        savedUsersList.clear();
+                        savedBooksIdList.clear();
+
+                        sortedBooksIds.clear();
+
                         if (value != null) {
                             for (QueryDocumentSnapshot doc : value) {
                                 String titleString = doc.getString("title");
                                 String authorString = doc.getString("author");
 
+                                String userId = doc.getString("user");
+
+
                                 if (containsAllWord(titleString, query) || containsAllWord(authorString, query)) {
+
+
+
                                     int relevanceScore = calculateRelevance(titleString, authorString, query);
 
                                     titlesList.add(doc.getString("title"));
@@ -125,6 +153,8 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                             }
                         }
 
+
+
                         // Ordenamos los resultados en función de la puntuación de relevancia
                         int[] sortedIndices = IntStream.range(0, relevanceScores.size())
                                 .boxed()
@@ -136,7 +166,6 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                         List<String> sortedAuthors = new ArrayList<>();
                         List<String> sortedPhotos = new ArrayList<>();
                         List<String> sortedUsers = new ArrayList<>();
-                        List<String> sortedBooksIds = new ArrayList<>();
 
                         for (int i : sortedIndices) {
                             sortedTitles.add(titlesList.get(i));
@@ -145,6 +174,12 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                             sortedUsers.add(usersList.get(i));
                             sortedBooksIds.add(booksIdList.get(i));
                         }
+
+                        savedTitlesList.addAll(sortedTitles);
+                        savedAuthorsList.addAll(sortedAuthors);
+                        savedPhotosList.addAll(sortedPhotos);
+                        savedUsersList.addAll(sortedUsers);
+                        savedBooksIdList.addAll(sortedBooksIds);
 
                         if (sortedTitles.isEmpty()) {
                             searchListView.setAdapter(null);
@@ -183,7 +218,8 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                 score++;
             }
         }
-        return score;
+
+       return score;
     }
 
     @Override
@@ -221,7 +257,7 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
 
     @Override
     public void onItemClick(int position, String user) {
-        String bookId = booksIdList.get(position);
+        String bookId = sortedBooksIds.get(position);
         Bundle bundle = new Bundle();
         bundle.putString("bookId",bookId);
         // Crear una instancia de BookInfoFragment y asignar el Bundle

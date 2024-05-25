@@ -48,13 +48,11 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
     private String idUser;
     public double longitude, latitude;
     private FirebaseFirestore db;
-
     private String lastSearchedAddress = "";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     public LocationFragment() {
         // Required empty public constructor
     }
@@ -84,8 +82,6 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
     }
 
     @Override
@@ -93,6 +89,17 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_location, container, false);
+        loadData(rootView);
+        return rootView;
+    }
+
+    /**
+     * Carga los datos necesarios y configura la vista del fragmento.
+     *
+     * @param rootView La vista raíz del fragmento.
+     */
+    private void loadData(View rootView){
+
         mAuth = FirebaseAuth.getInstance();
         idUser = mAuth.getCurrentUser().getUid();
         webView = rootView.findViewById(R.id.webView);
@@ -103,78 +110,65 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
                 .whereEqualTo("user", idUser)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    // El documento existe, puedes obtener los datos
-                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                    latitude = documentSnapshot.getDouble("latitude");
-                    longitude = documentSnapshot.getDouble("longitude");
-                    String address = documentSnapshot.getString("address");
-                    addressInput.setText(address);
-                    webView.getSettings().setJavaScriptEnabled(true);
-                    webView.getSettings().setAllowContentAccess(true);
-                    webView.getSettings().setAllowFileAccess(true);
-                    webView.addJavascriptInterface(LocationFragment.this, "Android");
-                    webView.setWebViewClient(new WebViewClient());
-                    if(latitude != 0 && longitude != 0){
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
 
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                            latitude = documentSnapshot.getDouble("latitude");
+                            longitude = documentSnapshot.getDouble("longitude");
+                            String address = documentSnapshot.getString("address");
+                            addressInput.setText(address);
+                            webView.getSettings().setJavaScriptEnabled(true);
+                            webView.getSettings().setAllowContentAccess(true);
+                            webView.getSettings().setAllowFileAccess(true);
+                            webView.addJavascriptInterface(LocationFragment.this, "Android");
+                            webView.setWebViewClient(new WebViewClient());
 
+                            if(latitude != 0 && longitude != 0){
+                                //si el user no tiene dirección asociada, sale una por defecto
+                                webView.loadUrl("file:///android_res/raw/mapuser.html");
 
-                        webView.loadUrl("file:///android_res/raw/mapuser.html"); // Ruta al archivo HTML del mapa
+                            } else {
+                                webView.loadUrl("file:///android_res/raw/map.html");
+                            }
 
-                    } else {
-                        webView.loadUrl("file:///android_res/raw/map.html");
+                            searchButton = rootView.findViewById(R.id.searchButton);
+                            backButton = rootView.findViewById(R.id.backButton);
+                            saveButton = rootView.findViewById(R.id.saveButton);
+
+                            searchButton.setOnClickListener(LocationFragment.this);
+                            saveButton.setOnClickListener(LocationFragment.this);
+                            backButton.setOnClickListener(LocationFragment.this);
+
+                        } else {
+                            negativeToast(getString(R.string.the_document_does_not_exist));
+                        }
                     }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        negativeToast(getString(R.string.the_document_does_not_exist));
+                    }
+                });
 
-                    searchButton = rootView.findViewById(R.id.searchButton);
-                    backButton = rootView.findViewById(R.id.backButton);
-                    saveButton = rootView.findViewById(R.id.saveButton);
-
-
-
-                    searchButton.setOnClickListener(LocationFragment.this);
-                    saveButton.setOnClickListener(LocationFragment.this);
-                    backButton.setOnClickListener(LocationFragment.this);
-
-
-                    // Y otros campos según tu estructura de datos
-                    // Haz lo que necesites con los datos del usuario
-                } else {
-                    LayoutInflater inflater = getLayoutInflater();
-                    View layout = inflater.inflate(R.layout.toast_layout_fail,
-                            requireActivity().findViewById(R.id.toastLayoutFail));
-                    TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                    txtMsg.setText("No existe el documento");
-                    Toast toast = new Toast(requireContext());
-                    toast.setDuration(Toast.LENGTH_LONG);
-                    toast.setView(layout);
-                    toast.show();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // Maneja cualquier error que pueda ocurrir al obtener el documento
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.toast_layout_fail,
-                        requireActivity().findViewById(R.id.toastLayoutFail));
-                TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                txtMsg.setText("No existe el documento");
-                Toast toast = new Toast(requireContext());
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
-            }
-        });
-
-
-        return rootView;
     }
+
+    /**
+     * Obtiene la latitud.
+     *
+     * @return La latitud actual.
+     */
     @JavascriptInterface
     public double getLatitude(){
         return latitude;
     }
+
+    /**
+     * Obtiene la longitud.
+     *
+     * @return La longitud actual.
+     */
     @JavascriptInterface
     public double getLongitude(){
         return longitude;
@@ -186,8 +180,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
         if (id == R.id.searchButton){
             String address = addressInput.getText().toString();
             if (address.isEmpty()){
-                addressInput.setError("Enter an address");
-
+                addressInput.setError(getString(R.string.enter_a_valid_address));
             }
             // Almacenar el contenido del addressInput
             lastSearchedAddress = address;
@@ -196,19 +189,9 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
         } else if (id == R.id.saveButton){
             // Obtener el contenido actual del addressInput
             String currentAddress = addressInput.getText().toString();
-
             // Comparar el contenido actual con el último contenido buscado
             if (!currentAddress.equals(lastSearchedAddress)) {
-                // Mostrar un toast indicando que el contenido ha cambiado desde la última búsqueda
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.toast_layout_fail,
-                        requireActivity().findViewById(R.id.toastLayoutFail));
-                TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                txtMsg.setText("You must search the address first");
-                Toast toast = new Toast(requireContext());
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
+                negativeToast(getString(R.string.you_must_search_the_address_first));
             } else {
                 db.collection("usersData")
                         .whereEqualTo("user", idUser)
@@ -218,8 +201,6 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                    // Aquí tendrás acceso al documento que cumple con la condición
-                                    // Puedes obtener su ID y luego actualizarlo
                                     String documentId = documentSnapshot.getId();
                                     updateDocument(documentId);
                                 }
@@ -227,27 +208,15 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                // Maneja cualquier error que pueda ocurrir al obtener el documento
-                                LayoutInflater inflater = getLayoutInflater();
-                                View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                        requireActivity().findViewById(R.id.toastLayoutFail));
-                                TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                                txtMsg.setText("No existe el documento");
-                                Toast toast = new Toast(requireContext());
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(layout);
-                                toast.show();
+                                negativeToast(getString(R.string.the_document_does_not_exist));
                             }
                         });
 
 
                 replaceFragment(new ProfileFragment());
             }
-
-
         } else if (id == R.id.backButton){
             replaceFragment(new ProfileFragment());
-
         }
     }
 
@@ -259,37 +228,27 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
         fragmentTransaction.commit();
     }
 
+    /**
+     * Establece nuevas coordenadas y las guarda en las variables de instancia.
+     *
+     * @param newLatitude  La nueva latitud.
+     * @param newLongitude La nueva longitud.
+     */
     @JavascriptInterface
     public void setCoordinates(double newLatitude, double newLongitude) {
-        // Guarda las coordenadas y la dirección en variables de instancia
         this.latitude = newLatitude;
         this.longitude = newLongitude;
-
-
        String addressWithCoordinates = String.format(Locale.getDefault(), "%.6f, %.6f", latitude, longitude);
         if (latitude == 0 && longitude == 0){
-
-            LayoutInflater inflater = requireActivity().getLayoutInflater();
-            View layout = inflater.inflate(R.layout.toast_layout_fail,
-                    (ViewGroup) requireActivity().findViewById(R.id.toastLayoutFail));
-            TextView txtMsg = layout.findViewById(R.id.toastMessage);
-            txtMsg.setText("Enter a valid address");
-            Toast toast = new Toast(requireContext());
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show();
-            addressInput.setText("");
-            addressInput.requestFocus();
-
-
+            negativeToast(getString(R.string.enter_a_valid_address));
         }
-
-
-        //showToast("Coordenadas: " + addressWithCoordinates);
-
-
     }
 
+    /**
+     * Actualiza el documento de Firestore con los nuevos datos.
+     *
+     * @param documentId El ID del documento a actualizar.
+     */
     private void updateDocument(String documentId) {
         DocumentReference docRef = db.collection("usersData").document(documentId);
 
@@ -298,38 +257,52 @@ public class LocationFragment extends Fragment implements View.OnClickListener{
         updatedData.put("longitude", longitude);
         updatedData.put("address",  addressInput.getText().toString());
 
-        // Añade más campos según sea necesario
-
         docRef.update(updatedData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // La actualización se realizó con éxito
-                        LayoutInflater inflater = requireActivity().getLayoutInflater();
-                        View layout = inflater.inflate(R.layout.toast_layout_ok,
-                                (ViewGroup) requireActivity().findViewById(R.id.toastLayoutOk));
-                        TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                        txtMsg.setText("Address updated!");
-                        Toast toast = new Toast(requireContext());
-                        toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
-                        toast.show();
+                        positiveToast(getString(R.string.address_updated));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // Maneja los errores de la actualización
-                        LayoutInflater inflater = requireActivity().getLayoutInflater();
-                        View layout = inflater.inflate(R.layout.toast_layout_fail,
-                                (ViewGroup) requireActivity().findViewById(R.id.toastLayoutFail));
-                        TextView txtMsg = layout.findViewById(R.id.toastMessage);
-                        txtMsg.setText("Error updating address");
-                        Toast toast = new Toast(requireContext());
-                        toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
-                        toast.show();
+                        negativeToast(getString(R.string.error_updating_address));
                     }
                 });
+    }
+
+    /**
+     * Muestra un mensaje de toast negativo.
+     *
+     * @param message El mensaje a mostrar.
+     */
+    private void negativeToast(String message){
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout_fail,
+                (ViewGroup) requireActivity().findViewById(R.id.toastLayoutFail));
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        txtMsg.setText(message);
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    /**
+     * Muestra un mensaje de toast positivo.
+     *
+     * @param message El mensaje a mostrar.
+     */
+    private void positiveToast(String message){
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout_ok,
+                (ViewGroup) requireActivity().findViewById(R.id.toastLayoutOk));
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        txtMsg.setText(message);
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }
