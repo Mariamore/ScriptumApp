@@ -43,7 +43,7 @@ public class BookEditFragment extends Fragment {
 
     private EditText authorEditText_bookEdit, titleEditText_bookEdit, editorialEditText_bookEdit, yearEditText_bookEdit, statusEditText_bookEdit;
     private ImageView imageBook_bookEdit;
-    private ImageButton button_bookEdit;
+    private ImageButton button_bookEdit, imageButtonDeleteBook;
 
     private Button button_saveBookEdit;
 
@@ -93,6 +93,7 @@ public class BookEditFragment extends Fragment {
         editorialEditText_bookEdit= rootView.findViewById(R.id.editorialEditText_bookEdit);
         button_saveBookEdit = rootView.findViewById(R.id.button_saveBookEdit);
 
+
         //extraemos los datos
         dataBook();
 
@@ -117,10 +118,37 @@ public class BookEditFragment extends Fragment {
             }
         });
 
+        //Eliminamos el libro
+        imageButtonDeleteBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteBook();
+            }
+        });
+
 
         return rootView;
 
     }
+
+    public void deleteBook() {
+        db.collection("booksData").document(docId)
+                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        //Eliminamos la imagen
+                        String imageName = docId + ".jpg";
+                        StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
+                        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getContext(), "Book Deleted successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
