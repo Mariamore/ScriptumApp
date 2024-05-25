@@ -119,7 +119,7 @@ public class BookEditFragmentExchange extends Fragment {
             @Override
             public void onClick(View v) {
                 //Funcion para guardar
-
+                saveBookEditExhange();
             }
         });
 

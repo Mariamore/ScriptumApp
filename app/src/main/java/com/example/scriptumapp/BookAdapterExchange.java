@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,10 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 public class BookAdapterExchange extends FirestoreRecyclerAdapter<Book, BookAdapterExchange.ViewHolder> {
 
+    FirebaseFirestore mFirestore;
     private FragmentManager fragmentManager; //Instanciamos para cambiar de Fragment
     //Le pasamos el parametro al constructor
     public BookAdapterExchange(@NonNull FirestoreRecyclerOptions<Book> options, FragmentManager fragmentManager) {
@@ -43,6 +48,27 @@ public class BookAdapterExchange extends FirestoreRecyclerAdapter<Book, BookAdap
                 BookEditFragmentExchange bookEditFragment = BookEditFragmentExchange.newInstance(docId);
                 viewHolder.replaceFragment(bookEditFragment);
 
+            }
+        });
+
+        viewHolder.imageButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //id del libro
+                String docId = getSnapshots().getSnapshot(position).getId();
+                mFirestore.getInstance().collection("booksData").document(docId)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(viewHolder.itemView.getContext(), "Book delete", Toast.LENGTH_SHORT);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(viewHolder.itemView.getContext(), "Error book delete", Toast.LENGTH_SHORT);
+                            }
+                        });
             }
         });
 
