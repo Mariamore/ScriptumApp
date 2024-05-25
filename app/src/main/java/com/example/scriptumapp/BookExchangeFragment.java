@@ -96,7 +96,7 @@ public class BookExchangeFragment extends Fragment {
         FirestoreRecyclerOptions<Book> exchangeOp = new FirestoreRecyclerOptions.Builder<Book>().setQuery(query, Book.class).build();
 
         //Inicializar el adaptador con las opciones
-        exchangeAdapterBook = new BookAdapterExchange(exchangeOp);
+        exchangeAdapterBook = new BookAdapterExchange(exchangeOp, getParentFragmentManager());
         mRecycler.setAdapter(exchangeAdapterBook);
 
         return rootView;

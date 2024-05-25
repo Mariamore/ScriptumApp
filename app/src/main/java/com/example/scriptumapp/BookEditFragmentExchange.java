@@ -32,12 +32,13 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BookEditFragmentLoan#newInstance} factory method to
+ * Use the {@link BookEditFragmentExchange#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookEditFragmentLoan extends Fragment {
+public class BookEditFragmentExchange extends Fragment {
 
-
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -45,11 +46,11 @@ public class BookEditFragmentLoan extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private EditText authorEditText_bookEditLoan, titleEditText_bookEditLoan, editorialEditText_bookEditLoan, yearEditText_bookEditLoan, statusEditText_bookEditLoan;
-    private ImageView imageBook_bookEditLoan;
+    private EditText authorEditText_bookEditExchange, titleEditText_bookEditExchange, editorialEditText_bookEditExchange, yearEditText_bookEditExchange, statusEditText_bookEditExchange;
+    private ImageView imageBook_bookEditExchange;
     private ImageButton button_bookEdit;
 
-    private Button button_saveBookEditLoan;
+    private Button button_saveBookEditExchange;
 
     private Book book;
     private FirebaseFirestore db;
@@ -60,19 +61,19 @@ public class BookEditFragmentLoan extends Fragment {
     private String docId;
     private Uri imageUri;
     //private String bookId;
-    public BookEditFragmentLoan() {
+
+    public BookEditFragmentExchange() {
         // Required empty public constructor
     }
 
-    public static BookEditFragmentLoan newInstance(String docId) {
-        BookEditFragmentLoan fragment = new BookEditFragmentLoan();
+
+    public static BookEditFragmentExchange newInstance(String docId) {
+        BookEditFragmentExchange fragment = new BookEditFragmentExchange();
         Bundle args = new Bundle();
         args.putString(DOC_ID, docId);
         fragment.setArguments(args);
         return fragment;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,36 +89,37 @@ public class BookEditFragmentLoan extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       View rootView = inflater.inflate(R.layout.fragment_book_edit_loan, container, false);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_book_edit_exchange, container, false);
 
-        authorEditText_bookEditLoan = rootView.findViewById(R.id.authorEditText_bookEditLoan);
-        titleEditText_bookEditLoan  = rootView.findViewById(R.id.titleEditText_bookEditLoan);
-        yearEditText_bookEditLoan = rootView.findViewById(R.id.yearEditText_bookEditLoan);
-        imageBook_bookEditLoan = rootView.findViewById(R.id.rectangle_bookEditImageLoan);
-        statusEditText_bookEditLoan = rootView.findViewById(R.id.currentStatusEditText_bookEditLoan);
-        editorialEditText_bookEditLoan= rootView.findViewById(R.id.editorialEditText_bookEditLoan);
-        button_saveBookEditLoan = rootView.findViewById(R.id.button_saveBookEditLoan);
+        authorEditText_bookEditExchange = rootView.findViewById(R.id.authorEditText_bookEditExchange);
+        titleEditText_bookEditExchange  = rootView.findViewById(R.id.titleEditText_bookEditExchange);
+        yearEditText_bookEditExchange = rootView.findViewById(R.id.yearEditText_bookEditExchange);
+        imageBook_bookEditExchange = rootView.findViewById(R.id.rectangle_bookEditImageExchange);
+        statusEditText_bookEditExchange = rootView.findViewById(R.id.currentStatusEditText_bookEditExchange);
+        editorialEditText_bookEditExchange= rootView.findViewById(R.id.editorialEditText_bookEditExchange);
+        button_saveBookEditExchange = rootView.findViewById(R.id.button_saveBookEditExchange);
 
-        //Funcion para extraer los datos del libro
-        dataBookLoan();
+        //Extraemos los datos del libro
+        dataBookExchange();
 
-        //Selecionamos imagen en la nueva pantalla de edicion
-        imageBook_bookEditLoan.setOnClickListener(new View.OnClickListener() {
+        //Selecinar Imagen nueva en la edicion
+        imageBook_bookEditExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //selecionamos la imagen
+                //selecionamos la iamgen
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, COD_SEL_IMAGE);//deprecado
             }
         });
 
-        //Guardamos los datos nuevos
-        button_saveBookEditLoan.setOnClickListener(new View.OnClickListener() {
+        //guardamos los datos al pulsar el boton
+        button_saveBookEditExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Funcion para guardar los datos del libro
-                saveBookEditLoan();
+                //Funcion para guardar
+
             }
         });
 
@@ -129,46 +131,47 @@ public class BookEditFragmentLoan extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == getActivity().RESULT_OK && requestCode == COD_SEL_IMAGE && data != null) {
             imageUri = data.getData();
-            imageBook_bookEditLoan.setImageURI(imageUri);
+            imageBook_bookEditExchange.setImageURI(imageUri);
         }
     }
 
-    //recuperamos datos con una funcion
-    private void dataBookLoan(){
+
+    public void dataBookExchange(){
 
         db.collection("booksData").document(docId).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                            titleEditText_bookEditLoan.setText(documentSnapshot.getString("title"));
-                            authorEditText_bookEditLoan.setText(documentSnapshot.getString("author"));
-                            editorialEditText_bookEditLoan.setText(documentSnapshot.getString("editorial"));
-                            yearEditText_bookEditLoan.setText(documentSnapshot.getString("year"));
-                            statusEditText_bookEditLoan.setText(documentSnapshot.getString("status"));
+                            titleEditText_bookEditExchange.setText(documentSnapshot.getString("title"));
+                            authorEditText_bookEditExchange.setText(documentSnapshot.getString("author"));
+                            editorialEditText_bookEditExchange.setText(documentSnapshot.getString("editorial"));
+                            yearEditText_bookEditExchange.setText(documentSnapshot.getString("year"));
+                            statusEditText_bookEditExchange.setText(documentSnapshot.getString("status"));
                             String imageUrl = documentSnapshot.getString("photo");
                             if (imageUrl != null && !imageUrl.isEmpty()) {
-                                Picasso.get().load(imageUrl).into(imageBook_bookEditLoan);
+                                Picasso.get().load(imageUrl).into(imageBook_bookEditExchange);
                             }
                         } else {
-                        Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getContext(), "Failed to load document", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-    //Guardamos los datos nuevos con la funcion
-    private void saveBookEditLoan(){
+    //guardamos los datos nuevos
+    public void saveBookEditExhange(){
 
-        String title = titleEditText_bookEditLoan.getText().toString();
-        String author = authorEditText_bookEditLoan.getText().toString();
-        String editorial = editorialEditText_bookEditLoan.getText().toString();
-        String year = yearEditText_bookEditLoan.getText().toString();
-        String status = statusEditText_bookEditLoan.getText().toString();
+        String title = titleEditText_bookEditExchange.getText().toString();
+        String author = authorEditText_bookEditExchange.getText().toString();
+        String editorial = editorialEditText_bookEditExchange.getText().toString();
+        String year = yearEditText_bookEditExchange.getText().toString();
+        String status = statusEditText_bookEditExchange.getText().toString();
 
         Map<String, Object> data = new HashMap<>();
         data.put("title", title);
@@ -181,23 +184,25 @@ public class BookEditFragmentLoan extends Fragment {
                 .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(Void unused) {
+                    public void onSuccess(Void aVoid) {
                         if (imageUri != null) {
-                            uploadPhotoEditLoan(docId);
+                            uploadPhotoExchange(docId);
                         } else {
                             Toast.makeText(getContext(), "Book updated", Toast.LENGTH_SHORT).show();
                             getParentFragmentManager().popBackStack();
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getContext(), "Error updating book", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
-    private void uploadPhotoEditLoan(String docId){
+
+
+    public void uploadPhotoExchange(String docId){
 
         String imageName= docId + ".jpg";
         StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
@@ -241,6 +246,8 @@ public class BookEditFragmentLoan extends Fragment {
                         Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
     }
 
 }
