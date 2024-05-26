@@ -126,11 +126,12 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                             for (QueryDocumentSnapshot doc : value) {
                                 String titleString = doc.getString("title");
                                 String authorString = doc.getString("author");
+                                String userString = doc.getString("user");
 
                                 String userId = doc.getString("user");
 
 
-                                if (containsAllWord(titleString, query) || containsAllWord(authorString, query)) {
+                                if (!userString.equals(idUser) && (containsAllWord(titleString, query) || containsAllWord(authorString, query))) {
 
                                     int relevanceScore = calculateRelevance(titleString, authorString, query);
 
