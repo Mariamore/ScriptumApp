@@ -69,6 +69,7 @@ dependencies {
 
     implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
+    implementation ("com.mikhaellopez:circularprogressbar:3.1.0")
 
 
 
