@@ -125,7 +125,12 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             fragmentManager.popBackStack();
         } else if (id == R.id.contactButton){
-            //fragment de chat individual con el usuario
+            //Iniciamos un chat individual con el usuario
+            Bundle bundle = new Bundle();
+            bundle.putString("userIdReceptor", bookUserString);
+            MessagesChatFragment messagesChatFragment = new MessagesChatFragment();
+            messagesChatFragment.setArguments(bundle);
+            replaceFragment(messagesChatFragment);
         } else if (id == R.id.bookPhoto){
             if (photoUrl != null && !photoUrl.isEmpty()) {
                 FragmentManager fragmentManager = getParentFragmentManager();
