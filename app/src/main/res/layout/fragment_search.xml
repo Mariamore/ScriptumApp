@@ -72,7 +72,7 @@
                 android:drawableTint="@color/text"
                 android:ems="10"
                 android:fontFamily="@font/inter"
-                android:hint="@string/search_title"
+                android:hint="@string/search_title_"
                 android:imeOptions="actionDone"
                 android:inputType="textAutoCorrect"
                 android:textColor="@color/text"
