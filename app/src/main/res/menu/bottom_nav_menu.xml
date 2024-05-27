@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:icon="@drawable/inicio"
+        android:icon="@drawable/homelight"
         android:title="Home" />
     <item android:title="Profile"
         android:id="@+id/profile"
-        android:icon="@drawable/user" />
+        android:icon="@drawable/profilelight" />
     <item android:title="Search"
         android:id="@+id/search"
-        android:icon="@drawable/lupa" />
+        android:icon="@drawable/searchlight" />
     <item android:title="Messages"
         android:id="@+id/messages"
-        android:icon="@drawable/mensaje" />
+        android:icon="@drawable/messageslight" />
 </menu>
