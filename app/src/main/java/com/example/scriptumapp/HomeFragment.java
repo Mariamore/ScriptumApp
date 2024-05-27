@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
     }
 
     public static HomeFragment newInstance() {
+
         return new HomeFragment();
     }
 
@@ -76,6 +77,7 @@ public class HomeFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+
                 Log.e(TAG, "Failed to list items", e);
             }
         });
