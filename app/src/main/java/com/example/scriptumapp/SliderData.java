@@ -1,0 +1,25 @@
+package com.example.scriptumapp;
+
+public class SliderData {
+
+    private String imgUrl;
+    //constructor
+    public SliderData() {
+
+    }
+
+    public SliderData(String imgUrl) {
+
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImgUrl() {
+
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+
+        this.imgUrl = imgUrl;
+    }
+}

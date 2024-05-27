@@ -35,132 +35,28 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo" />
 
-        <TextView
-            android:id="@+id/recomendaciones"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="120dp"
-            android:fontFamily="@font/inter"
-            android:gravity="center_vertical"
-            android:text="@string/recomendaci"
-            android:textColor="@color/text"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/rectangle"
-            app:layout_constraintTop_toTopOf="@+id/rectangle" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="DuplicateIds">
 
-        <View
-            android:id="@+id/vector1"
-            android:layout_width="220dp"
-            android:layout_height="3.78dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/vector"
-            app:layout_constraintStart_toStartOf="@+id/recomendaciones"
-            app:layout_constraintTop_toBottomOf="@+id/recomendaciones" />
+            <!-- Your other views -->
 
-        <LinearLayout
-            android:id="@+id/linear1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="3dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintStart_toStartOf="@+id/rectangle"
-            app:layout_constraintTop_toBottomOf="@+id/vector1">
-
-            <ImageView
-                android:id="@+id/libro1"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="6dp"
-                android:src="@drawable/libro" />
+                app:layout_constraintTop_toBottomOf="@+id/vector5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="UnknownId" />
 
-            <ImageView
-                android:id="@+id/libro2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="6dp"
-                android:src="@drawable/libro" />
+            <!-- Your other views -->
 
-            <ImageView
-                android:id="@+id/libro3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="6dp"
-                android:src="@drawable/libro" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/vistoreciente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/inter"
-            android:gravity="center_vertical"
-            android:text="@string/librosvistos"
-            android:textColor="@color/text"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/rectangle"
-            app:layout_constraintTop_toBottomOf="@+id/linear1" />
-
-        <View
-            android:id="@+id/vector2"
-            android:layout_width="220dp"
-            android:layout_height="3.78dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/vector"
-            app:layout_constraintStart_toStartOf="@+id/vistoreciente"
-            app:layout_constraintTop_toBottomOf="@+id/vistoreciente" />
-
-        <LinearLayout
-            android:id="@+id/linear2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="3dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/rectangle"
-            app:layout_constraintStart_toStartOf="@+id/rectangle"
-            app:layout_constraintTop_toBottomOf="@+id/vector2">
-
-            <ImageView
-                android:id="@+id/libro4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="6dp"
-                android:src="@drawable/libro" />
-
-            <ImageView
-                android:id="@+id/libro5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="6dp"
-                android:src="@drawable/libro" />
-
-            <ImageView
-                android:id="@+id/libro6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="6dp"
-                android:src="@drawable/libro" />
-        </LinearLayout>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
