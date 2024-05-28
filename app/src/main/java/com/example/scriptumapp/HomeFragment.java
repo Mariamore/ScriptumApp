@@ -27,7 +27,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private List<List<String>> imageUrls = new ArrayList<>();
-    private List<List<String>> imageUrl = new ArrayList<>();
+    private List<List<String>> imageUrl2 = new ArrayList<>();
      private ImageCarouselAdapter adapter;
      private ImageCarouselAdapter2 adapter2;
 
@@ -48,9 +48,9 @@ public class HomeFragment extends Fragment {
 
         fetchLatestImagesFromFirestore();
 
-        adapter2 = new ImageCarouselAdapter2(imageUrl);
-        binding.viewPager.setAdapter(adapter2);
-        binding.viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        adapter2 = new ImageCarouselAdapter2(getContext(), imageUrl2);
+        binding.viewPager2.setAdapter(adapter2);
+        binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         fetchLatestImagesFromFirestore2();
 
@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
                                 urls.add(imageUrl);
                                 if (urls.size() == 3) {
                                     imageUrls.add(urls);
-                                    urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
+                                    urls = new ArrayList<>(); //Reiniciar para el próximo grupo de imágenes
                                 }
                             }
                         }
@@ -94,9 +94,10 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                            Collections.shuffle(documents); //Mezcla los documentos
+                            Collections.shuffle(documents); // Mezclar los documento, aleatorio
 
                             List<String> urls = new ArrayList<>();
+                            //contador
                             int count = 0;
                             for (DocumentSnapshot document : documents) {
                                 String imageUrl = document.getString("photo");
@@ -104,15 +105,15 @@ public class HomeFragment extends Fragment {
                                     urls.add(imageUrl);
                                     count++;
                                     if (urls.size() == 3) {
-                                        imageUrls.add(urls);
-                                        urls = new ArrayList<>(); //Reiniciamos para imagenes nuevas
+                                        imageUrl2.add(urls); // Añadir a imageUrl2
+                                        urls = new ArrayList<>(); //reinicamos imagenes nuevas
                                     }
                                     if (count >= 9) {
-                                        break; //Salida bucle
+                                        break; //salimos del bucle
                                     }
                                 }
                             }
-                            adapter.notifyDataSetChanged();
+                            adapter2.notifyDataSetChanged();
                         } else {
                             Log.e("Firestore", "Error getting documents.", task.getException());
                         }
