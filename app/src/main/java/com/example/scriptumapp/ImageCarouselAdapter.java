@@ -17,10 +17,10 @@ import java.util.List;
 
 public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdapter.ImageViewHolder> {
 
-    private List<List<Integer>> images;
+    private List<List<String>> imageUrls;
 
-    public ImageCarouselAdapter(List<List<Integer>> images) {
-        this.images = images;
+    public ImageCarouselAdapter(List<List<String>> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     @NonNull
@@ -32,15 +32,17 @@ public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdap
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        List<Integer> imageResources = images.get(position);
-        Glide.with(holder.itemView.getContext()).load(imageResources.get(0)).into(holder.imageView1);
-        Glide.with(holder.itemView.getContext()).load(imageResources.get(1)).into(holder.imageView2);
-        Glide.with(holder.itemView.getContext()).load(imageResources.get(2)).into(holder.imageView3);
+        List<String> imageUrlsGroup = imageUrls.get(position);
+        if (imageUrlsGroup != null && imageUrlsGroup.size() >= 3) {
+            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(0)).into(holder.imageView1);
+            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(1)).into(holder.imageView2);
+            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(2)).into(holder.imageView3);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return images.size();
+        return imageUrls.size();
     }
 
     static class ImageViewHolder extends RecyclerView.ViewHolder {
