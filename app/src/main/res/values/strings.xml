@@ -88,5 +88,7 @@
     <string name="messages">Messages</string>
     <string name="type">Type</string>
     <string name="book">Book</string>
+    <string name="latest_books_added">Latest books added</string>
+    <string name="my_books">My Books</string>
 
 </resources>

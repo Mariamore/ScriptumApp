@@ -43,7 +43,7 @@
             android:layout_marginTop="120dp"
             android:fontFamily="@font/inter"
             android:gravity="center_vertical"
-            android:text="@string/recomendaci"
+            android:text="@string/latest_books_added"
             android:textColor="@color/text"
             android:textSize="16sp"
             android:textStyle="bold"
