@@ -70,3 +70,6 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation ("com.github.smarteist:autoimageslider:1.4.0")
     implementation ("com.mikhaellopez:circularprogressbar:3.1.0")
+
+}
+

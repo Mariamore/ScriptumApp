@@ -21,7 +21,8 @@ dependencyResolutionManagement {
         }
 
     }
-}
+
 
 rootProject.name = "ScriptumApp"
 include(":app")
+ 
