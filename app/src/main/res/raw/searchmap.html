@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Leaflet Map</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <style>
+            #map { height: 100vh; }
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script>
+            var map = L.map('map').setView([40.416775, -3.703790], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+            }).addTo(map);
+
+
+            // Array para almacenar los marcadores
+            var markers = [];
+
+
+
+
+            // Función para agregar una ubicación de usuario y crear un marcador en el mapa
+             window.addUserLocation = function(latitude, longitude) {
+            console.log("Adding marker at: ", latitude, longitude); // Registro de depuración
+            var marker = L.marker([latitude, longitude]).addTo(map);
+            markers.push(marker);
+            marker.on('click', function() {
+                // Llama a la interfaz Java cuando se hace clic en el marcador
+                Android.onMarkerClick(latitude, longitude);
+            });
+
+            }
+
+             function searchAddress(address) {
+            // Usa un servicio de geocodificación (puedes usar Nominatim de OpenStreetMap)
+            // En este ejemplo, simplemente agregamos un marcador en la ubicación de Madrid como demostración
+            var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        var lat = parseFloat(data[0].lat);
+                        var lon = parseFloat(data[0].lon);
+                        var coordinates = [lat, lon];
+
+                        map.setView(coordinates, 13);
+
+                        // Llama a la función que pasará las coordenadas al código Java
+                        Android.setCoordinates(lat, lon);
+
+
+                    } else {
+                        var lat = 0;
+                        var lon =  0;
+                        Android.setCoordinates(lat, lon);
+                        alert('Dirección no encontrada');
+                    }
+                })
+                .catch(error => console.error('Error al buscar la dirección:', error));
+        }
+        </script>
+    </body>
+</html>
