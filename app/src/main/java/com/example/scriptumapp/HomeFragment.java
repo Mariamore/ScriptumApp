@@ -22,22 +22,15 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements ImageCarouselAdapter2.OnItemClickListener{
+public class HomeFragment extends Fragment implements ImageCarouselAdapter2.OnItemClickListener {
 
     private FragmentHomeBinding binding;
-
     private List<List<String>> imageUrls = new ArrayList<>();
-    private List<List<String>> imageUrl2 = new ArrayList<>();
-    private List<String> listBooks = new ArrayList<>();
-
-    private ImageCarouselAdapter adapter;
     private ImageCarouselAdapter2 adapter2;
     private FirebaseFirestore db;
     private String bookId;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,20 +44,14 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter2.OnIt
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
-        adapter2 = new ImageCarouselAdapter2(imageUrl2, this);
+        adapter2 = new ImageCarouselAdapter2(imageUrls, this);
         binding.viewPager2.setAdapter(adapter2);
         binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
-        fetchLatestImagesFromFirestore();
         fetchLatestImagesFromFirestore2();
-
     }
 
-
-
-    private void fetchLatestImagesFromFirestore() {
+    private void fetchLatestImagesFromFirestore2() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("booksData")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -79,65 +66,19 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter2.OnIt
                                 urls.add(imageUrl);
                                 if (urls.size() == 3) {
                                     imageUrls.add(urls);
-                                    urls = new ArrayList<>(); //Reiniciar para el próximo grupo de imágenes
+                                    urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
                                 }
                             }
                         }
-                        adapter.notifyDataSetChanged();
+                        adapter2.notifyDataSetChanged();
                     } else {
                         Log.e("Firestore", "Error getting documents.", task.getException());
                     }
                 });
-
-    }
-
-    private void fetchLatestImagesFromFirestore2() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("booksData")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                            Collections.shuffle(documents); // Mezclar los documento, aleatorio
-
-                            List<String> urls = new ArrayList<>();
-                            //contador
-                            int count = 0;
-                            for (DocumentSnapshot document : documents) {
-                                String imageUrl = document.getString("photo");
-                                String bookId = document.getString("bookId");
-                                if (imageUrl != null) {
-                                    urls.add(imageUrl);
-                                    listBooks.add(bookId); // Añadir el ID del libro a la lista
-                                    count++;
-                                    if (urls.size() == 3) {
-                                        imageUrl2.add(urls); // Añadir a imageUrl2
-                                        urls = new ArrayList<>(); //reinicamos imagenes nuevas
-                                    }
-                                    if (count >= 9) {
-                                        break; //salimos del bucle
-                                    }
-                                }
-                            }
-                            adapter2.notifyDataSetChanged();
-                        } else {
-                            Log.e("Firestore", "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     @Override
     public void onItemClick(String imageUrl) {
-        openDetailFragment2(imageUrl);
         openDetailFragment2(imageUrl);
     }
 
@@ -172,5 +113,11 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter2.OnIt
 
 
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
