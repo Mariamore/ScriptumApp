@@ -36,8 +36,8 @@
         <TextView
             android:id="@+id/textBookExchange"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
             android:fontFamily="@font/inter"
             android:text="@string/book_exchange"
             android:textColor="@color/buttonQueries"
@@ -52,7 +52,7 @@
             android:id="@+id/backBookExchange"
             android:layout_width="148dp"
             android:layout_height="48dp"
-            android:layout_marginTop="340dp"
+            android:layout_marginTop="360dp"
             android:backgroundTint="@color/buttonQueries"
             android:fontFamily="@font/inter"
             android:text="@string/back"
@@ -102,11 +102,12 @@
             android:id="@+id/recyclerViewSingle3"
             android:layout_width="299dp"
             android:layout_height="328dp"
-            android:layout_marginBottom="180dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.511"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
 
 
