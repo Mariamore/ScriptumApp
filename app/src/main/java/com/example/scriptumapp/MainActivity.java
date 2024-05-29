@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new LoginFragment());
                 }
             } else if (item.getItemId() == R.id.search) {
-                replaceFragment(new SearchFragment());
+                replaceFragment(new SearchMenuFragment());
             } else if (item.getItemId() == R.id.messages) {
                 //Comprobamos si un usuario está logeado
                 if(user != null){

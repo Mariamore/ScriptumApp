@@ -23,11 +23,8 @@
             // Array para almacenar los marcadores
             var markers = [];
 
-
-
-
             // Función para agregar una ubicación de usuario y crear un marcador en el mapa
-             window.addUserLocation = function(latitude, longitude) {
+            window.addUserLocation = function(latitude, longitude) {
             console.log("Adding marker at: ", latitude, longitude); // Registro de depuración
             var marker = L.marker([latitude, longitude]).addTo(map);
             markers.push(marker);
@@ -39,8 +36,7 @@
             }
 
              function searchAddress(address) {
-            // Usa un servicio de geocodificación (puedes usar Nominatim de OpenStreetMap)
-            // En este ejemplo, simplemente agregamos un marcador en la ubicación de Madrid como demostración
+            // Agregamos el marcador inicial en la ubicación de Madrid
             var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
 
             fetch(url)

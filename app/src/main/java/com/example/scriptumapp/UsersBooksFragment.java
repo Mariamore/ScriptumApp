@@ -97,7 +97,7 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_users_books, container, false);
+        rootView = inflater.inflate(R.layout.fragment_users_books, container, false);
 
         db = FirebaseFirestore.getInstance();
 
@@ -122,7 +122,8 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new SearchByMapFragment());
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack();
             }
         });
 
@@ -165,13 +166,14 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
 
 
 
-
-                        if (titlesList.isEmpty()) {
-                            searchListView.setAdapter(null);
-                            toastNoResultsFound();
-                        } else {
-                            BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), titlesList, authorsList, photosList, usersList, UsersBooksFragment.this);
-                            searchListView.setAdapter(bookAdapter);
+                        if (isAdded()) {
+                            if (titlesList.isEmpty()) {
+                                searchListView.setAdapter(null);
+                                toastNoResultsFound();
+                            } else {
+                                BookAdapterSearch bookAdapter = new BookAdapterSearch(requireActivity(), titlesList, authorsList, photosList, usersList, UsersBooksFragment.this);
+                                searchListView.setAdapter(bookAdapter);
+                            }
                         }
                     }
                 });
@@ -220,11 +222,12 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
         fragment.setArguments(bundle);
 
         // Reemplazar el fragmento actual con BookInfoFragment
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-
+        if (isAdded()) {
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 }
