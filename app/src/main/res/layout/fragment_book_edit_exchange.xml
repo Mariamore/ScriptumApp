@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/imageninicio"
     tools:context=".BookEditFragmentExchange">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -211,6 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="150dp"
             android:text="OK"
+            android:backgroundTint="@color/buttonQueries"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
