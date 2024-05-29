@@ -18,13 +18,11 @@ import java.util.List;
 public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAdapter2.ImageViewHolder> {
 
     private List<List<String>> imageUrl2;
-    private List<String> bookIds;
     private Context context;
 
-    public ImageCarouselAdapter2(Context context, List<List<String>> imageUrl2, List<String> bookIds) {
+    public ImageCarouselAdapter2(Context context, List<List<String>> imageUrl2) {
         this.context = context;
         this.imageUrl2 = imageUrl2;
-        this.bookIds = bookIds;
     }
 
     @NonNull
@@ -37,13 +35,12 @@ public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAda
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         List<String> urls = imageUrl2.get(position);
-        String bookId = bookIds.get(position); // Obtenemos el ID del libro correspondiente a esta posición
         if (urls.size() > 0) {
             Glide.with(context).load(urls.get(0)).into(holder.imageView1);
             holder.imageView1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bookDetail(bookId);
+                    bookDetail(urls.get(0));
                 }
             });
         }
@@ -52,7 +49,7 @@ public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAda
             holder.imageView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bookDetail(bookId);
+                    bookDetail(urls.get(1));
                 }
             });
         }
@@ -61,7 +58,7 @@ public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAda
             holder.imageView3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bookDetail(bookId);
+                    bookDetail(urls.get(2));
                 }
             });
         }
@@ -85,9 +82,9 @@ public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAda
         }
     }
 
-    private void bookDetail(String bookId) {
+    private void bookDetail(String imageUrl) {
         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-        BookInfoFragment bookInfoFragment = BookInfoFragment.newInstance(bookId, null); // Pasa el bookId al fragmento
+        BookInfoFragment bookInfoFragment = BookInfoFragment.newInstance(imageUrl, null); // Pasa la URL aquí
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, bookInfoFragment) // Asegúrate de que R.id.fragment_container es el ID correcto
                 .addToBackStack(null)

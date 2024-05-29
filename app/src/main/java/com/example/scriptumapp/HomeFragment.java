@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
 
         fetchLatestImagesFromFirestore();
 
-        adapter2 = new ImageCarouselAdapter2(getContext(), imageUrl2, listBooks);
+        adapter2 = new ImageCarouselAdapter2(getContext(), imageUrl2);
         binding.viewPager2.setAdapter(adapter2);
         binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
