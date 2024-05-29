@@ -249,7 +249,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
         }
     }
-   /* //selecionamos la imagen
+   //selecionamos la imagen
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -273,7 +273,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     private void uploadPhoto(String idUser) {
 
         if (imageUri == null) { // Asegurarse de que la imagen se ha seleccionado
-            negativeToast("Please select an image");
+            Toast.makeText(getContext(), "Please select an image", Toast.LENGTH_SHORT).show();
             return;
         }
         String imageName = idUser + ".jpg";
@@ -296,21 +296,21 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                               positiveToast("Image uploaded successfully");
-                                               replaceFragment(new QueriesFragment());
+                                                Toast.makeText(getContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
+                                                replaceFragment(new QueriesFragment());
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                               negativeToast("Error updating 'photo' field in Firestore: " + e.getMessage());
+                                                Toast.makeText(getContext(), "Error updating 'photo' field in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                negativeToast("Error getting download URL: " + e.getMessage());
+                                Toast.makeText(getContext(), "Error getting download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -318,12 +318,11 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        negativeToast("Error uploading image: " + e.getMessage());
+                        Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-*/
-
+/*
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -332,7 +331,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
     /**
      * Sube la imagen seleccionada a Firebase Storage y actualiza el perfil del usuario en Firestore.
-     */
+
     private void uploadPhoto(String idUser) {
         if (imageUri != null) {
             StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + Files.getFileExtension(imageUri.toString()));
@@ -374,7 +373,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                         }
 
         }
-
+*/
 
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getParentFragmentManager(); // Obtiene el FragmentManager del padre
