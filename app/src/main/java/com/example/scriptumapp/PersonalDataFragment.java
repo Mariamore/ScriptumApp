@@ -144,7 +144,11 @@ public class PersonalDataFragment extends Fragment implements View.OnClickListen
             if (passwordEditText.length()<6 && !newPasswordString.equals(getString(R.string.pass))){
                 editPasswordButton.performClick();
                 passwordEditText.setError(getString(R.string._6_characters_minimum));
-            } else {
+            } else if (nameEditText.getText().toString().isEmpty()){
+                nameEditText.setError(getString(R.string.this_field_can_t_be_empty));
+
+            }else {
+
                 //si la contraseña es distinta al string de muestra que fijamos al principio, la cambiamos
                 if(!newPasswordString.equals(getString(R.string.pass))){
                     updatePassword(newPasswordString);

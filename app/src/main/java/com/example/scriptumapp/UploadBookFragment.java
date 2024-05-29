@@ -2,6 +2,7 @@ package com.example.scriptumapp;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,19 +13,28 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.io.Files;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +78,32 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
     Spinner spinner;
     private long timestamp;
+    private static final String YEAR_REGEX = "^\\d{4}$";
+    private static final Pattern YEAR_PATTERN = Pattern.compile(YEAR_REGEX);
 
+    // Method to check if the string is a valid year
+    public static boolean isValidYear(String year) {
+        if (year == null) {
+            return false;
+        }
+        Matcher matcher = YEAR_PATTERN.matcher(year);
+        return matcher.matches();
+    }
+
+
+    private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null && result.getData().getData() != null) {
+                        imageUri = result.getData().getData();
+                        Glide.with(UploadBookFragment.this).load(imageUri).into(rectanglePhotoBook);
+
+                    }
+                }
+            }
+    );
     public UploadBookFragment() {
         // Required empty public constructor
     }
@@ -118,7 +155,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         spinnnerOp.add("loan");
         spinnnerOp.add("exchange");
         spinnnerOp.add("gift");
-        //utilizamos ArrayAdpter para adaptar los datos de Spinner
+        //utilizamos ArrayAdapter para adaptar los datos de Spinner
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(getContext(), R.layout.spinner_item, spinnnerOp);
         //Diseño del despliegue
         adapterSpinner.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -149,38 +186,70 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             String status = currentStatus.getText().toString();
             String spinnerSelection = spinner.getSelectedItem().toString();//Seleccionamos la opcion
 
-            String bookId = UUID.randomUUID().toString();
-            timestamp = System.currentTimeMillis();
+            if (title.isEmpty()){
+                titleBookEditText.setError(getString(R.string.required_field));
+                titleBookEditText.requestFocus();
+            }else if (author.isEmpty()){
+                authorEditText.setError(getString(R.string.required_field));
+                authorEditText.requestFocus();
+            } else if(editorial.isEmpty()){
+                editorialEditText.setError(getString(R.string.required_field));
+                editorialEditText.requestFocus();
+            }else if (publicationYear.isEmpty()){
+                publicationYearEditText.setError(getString(R.string.required_field));
+                publicationYearEditText.requestFocus();
+            } else if (!isValidYear(publicationYear)) {
+                publicationYearEditText.setError("Invalid year format");
+                publicationYearEditText.requestFocus();
+            }else if (imageUri == null) {
+                negativeToast("Please select an image");
+                return;
+            } else{
+                String bookId = UUID.randomUUID().toString();
+                timestamp = System.currentTimeMillis();
 
-            // Add a new document with a generated id.
-            Map<String, Object> data = new HashMap<>();
-            data.put("bookId", bookId);
-            data.put("title", title);
-            data.put("author", author);
-            data.put("editorial", editorial);
-            data.put("year", publicationYear);
-            data.put("status", status);
-            data.put("type", spinnerSelection);
-            data.put("user", idUser);
-            data.put("timestamp", timestamp);
+                // Add a new document with a generated id.
+                Map<String, Object> data = new HashMap<>();
+                data.put("bookId", bookId);
+                data.put("title", title);
+                data.put("author", author);
+                data.put("editorial", editorial);
+                data.put("year", publicationYear);
+                data.put("status", status);
+                data.put("type", spinnerSelection);
+                data.put("user", idUser);
+                data.put("timestamp", timestamp);
 
-            db.collection("booksData")
-                    .add(data)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            uploadPhoto(documentReference.getId());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), "Error saving book data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                db.collection("booksData")
+                        .add(data)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                uploadPhoto(documentReference.getId());
+                                positiveToast("Book uploaded");
+                                titleBookEditText.setText("");
+                                authorEditText.setText("");
+                                editorialEditText.setText("");
+                                publicationYearEditText.setText("");
+                                currentStatus.setText("");
+                                spinner.setSelection(0);
+                                rectanglePhotoBook.setImageResource(R.drawable.photobook);
+
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                negativeToast("Error saving book data: " + e.getMessage());
+                            }
+                        });
+            }
+
+
         }
     }
-    //selecionamos la imagen
+   /* //selecionamos la imagen
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -199,10 +268,12 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         }
     }
 
+
+
     private void uploadPhoto(String idUser) {
 
         if (imageUri == null) { // Asegurarse de que la imagen se ha seleccionado
-            Toast.makeText(getContext(), "Please select an image", Toast.LENGTH_SHORT).show();
+            negativeToast("Please select an image");
             return;
         }
         String imageName = idUser + ".jpg";
@@ -225,21 +296,21 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getContext(), "Image uploaded and link saved in Firestore successfully", Toast.LENGTH_SHORT).show();
-                                                replaceFragment(new QueriesFragment());
+                                               positiveToast("Image uploaded successfully");
+                                               replaceFragment(new QueriesFragment());
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getContext(), "Error updating 'photo' field in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                               negativeToast("Error updating 'photo' field in Firestore: " + e.getMessage());
                                             }
                                         });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Error getting download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                negativeToast("Error getting download URL: " + e.getMessage());
                             }
                         });
                     }
@@ -247,11 +318,62 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        negativeToast("Error uploading image: " + e.getMessage());
                     }
                 });
     }
+*/
 
+    private void selectImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        pickImageLauncher.launch(intent);
+    }
+
+    /**
+     * Sube la imagen seleccionada a Firebase Storage y actualiza el perfil del usuario en Firestore.
+     */
+    private void uploadPhoto(String idUser) {
+        if (imageUri != null) {
+            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + Files.getFileExtension(imageUri.toString()));
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    Map<String, Object> updates = new HashMap<>();
+                                    updates.put("photo", uri.toString());
+
+                                    db.collection("booksData").document(idUser)
+                                            .update(updates)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    //positiveToast("Image uploaded successfully");
+
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    negativeToast("Error updating 'photo' field in Firestore: " + e.getMessage());
+                                                }
+                                            });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    negativeToast("Error getting download URL: " + e.getMessage());
+                                }
+                            });
+                                }
+                            });
+                        }
+
+        }
 
 
     private void replaceFragment(Fragment fragment){
@@ -262,8 +384,40 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         fragmentTransaction.commit();
     }
 
-
-
+    private void negativeToast(String message) {
+        // Usa inflater para inflar el diseño del toast
+        LayoutInflater inflater = getLayoutInflater();
+        // Infla el diseño personalizado del toast
+        View layout = inflater.inflate(R.layout.toast_layout_fail,
+                requireActivity().findViewById(R.id.toastLayoutFail));
+        // Busca el TextView dentro del diseño del toast
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        // Establece el mensaje proporcionado en el TextView
+        txtMsg.setText(message);
+        // Crea y muestra el toast
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
+
+    private void positiveToast(String message) {
+        // Obtiene el servicio de inflater para inflar el diseño del toast
+        LayoutInflater inflater = getLayoutInflater();
+        // Infla el diseño personalizado del toast
+        View layout = inflater.inflate(R.layout.toast_layout_ok,
+                requireActivity().findViewById(R.id.toastLayoutOk));
+        // Busca el TextView dentro del diseño del toast
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        // Establece el mensaje proporcionado en el TextView
+        txtMsg.setText(message);
+        // Crea y muestra el toast
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+}
 
 
