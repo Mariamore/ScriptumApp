@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.scriptumapp.databinding.FragmentHomeBinding;
@@ -23,19 +25,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ImageCarouselAdapter2.OnItemClickListener{
 
     private FragmentHomeBinding binding;
+
     private List<List<String>> imageUrls = new ArrayList<>();
     private List<List<String>> imageUrl2 = new ArrayList<>();
     private List<String> listBooks = new ArrayList<>();
+
     private ImageCarouselAdapter adapter;
-     private ImageCarouselAdapter2 adapter2;
+    private ImageCarouselAdapter2 adapter2;
+    private FirebaseFirestore db;
+    private String bookId;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        db = FirebaseFirestore.getInstance();
         return binding.getRoot();
     }
 
@@ -43,16 +51,13 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new ImageCarouselAdapter(imageUrls);
-        binding.viewPager.setAdapter(adapter);
-        binding.viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
-        fetchLatestImagesFromFirestore();
 
-        adapter2 = new ImageCarouselAdapter2(getContext(), imageUrl2);
+        adapter2 = new ImageCarouselAdapter2(imageUrl2, this);
         binding.viewPager2.setAdapter(adapter2);
         binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
+        fetchLatestImagesFromFirestore();
         fetchLatestImagesFromFirestore2();
 
     }
@@ -128,5 +133,44 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onItemClick(String imageUrl) {
+        openDetailFragment2(imageUrl);
+        openDetailFragment2(imageUrl);
+    }
+
+    private void openDetailFragment2(String imageUrl) {
+        db.collection("booksData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        if (document.contains("photo") && document.getString("photo").equals(imageUrl)) {
+                            bookId = document.getId();
+                        }
+
+                    }
+                }
+                Log.d("bookid", bookId);
+                Bundle bundle = new Bundle();
+                bundle.putString("bookId", bookId);
+                BookInfoFragment fragment = new BookInfoFragment();
+                fragment.setArguments(bundle);
+
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        });
+
+
+
     }
 }
