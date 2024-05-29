@@ -118,14 +118,6 @@ public class BookEditFragment extends Fragment {
             }
         });
 
-        //Eliminamos el libro
-        imageButtonDeleteBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteBook();
-            }
-        });
-
 
         return rootView;
 
