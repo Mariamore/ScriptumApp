@@ -29,12 +29,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnItemClickListener, ImageCarouselAdapter2.OnItemClickListener{
 
     private FragmentHomeBinding binding;
     private List<List<String>> imageUrls = new ArrayList<>();
+    private List<List<String>> imageUrls2 = new ArrayList<>();
     private ImageCarouselAdapter adapter;
     private ImageCarouselAdapter2 adapter2;
     private FirebaseFirestore db;
@@ -65,7 +67,7 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
         binding.viewPager.setAdapter(adapter);
         binding.viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
-        adapter2 = new ImageCarouselAdapter2(imageUrls, this);
+        adapter2 = new ImageCarouselAdapter2(imageUrls2, this);
         binding.viewPager2.setAdapter(adapter2);
         binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
@@ -81,16 +83,27 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        List<String> urls = new ArrayList<>();
+                        List<String> allUrls = new ArrayList<>();
+
                         for (DocumentSnapshot document : task.getResult()) {
                             String imageUrl = document.getString("photo");
                             String userString = document.getString("user");
                             if (imageUrl != null && !userString.equals(idUser)) {
-                                urls.add(imageUrl);
-                                if (urls.size() == 3) {
-                                    imageUrls.add(urls);
-                                    urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
-                                }
+                                allUrls.add(imageUrl);
+                            }
+                        }
+
+
+                        // Barajar la lista de URLs
+                        Collections.shuffle(allUrls);
+                        List<String> urls = new ArrayList<>();
+
+                        for (int i = 0; i < Math.min(9, allUrls.size()); i++) {
+                            String url = allUrls.get(i);
+                            urls.add(url);
+                            if (urls.size() == 3) {
+                                imageUrls.add(urls);
+                                urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
                             }
                         }
                         adapter.notifyDataSetChanged();
@@ -109,13 +122,14 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<String> urls = new ArrayList<>();
+
                         for (DocumentSnapshot document : task.getResult()) {
                             String imageUrl = document.getString("photo");
                             String userString = document.getString("user");
                             if (imageUrl != null && !userString.equals(idUser)) {
                                 urls.add(imageUrl);
                                 if (urls.size() == 3) {
-                                    imageUrls.add(urls);
+                                    imageUrls2.add(urls);
                                     urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
                                 }
                             }
