@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -146,42 +148,62 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
         openDetailFragment2(imageUrl);
     }
 
-    private void openDetailFragment2(String imageUrl) {
-        db.collection("booksData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot querySnapshot = task.getResult();
+        private void openDetailFragment2(String imageUrl) {
+            if(user!=null){
+            db.collection("booksData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
 
-                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                        if (document.contains("photo") && document.getString("photo").equals(imageUrl)) {
-                            bookId = document.getId();
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            if (document.contains("photo") && document.getString("photo").equals(imageUrl)) {
+                                bookId = document.getId();
+                            }
+
                         }
-
                     }
-                }
-                Log.d("bookid", bookId);
-                Bundle bundle = new Bundle();
-                bundle.putString("bookId", bookId);
-                BookInfoFragment fragment = new BookInfoFragment();
-                fragment.setArguments(bundle);
+                    Log.d("bookid", bookId);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("bookId", bookId);
+                    BookInfoFragment fragment = new BookInfoFragment();
+                    fragment.setArguments(bundle);
 
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame_layout, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_layout, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+                }
+            });
+            } else {
+                negativeToast("You need to be logged in");
 
             }
-        });
 
 
-
-    }
+        }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    private void negativeToast(String message) {
+        // Usa inflater para inflar el diseño del toast
+        LayoutInflater inflater = getLayoutInflater();
+        // Infla el diseño personalizado del toast
+        View layout = inflater.inflate(R.layout.toast_layout_fail,
+                requireActivity().findViewById(R.id.toastLayoutFail));
+        // Busca el TextView dentro del diseño del toast
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        // Establece el mensaje proporcionado en el TextView
+        txtMsg.setText(message);
+        // Crea y muestra el toast
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }

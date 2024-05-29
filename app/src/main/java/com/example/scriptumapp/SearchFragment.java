@@ -216,13 +216,18 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
 
     @Override
     public void onMessageButtonClick(int position) {
-        //Enviamos el usuario al fragment de messagesChatFragment
-        String textToSend = usersList.get(position);
-        Bundle bundle = new Bundle();
-        bundle.putString("userIdReceptor", textToSend);
-        MessagesChatFragment messagesChatFragment = new MessagesChatFragment();
-        messagesChatFragment.setArguments(bundle);
-        replaceFragment(messagesChatFragment);
+        if (user!=null){
+            //Enviamos el usuario al fragment de messagesChatFragment
+            String textToSend = usersList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("userIdReceptor", textToSend);
+            MessagesChatFragment messagesChatFragment = new MessagesChatFragment();
+            messagesChatFragment.setArguments(bundle);
+            replaceFragment(messagesChatFragment);
+        } else {
+            negativeToast("You need to be logged in");
+        }
+
     }
 
     private void toastNoResultsFound() {
@@ -249,20 +254,46 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
 
     @Override
     public void onItemClick(int position) {
-        String bookId = sortedBooksIds.get(position);
-        Bundle bundle = new Bundle();
-        bundle.putString("bookId",bookId);
-        // Crear una instancia de BookInfoFragment y asignar el Bundle
-        BookInfoFragment fragment = new BookInfoFragment();
-        fragment.setArguments(bundle);
+        if (user!=null){
+            String bookId = sortedBooksIds.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("bookId",bookId);
+            // Crear una instancia de BookInfoFragment y asignar el Bundle
+            BookInfoFragment fragment = new BookInfoFragment();
+            fragment.setArguments(bundle);
 
-        // Reemplazar el fragmento actual con BookInfoFragment
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+            // Reemplazar el fragmento actual con BookInfoFragment
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        } else {
+            negativeToast("You need to be logged in");
+        }
 
+
+    }
+    /**
+     * Muestra un mensaje de notificación negativo (toast) en la pantalla.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
+    private void negativeToast(String message) {
+        // Usa inflater para inflar el diseño del toast
+        LayoutInflater inflater = getLayoutInflater();
+        // Infla el diseño personalizado del toast
+        View layout = inflater.inflate(R.layout.toast_layout_fail,
+                requireActivity().findViewById(R.id.toastLayoutFail));
+        // Busca el TextView dentro del diseño del toast
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        // Establece el mensaje proporcionado en el TextView
+        txtMsg.setText(message);
+        // Crea y muestra el toast
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 
 
