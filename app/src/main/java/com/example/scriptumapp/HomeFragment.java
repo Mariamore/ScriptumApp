@@ -9,26 +9,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.scriptumapp.databinding.FragmentHomeBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnItemClickListener {
 
     private FragmentHomeBinding binding;
     private List<List<String>> imageUrls = new ArrayList<>();
     private ImageCarouselAdapter adapter;
+    private FirebaseFirestore db;
+    private String bookId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        db = FirebaseFirestore.getInstance();
         return binding.getRoot();
     }
 
@@ -36,7 +44,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new ImageCarouselAdapter(imageUrls);
+        adapter = new ImageCarouselAdapter(imageUrls, this);
         binding.viewPager.setAdapter(adapter);
         binding.viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
@@ -67,6 +75,44 @@ public class HomeFragment extends Fragment {
                         Log.e("Firestore", "Error getting documents.", task.getException());
                     }
                 });
+    }
+
+    @Override
+    public void onItemClick(String imageUrl) {
+            openDetailFragment(imageUrl);
+    }
+
+    private void openDetailFragment(String imageUrl) {
+        db.collection("booksData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        if (document.contains("photo") && document.getString("photo").equals(imageUrl)) {
+                            bookId = document.getId();
+                        }
+
+                        }
+                    }
+                Log.d("bookid", bookId);
+                Bundle bundle = new Bundle();
+                bundle.putString("bookId", bookId);
+                BookInfoFragment fragment = new BookInfoFragment();
+                fragment.setArguments(bundle);
+
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        });
+
+
+
     }
 
     @Override
