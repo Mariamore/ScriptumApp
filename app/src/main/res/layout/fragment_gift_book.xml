@@ -36,12 +36,12 @@
         <TextView
             android:id="@+id/textGifBook"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
             android:fontFamily="@font/inter"
             android:text="@string/gift_book"
             android:textColor="@color/buttonQueries"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -52,7 +52,7 @@
             android:id="@+id/backGiftBook"
             android:layout_width="148dp"
             android:layout_height="48dp"
-            android:layout_marginTop="340dp"
+            android:layout_marginTop="360dp"
             android:backgroundTint="@color/buttonQueries"
             android:fontFamily="@font/inter"
             android:text="@string/back"
@@ -66,12 +66,11 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSingle2"
-            android:layout_width="293dp"
-            android:layout_height="269dp"
-            android:layout_marginBottom="255dp"
+            android:layout_width="299dp"
+            android:layout_height="328dp"
+            android:layout_marginBottom="180dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.511"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
 
