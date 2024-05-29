@@ -20,6 +20,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.scriptumapp.databinding.FragmentHomeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -36,19 +38,28 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
     private ImageCarouselAdapter adapter;
     private ImageCarouselAdapter2 adapter2;
     private FirebaseFirestore db;
-    private String bookId;
+    private String bookId, idUser;
+    private FirebaseUser user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        //hay que pensar si queremos que usuarios no autenticados puedan buscar o no
+        if (user != null) {
+            idUser = user.getUid();
+            // Resto del código que utiliza el UID del usuario
+        }
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         adapter = new ImageCarouselAdapter(imageUrls, this);
         binding.viewPager.setAdapter(adapter);
@@ -58,6 +69,7 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
         binding.viewPager2.setAdapter(adapter2);
         binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
+        fetchLatestImagesFromFirestore();
         fetchLatestImagesFromFirestore2();
     }
 
@@ -72,7 +84,8 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
                         List<String> urls = new ArrayList<>();
                         for (DocumentSnapshot document : task.getResult()) {
                             String imageUrl = document.getString("photo");
-                            if (imageUrl != null) {
+                            String userString = document.getString("user");
+                            if (imageUrl != null && !userString.equals(idUser)) {
                                 urls.add(imageUrl);
                                 if (urls.size() == 3) {
                                     imageUrls.add(urls);
@@ -98,7 +111,8 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
                         List<String> urls = new ArrayList<>();
                         for (DocumentSnapshot document : task.getResult()) {
                             String imageUrl = document.getString("photo");
-                            if (imageUrl != null) {
+                            String userString = document.getString("user");
+                            if (imageUrl != null && !userString.equals(idUser)) {
                                 urls.add(imageUrl);
                                 if (urls.size() == 3) {
                                     imageUrls.add(urls);
