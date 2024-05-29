@@ -213,7 +213,7 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
 
 
     @Override
-    public void onItemClick(int position, String user) {
+    public void onItemClick(int position) {
         String bookId = booksIdList.get(position);
         Bundle bundle = new Bundle();
         bundle.putString("bookId",bookId);

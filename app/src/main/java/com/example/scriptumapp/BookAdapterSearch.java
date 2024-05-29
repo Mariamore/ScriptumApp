@@ -25,7 +25,7 @@ public class BookAdapterSearch extends ArrayAdapter<String> {
 
     public interface OnMessageButtonClickListener {
         void onMessageButtonClick(int position);
-        void onItemClick(int position, String user);
+        void onItemClick(int position);
     }
 
     public BookAdapterSearch(Context context, List<String> titlesList, List<String> authorsList,
@@ -77,7 +77,7 @@ public class BookAdapterSearch extends ArrayAdapter<String> {
             public void onClick(View v) {
                 String user = userTextView.toString();
                 if (listener != null) {
-                    listener.onItemClick(position, user);
+                    listener.onItemClick(position);
                 }
             }
         });

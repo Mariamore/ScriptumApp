@@ -248,7 +248,7 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
 
 
     @Override
-    public void onItemClick(int position, String user) {
+    public void onItemClick(int position) {
         String bookId = sortedBooksIds.get(position);
         Bundle bundle = new Bundle();
         bundle.putString("bookId",bookId);
