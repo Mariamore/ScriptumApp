@@ -2,9 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_container"
     tools:context=".HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,7 +60,6 @@
             android:background="@drawable/vector"
             app:layout_constraintStart_toStartOf="@+id/recomendaciones"
             app:layout_constraintTop_toBottomOf="@+id/recomendaciones" />
-
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
@@ -119,6 +118,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

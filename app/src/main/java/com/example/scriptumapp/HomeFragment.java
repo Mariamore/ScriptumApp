@@ -28,7 +28,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private List<List<String>> imageUrls = new ArrayList<>();
     private List<List<String>> imageUrl2 = new ArrayList<>();
-     private ImageCarouselAdapter adapter;
+    private List<String> listBooks = new ArrayList<>();
+    private ImageCarouselAdapter adapter;
      private ImageCarouselAdapter2 adapter2;
 
     @Override
@@ -48,7 +49,7 @@ public class HomeFragment extends Fragment {
 
         fetchLatestImagesFromFirestore();
 
-        adapter2 = new ImageCarouselAdapter2(getContext(), imageUrl2);
+        adapter2 = new ImageCarouselAdapter2(getContext(), imageUrl2, listBooks);
         binding.viewPager2.setAdapter(adapter2);
         binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
@@ -101,8 +102,10 @@ public class HomeFragment extends Fragment {
                             int count = 0;
                             for (DocumentSnapshot document : documents) {
                                 String imageUrl = document.getString("photo");
+                                String bookId = document.getString("bookId");
                                 if (imageUrl != null) {
                                     urls.add(imageUrl);
+                                    listBooks.add(bookId); // Añadir el ID del libro a la lista
                                     count++;
                                     if (urls.size() == 3) {
                                         imageUrl2.add(urls); // Añadir a imageUrl2

@@ -3,12 +3,6 @@ package com.example.scriptumapp;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +15,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -60,6 +59,9 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
     private FirebaseFirestore db;
     private Button backButton, contactButton;
     private WebView webView;
+
+    private static final String ARG_BOOK_ID = "bookId";
+    private String bookId;
 
 
     public BookInfoFragment() {
@@ -251,90 +253,80 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
     /**
      * Carga los datos del libro seleccionado en el searchFragment anterior, utilizando el ID del libro extraido a través de un bundle.
      */
-    private void loadData(){
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String bookId = bundle.getString("bookId");
-            DocumentReference docRef = db.collection("booksData").document(bookId);
-            docRef.get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    private void loadData() {
+        if (bookId == null) {
+            negativeToast("El ID del libro es nulo.");
+            return;
+        }
+
+        DocumentReference docRef = db.collection("booksData").document(bookId);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    bookTitleString = documentSnapshot.getString("title");
+                    bookAuthorString = documentSnapshot.getString("author");
+                    bookEditorialString = documentSnapshot.getString("editorial");
+                    bookStatusString = documentSnapshot.getString("type");
+                    bookUserString = documentSnapshot.getString("user");
+                    bookYearString = documentSnapshot.getString("year");
+
+                    usersCollection = db.collection("usersData");
+                    query = usersCollection.whereEqualTo("user", bookUserString);
+                    query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-
-                                bookTitleString =  documentSnapshot.getString("title");
-                                bookAuthorString = documentSnapshot.getString("author");
-                                bookEditorialString = documentSnapshot.getString("editorial");
-                                bookStatusString = documentSnapshot.getString("type");
-                                bookUserString = documentSnapshot.getString("user");
-                                bookYearString = documentSnapshot.getString("year");
-
-                                usersCollection = db.collection("usersData");
-                                query = usersCollection.whereEqualTo("user", bookUserString);
-                                query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        if (!queryDocumentSnapshots.isEmpty()) {
-                                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-
-                                                userNameString = document.getString("nameSurname");
-                                                bookUserEditText.setText(userNameString);
-                                                latitude = document.getDouble("latitude");
-                                                longitude = document.getDouble("longitude");
-                                                webView.getSettings().setJavaScriptEnabled(true);
-                                                webView.getSettings().setAllowContentAccess(true);
-                                                webView.getSettings().setAllowFileAccess(true);
-                                                webView.addJavascriptInterface(BookInfoFragment.this, "Android");
-                                                webView.setWebViewClient(new WebViewClient());
-                                                webView.loadUrl("file:///android_res/raw/mapuser.html");
-
-                                            }
-                                        }
-
-                                    }
-                                });
-
-                                bookTitleEditText.setText(bookTitleString);
-                                bookAuthorEditText.setText(bookAuthorString);
-                                bookEditorialEditText.setText(bookEditorialString);
-                                bookStatusEditText.setText(bookStatusString);
-                                bookYearEditText.setText(bookYearString);
-
-                                FirebaseStorage storage = FirebaseStorage.getInstance();
-
-                                photoUrl = documentSnapshot.getString("photo");
-                                if (photoUrl != null && !photoUrl.isEmpty()) {
-                                    StorageReference storageRef = storage.getReferenceFromUrl(photoUrl);
-                                    storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            // Uri de la imagen descargada
-                                            String imageUrl = uri.toString();
-                                            Picasso.get().load(imageUrl).into(bookPhoto);
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            bookPhoto.setImageResource(R.drawable.photobook);
-                                        }
-                                    });
-                                } else {
-                                    // Manejo del caso cuando la URL es nula o vacía
-                                    bookPhoto.setImageResource(R.drawable.photobook);
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                    userNameString = document.getString("nameSurname");
+                                    bookUserEditText.setText(userNameString);
+                                    latitude = document.getDouble("latitude");
+                                    longitude = document.getDouble("longitude");
+                                    webView.getSettings().setJavaScriptEnabled(true);
+                                    webView.getSettings().setAllowContentAccess(true);
+                                    webView.getSettings().setAllowFileAccess(true);
+                                    webView.addJavascriptInterface(BookInfoFragment.this, "Android");
+                                    webView.setWebViewClient(new WebViewClient());
+                                    webView.loadUrl("file:///android_res/raw/mapuser.html");
                                 }
-
-                            } else {
-                                negativeToast(getString(R.string.the_document_does_not_exist));
                             }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            negativeToast(getString(R.string.error_retrieving_document));
                         }
                     });
 
-        }
+                    bookTitleEditText.setText(bookTitleString);
+                    bookAuthorEditText.setText(bookAuthorString);
+                    bookEditorialEditText.setText(bookEditorialString);
+                    bookStatusEditText.setText(bookStatusString);
+                    bookYearEditText.setText(bookYearString);
+
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    photoUrl = documentSnapshot.getString("photo");
+                    if (photoUrl != null && !photoUrl.isEmpty()) {
+                        StorageReference storageRef = storage.getReferenceFromUrl(photoUrl);
+                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String imageUrl = uri.toString();
+                                Picasso.get().load(imageUrl).into(bookPhoto);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                bookPhoto.setImageResource(R.drawable.photobook);
+                            }
+                        });
+                    } else {
+                        bookPhoto.setImageResource(R.drawable.photobook);
+                    }
+                } else {
+                    negativeToast(getString(R.string.the_document_does_not_exist));
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                negativeToast(getString(R.string.error_retrieving_document));
+            }
+        });
     }
 }
