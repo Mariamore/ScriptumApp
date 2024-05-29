@@ -88,5 +88,6 @@
     <string name="messages">Messages</string>
     <string name="type">Type</string>
     <string name="search_address">Search address</string>
+    <string name="book">Book</string>
 
 </resources>

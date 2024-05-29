@@ -11,6 +11,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -19,10 +20,8 @@ dependencyResolutionManagement {
         maven {
             setUrl("https://jitpack.io")
         }
-
     }
 }
 
-rootProject.name = "ScriptumApp"
-include(":app")
- 
+    rootProject.name = "ScriptumApp"
+    include(":app")

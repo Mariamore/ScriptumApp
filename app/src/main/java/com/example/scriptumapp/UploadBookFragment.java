@@ -65,6 +65,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
 
 
     Spinner spinner;
+    private long timestamp;
 
     public UploadBookFragment() {
         // Required empty public constructor
@@ -118,9 +119,9 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         spinnnerOp.add("exchange");
         spinnnerOp.add("gift");
         //utilizamos ArrayAdpter para adaptar los datos de Spinner
-        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spinnnerOp);
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(getContext(), R.layout.spinner_item, spinnnerOp);
         //Diseño del despliegue
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterSpinner.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapterSpinner);
 
 
@@ -149,6 +150,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             String spinnerSelection = spinner.getSelectedItem().toString();//Seleccionamos la opcion
 
             String bookId = UUID.randomUUID().toString();
+            timestamp = System.currentTimeMillis();
 
             // Add a new document with a generated id.
             Map<String, Object> data = new HashMap<>();
@@ -160,6 +162,7 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
             data.put("status", status);
             data.put("type", spinnerSelection);
             data.put("user", idUser);
+            data.put("timestamp", timestamp);
 
             db.collection("booksData")
                     .add(data)
