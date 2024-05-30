@@ -93,5 +93,12 @@
     <string name="my_books">My Books</string>
     <string name="ok">OK</string>
     <string name="recommended_books">Recommended books</string>
+    <string name="error_updating_book">Error updating book</string>
+    <string name="book_updated">Book updated!</string>
+    <string name="error_uploading_photo">Error uploading photo</string>
+    <string name="book_uploaded">Book uploaded!</string>
+    <string name="please_select_an_image">Please select an image</string>
+    <string name="error_saving_book_data">Error saving book data</string>
+    <string name="invalid_year_format">Invalid year format</string>
 
 </resources>

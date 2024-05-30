@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -153,14 +154,14 @@ public class BookEditFragmentExchange extends Fragment {
                                 Picasso.get().load(imageUrl).into(imageBook_bookEditExchange);
                             }
                         } else {
-                            Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Failed to load document", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getContext(), "Failed to load document", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -188,7 +189,7 @@ public class BookEditFragmentExchange extends Fragment {
                         if (imageUri != null) {
                             uploadPhotoExchange(docId);
                         } else {
-                            Toast.makeText(getContext(), "Book updated", Toast.LENGTH_SHORT).show();
+                            positiveToast("Book updated!");
                             getParentFragmentManager().popBackStack();
                         }
                     }
@@ -196,7 +197,7 @@ public class BookEditFragmentExchange extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Error updating book", Toast.LENGTH_SHORT).show();
+                       negativeToast(getString(R.string.error_updating_book));
                     }
                 });
     }
@@ -222,20 +223,20 @@ public class BookEditFragmentExchange extends Fragment {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getContext(), "Book and image updated successfully!", Toast.LENGTH_SHORT).show();
+                                               // Toast.makeText(getContext(), "Book and image updated successfully!", Toast.LENGTH_SHORT).show();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getContext(), "Error updating photo URL in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                               // Toast.makeText(getContext(), "Error updating photo URL in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Error getting download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), "Error getting download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -243,11 +244,32 @@ public class BookEditFragmentExchange extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
 
     }
 
+    private void negativeToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout_fail, requireActivity().findViewById(R.id.toastLayoutFail));
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        txtMsg.setText(message);
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    private void positiveToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout_ok, requireActivity().findViewById(R.id.toastLayoutOk));
+        TextView txtMsg = layout.findViewById(R.id.toastMessage);
+        txtMsg.setText(message);
+        Toast toast = new Toast(requireContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
 }
