@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,37 +29,22 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookEditFragmentLoan#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BookEditFragmentLoan extends Fragment {
-
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private EditText authorEditText_bookEditLoan, titleEditText_bookEditLoan, editorialEditText_bookEditLoan, yearEditText_bookEditLoan, statusEditText_bookEditLoan;
     private ImageView imageBook_bookEditLoan;
-    private ImageButton button_bookEdit;
-
     private Button button_saveBookEditLoan;
-
-    private Book book;
     private FirebaseFirestore db;
     StorageReference stRe;
-    private String idUser;
     private static final String DOC_ID = "docId";
-
     private String docId;
     private Uri imageUri;
-    //private String bookId;
+    private static final String YEAR_REGEX = "^\\d{4}$";
+    private static final Pattern YEAR_PATTERN = Pattern.compile(YEAR_REGEX);
+
     public BookEditFragmentLoan() {
         // Required empty public constructor
     }
@@ -72,8 +56,6 @@ public class BookEditFragmentLoan extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,7 +91,7 @@ public class BookEditFragmentLoan extends Fragment {
                 //selecionamos la imagen
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(intent, COD_SEL_IMAGE);//deprecado
+                startActivityForResult(intent, COD_SEL_IMAGE);
             }
         });
 
@@ -121,7 +103,6 @@ public class BookEditFragmentLoan extends Fragment {
                 saveBookEditLoan();
             }
         });
-
         return rootView;
     }
 
@@ -171,32 +152,47 @@ public class BookEditFragmentLoan extends Fragment {
         String year = yearEditText_bookEditLoan.getText().toString();
         String status = statusEditText_bookEditLoan.getText().toString();
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("title", title);
-        data.put("author", author);
-        data.put("editorial", editorial);
-        data.put("year", year);
-        data.put("status", status);
+        if (title.isEmpty()){
+            titleEditText_bookEditLoan.setError(getString(R.string.required_field));
+            titleEditText_bookEditLoan.requestFocus();
+        } else if (author.isEmpty()){
+            authorEditText_bookEditLoan.setError(getString(R.string.required_field));
+            authorEditText_bookEditLoan.requestFocus();
+        } else if(editorial.isEmpty()){
+            editorialEditText_bookEditLoan.setError(getString(R.string.required_field));
+            editorialEditText_bookEditLoan.requestFocus();
+        } else if (year.isEmpty()){
+            yearEditText_bookEditLoan.setError(getString(R.string.required_field));
+            yearEditText_bookEditLoan.requestFocus();
+        } else if (!isValidYear(year)) {
+            yearEditText_bookEditLoan.setError(getString(R.string.invalid_year_format));
+            yearEditText_bookEditLoan.requestFocus();
+        } else {
+            Map<String, Object> data = new HashMap<>();
+            data.put("title", title);
+            data.put("author", author);
+            data.put("editorial", editorial);
+            data.put("year", year);
+            data.put("status", status);
 
-        db.collection("booksData").document(docId)
-                .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        if (imageUri != null) {
-                            uploadPhotoEditLoan(docId);
-                        } else {
+            db.collection("booksData").document(docId)
+                    .update(data)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            if (imageUri != null) {
+                                uploadPhotoEditLoan(docId);
+                            }
                             positiveToast(getString(R.string.book_updated));
                             getParentFragmentManager().popBackStack();
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        negativeToast(getString(R.string.error_updating_book));
-                    }
-                });
-
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            negativeToast(getString(R.string.error_updating_book));
+                        }
+                    });
+        }
     }
     private void uploadPhotoEditLoan(String docId){
 
@@ -243,6 +239,15 @@ public class BookEditFragmentLoan extends Fragment {
                     }
                 });
     }
+
+    public static boolean isValidYear(String year) {
+        if (year == null) {
+            return false;
+        }
+        Matcher matcher = YEAR_PATTERN.matcher(year);
+        return matcher.matches();
+    }
+
     private void negativeToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail, requireActivity().findViewById(R.id.toastLayoutFail));

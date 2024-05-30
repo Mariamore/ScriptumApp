@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,33 +29,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookEditFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BookEditFragment extends Fragment {
-
-
-    private String mParam1;
-    private String mParam2;
 
     private EditText authorEditText_bookEdit, titleEditText_bookEdit, editorialEditText_bookEdit, yearEditText_bookEdit, statusEditText_bookEdit;
     private ImageView imageBook_bookEdit;
-    private ImageButton button_bookEdit, imageButtonDeleteBook;
-
     private Button button_saveBookEdit;
-
-    private Book book;
     private FirebaseFirestore db;
     StorageReference stRe;
-    private String idUser;
     private static final String DOC_ID = "docId";
-
     private String docId;
     private Uri imageUri;
-    //private String bookId;
+    private static final String YEAR_REGEX = "^\\d{4}$";
+    private static final Pattern YEAR_PATTERN = Pattern.compile(YEAR_REGEX);
 
     public BookEditFragment() {
         // Required empty public constructor
@@ -85,7 +72,6 @@ public class BookEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_book_edit, container, false);
 
-
         authorEditText_bookEdit = rootView.findViewById(R.id.authorEditText_bookEdit);
         titleEditText_bookEdit  = rootView.findViewById(R.id.titleEditText_bookEdit);
         yearEditText_bookEdit = rootView.findViewById(R.id.yearEditText_bookEdit);
@@ -94,10 +80,8 @@ public class BookEditFragment extends Fragment {
         editorialEditText_bookEdit= rootView.findViewById(R.id.editorialEditText_bookEdit);
         button_saveBookEdit = rootView.findViewById(R.id.button_saveBookEdit);
 
-
         //extraemos los datos
         dataBook();
-
 
         //Selecinar Imagen nueva en la edicion
         imageBook_bookEdit.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +90,7 @@ public class BookEditFragment extends Fragment {
                 //selecionamos la iamgen
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(intent, COD_SEL_IMAGE);//deprecado
+                startActivityForResult(intent, COD_SEL_IMAGE);
             }
         });
 
@@ -114,42 +98,11 @@ public class BookEditFragment extends Fragment {
         button_saveBookEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 saveBookEdit();
             }
         });
-
-//        Eliminamos el libro
-//        imageButtonDeleteBook.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                deleteBook();
-//            }
-//        });
-
-
         return rootView;
-
     }
-
-    public void deleteBook() {
-        db.collection("booksData").document(docId)
-                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        //Eliminamos la imagen
-                        String imageName = docId + ".jpg";
-                        StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
-                        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                               positiveToast("Book deleted!");
-                            }
-                        });
-                    }
-                });
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -165,7 +118,6 @@ public class BookEditFragment extends Fragment {
     }
 
     public void dataBook(){
-
         db.collection("booksData").document(docId).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -206,37 +158,51 @@ public class BookEditFragment extends Fragment {
         String year = yearEditText_bookEdit.getText().toString();
         String status = statusEditText_bookEdit.getText().toString();
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("title", title);
-        data.put("author", author);
-        data.put("editorial", editorial);
-        data.put("year", year);
-        data.put("status", status);
+        if (title.isEmpty()){
+            titleEditText_bookEdit.setError(getString(R.string.required_field));
+            titleEditText_bookEdit.requestFocus();
+        } else if (author.isEmpty()){
+            authorEditText_bookEdit.setError(getString(R.string.required_field));
+            authorEditText_bookEdit.requestFocus();
+        } else if(editorial.isEmpty()){
+            editorialEditText_bookEdit.setError(getString(R.string.required_field));
+            editorialEditText_bookEdit.requestFocus();
+        } else if (year.isEmpty()){
+            yearEditText_bookEdit.setError(getString(R.string.required_field));
+            yearEditText_bookEdit.requestFocus();
+        } else if (!isValidYear(year)) {
+            yearEditText_bookEdit.setError(getString(R.string.invalid_year_format));
+            yearEditText_bookEdit.requestFocus();
+        } else {
+            Map<String, Object> data = new HashMap<>();
+            data.put("title", title);
+            data.put("author", author);
+            data.put("editorial", editorial);
+            data.put("year", year);
+            data.put("status", status);
 
-        db.collection("booksData").document(docId)
-                .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        if (imageUri != null) {
-                            uploadPhoto(docId);
-                        } else {
-                          positiveToast("Book updated!");
+            db.collection("booksData").document(docId)
+                    .update(data)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            if (imageUri != null) {
+                                uploadPhoto(docId);
+                            }
+                            positiveToast("Book updated!");
                             getParentFragmentManager().popBackStack();
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        negativeToast("Error updating book");
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            negativeToast("Error updating book");
+                        }
+                    });
+        }
     }
 
-
     public void uploadPhoto(String docId){
-
         String imageName= docId + ".jpg";
         StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
 
@@ -279,9 +245,15 @@ public class BookEditFragment extends Fragment {
                    // Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+    }
 
-
-}
+    public static boolean isValidYear(String year) {
+        if (year == null) {
+            return false;
+        }
+        Matcher matcher = YEAR_PATTERN.matcher(year);
+        return matcher.matches();
+    }
 
     private void negativeToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
@@ -304,8 +276,6 @@ public class BookEditFragment extends Fragment {
         toast.setView(layout);
         toast.show();
     }
-
-
 }
 
 

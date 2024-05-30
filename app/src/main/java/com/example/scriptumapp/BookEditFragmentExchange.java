@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,43 +29,25 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookEditFragmentExchange#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BookEditFragmentExchange extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private EditText authorEditText_bookEditExchange, titleEditText_bookEditExchange, editorialEditText_bookEditExchange, yearEditText_bookEditExchange, statusEditText_bookEditExchange;
     private ImageView imageBook_bookEditExchange;
-    private ImageButton button_bookEdit;
-
     private Button button_saveBookEditExchange;
-
-    private Book book;
     private FirebaseFirestore db;
     StorageReference stRe;
-    private String idUser;
     private static final String DOC_ID = "docId";
-
     private String docId;
     private Uri imageUri;
-    //private String bookId;
+    private static final String YEAR_REGEX = "^\\d{4}$";
+    private static final Pattern YEAR_PATTERN = Pattern.compile(YEAR_REGEX);
 
     public BookEditFragmentExchange() {
         // Required empty public constructor
     }
-
 
     public static BookEditFragmentExchange newInstance(String docId) {
         BookEditFragmentExchange fragment = new BookEditFragmentExchange();
@@ -108,10 +89,10 @@ public class BookEditFragmentExchange extends Fragment {
         imageBook_bookEditExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //selecionamos la iamgen
+                //selecionamos la imagen
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(intent, COD_SEL_IMAGE);//deprecado
+                startActivityForResult(intent, COD_SEL_IMAGE);
             }
         });
 
@@ -136,9 +117,7 @@ public class BookEditFragmentExchange extends Fragment {
         }
     }
 
-
     public void dataBookExchange(){
-
         db.collection("booksData").document(docId).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -167,44 +146,57 @@ public class BookEditFragmentExchange extends Fragment {
     }
     //guardamos los datos nuevos
     public void saveBookEditExhange(){
-
         String title = titleEditText_bookEditExchange.getText().toString();
         String author = authorEditText_bookEditExchange.getText().toString();
         String editorial = editorialEditText_bookEditExchange.getText().toString();
         String year = yearEditText_bookEditExchange.getText().toString();
         String status = statusEditText_bookEditExchange.getText().toString();
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("title", title);
-        data.put("author", author);
-        data.put("editorial", editorial);
-        data.put("year", year);
-        data.put("status", status);
+        if (title.isEmpty()){
+            titleEditText_bookEditExchange.setError(getString(R.string.required_field));
+            titleEditText_bookEditExchange.requestFocus();
+        } else if (author.isEmpty()){
+            authorEditText_bookEditExchange.setError(getString(R.string.required_field));
+            authorEditText_bookEditExchange.requestFocus();
+        } else if(editorial.isEmpty()){
+            editorialEditText_bookEditExchange.setError(getString(R.string.required_field));
+            editorialEditText_bookEditExchange.requestFocus();
+        } else if (year.isEmpty()){
+            yearEditText_bookEditExchange.setError(getString(R.string.required_field));
+            yearEditText_bookEditExchange.requestFocus();
+        } else if (!isValidYear(year)) {
+            yearEditText_bookEditExchange.setError(getString(R.string.invalid_year_format));
+            yearEditText_bookEditExchange.requestFocus();
+        } else {
+            Map<String, Object> data = new HashMap<>();
+            data.put("title", title);
+            data.put("author", author);
+            data.put("editorial", editorial);
+            data.put("year", year);
+            data.put("status", status);
 
-        db.collection("booksData").document(docId)
-                .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        if (imageUri != null) {
-                            uploadPhotoExchange(docId);
-                        } else {
+            db.collection("booksData").document(docId)
+                    .update(data)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            if (imageUri != null) {
+                                uploadPhotoExchange(docId);
+                            }
                             positiveToast("Book updated!");
                             getParentFragmentManager().popBackStack();
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                       negativeToast(getString(R.string.error_updating_book));
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            negativeToast(getString(R.string.error_updating_book));
+                        }
+                    });
+        }
     }
 
-
     public void uploadPhotoExchange(String docId){
-
         String imageName= docId + ".jpg";
         StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
 
@@ -247,8 +239,14 @@ public class BookEditFragmentExchange extends Fragment {
                        // Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
 
-
+    public static boolean isValidYear(String year) {
+        if (year == null) {
+            return false;
+        }
+        Matcher matcher = YEAR_PATTERN.matcher(year);
+        return matcher.matches();
     }
 
     private void negativeToast(String message) {
