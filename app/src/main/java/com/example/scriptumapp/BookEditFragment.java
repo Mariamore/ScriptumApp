@@ -118,6 +118,14 @@ public class BookEditFragment extends Fragment {
             }
         });
 
+//        Eliminamos el libro
+//        imageButtonDeleteBook.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                deleteBook();
+//            }
+//        });
+
 
         return rootView;
 
@@ -147,7 +155,11 @@ public class BookEditFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == getActivity().RESULT_OK && requestCode == COD_SEL_IMAGE && data != null) {
             imageUri = data.getData();
-            imageBook_bookEdit.setImageURI(imageUri);
+            Picasso.get()
+                    .load(imageUri)
+                    .resize(200, 300)
+                    .centerInside()
+                    .into(imageBook_bookEdit);
         }
     }
 
@@ -165,7 +177,11 @@ public class BookEditFragment extends Fragment {
                             statusEditText_bookEdit.setText(documentSnapshot.getString("status"));
                             String imageUrl = documentSnapshot.getString("photo");
                             if (imageUrl != null && !imageUrl.isEmpty()) {
-                                Picasso.get().load(imageUrl).into(imageBook_bookEdit);
+                                Picasso.get()
+                                        .load(imageUrl)
+                                        .resize(200, 300)
+                                        .centerInside()
+                                        .into(imageBook_bookEdit);
                             }
                         } else {
                             Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();

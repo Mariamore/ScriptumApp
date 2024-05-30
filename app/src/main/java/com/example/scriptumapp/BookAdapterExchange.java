@@ -37,7 +37,12 @@ public class BookAdapterExchange extends FirestoreRecyclerAdapter<Book, BookAdap
         viewHolder.title.setText(Book.getTitle());
         viewHolder.author.setText(Book.getAuthor());
         viewHolder.status.setText(Book.getStatus());
-        Picasso.get().load(Book.getPhoto()).into(viewHolder.photo);
+
+        Picasso.get()
+                .load(Book.getPhoto())
+                .resize(200,300)
+                .centerInside()
+                .into(viewHolder.photo);
 
         viewHolder.imageButtonEdit.setOnClickListener(new View.OnClickListener(){
 
@@ -46,6 +51,7 @@ public class BookAdapterExchange extends FirestoreRecyclerAdapter<Book, BookAdap
                 //Obtenemos id
                 String docId = getSnapshots().getSnapshot(position).getId();
                 BookEditFragmentExchange bookEditFragment = BookEditFragmentExchange.newInstance(docId);
+
                 viewHolder.replaceFragment(bookEditFragment);
 
             }
@@ -61,12 +67,12 @@ public class BookAdapterExchange extends FirestoreRecyclerAdapter<Book, BookAdap
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(viewHolder.itemView.getContext(), "Book delete", Toast.LENGTH_SHORT);
+                                Toast.makeText(viewHolder.itemView.getContext(), "Book delete", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(viewHolder.itemView.getContext(), "Error book delete", Toast.LENGTH_SHORT);
+                                Toast.makeText(viewHolder.itemView.getContext(), "Error book delete", Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -103,7 +109,7 @@ public class BookAdapterExchange extends FirestoreRecyclerAdapter<Book, BookAdap
         //cambiar de fragment
         private void replaceFragment(Fragment fragment) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container_exchange, fragment); // Usa el ID del contenedor de fragmentos
+            transaction.replace(R.id.frame_layout, fragment); // Usa el ID del contenedor de fragmentos
             transaction.addToBackStack(null);
             transaction.commit();
         }
