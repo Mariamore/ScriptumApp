@@ -40,10 +40,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="110dp"
             android:fontFamily="@font/inter"
             android:gravity="center_vertical"
-            android:text="Books you might like"
+            android:text="@string/latest_books_added"
             android:textColor="@color/text"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -52,7 +52,7 @@
 
         <View
             android:id="@+id/vector1"
-            android:layout_width="220dp"
+            android:layout_width="230dp"
             android:layout_height="3.78dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
@@ -83,10 +83,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="28dp"
             android:fontFamily="@font/inter"
             android:gravity="center_vertical"
-            android:text="Most searched books "
+            android:text="@string/recommended_books"
             android:textColor="@color/text"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -95,7 +95,7 @@
 
         <View
             android:id="@+id/vector2"
-            android:layout_width="220dp"
+            android:layout_width="230dp"
             android:layout_height="3.78dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
@@ -110,12 +110,12 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="135dp"
             android:clipToPadding="false"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vector2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("booksData")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(9)
+                .limit(18)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -90,22 +90,13 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
                         for (DocumentSnapshot document : task.getResult()) {
                             String imageUrl = document.getString("photo");
                             String userString = document.getString("user");
+                            // Solo mostramos libros nuevos de otros usuarios
                             if (imageUrl != null && !userString.equals(idUser)) {
                                 allUrls.add(imageUrl);
-                            }
-                        }
-
-
-                        // Barajar la lista de URLs
-                        Collections.shuffle(allUrls);
-                        List<String> urls = new ArrayList<>();
-
-                        for (int i = 0; i < Math.min(9, allUrls.size()); i++) {
-                            String url = allUrls.get(i);
-                            urls.add(url);
-                            if (urls.size() == 3) {
-                                imageUrls.add(urls);
-                                urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
+                                if (allUrls.size() == 3) {
+                                    imageUrls.add(allUrls);
+                                    allUrls = new ArrayList<>(); // Reiniciamos para el próximo grupo de imágenes
+                                }
                             }
                         }
                         adapter.notifyDataSetChanged();
@@ -117,9 +108,8 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
 
     private void fetchLatestImagesFromFirestore2() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("booksData")
+        db.collection("recommendedBooks")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(9)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -128,12 +118,10 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
                         for (DocumentSnapshot document : task.getResult()) {
                             String imageUrl = document.getString("photo");
                             String userString = document.getString("user");
-                            if (imageUrl != null && !userString.equals(idUser)) {
-                                urls.add(imageUrl);
-                                if (urls.size() == 3) {
-                                    imageUrls2.add(urls);
-                                    urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
-                                }
+                            urls.add(imageUrl);
+                            if (urls.size() == 3) {
+                                imageUrls2.add(urls);
+                                urls = new ArrayList<>(); // Reiniciar para el próximo grupo de imágenes
                             }
                         }
                         adapter2.notifyDataSetChanged();

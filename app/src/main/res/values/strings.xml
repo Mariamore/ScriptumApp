@@ -89,8 +89,9 @@
     <string name="search_address">Search address</string>
     <string name="book">Book</string>
     <string name="this_field_can_t_be_empty">This field can´t be empty</string>
-    <string name="latest_books_added">Latest books added</string>
+    <string name="latest_books_added">Latest books from other users</string>
     <string name="my_books">My Books</string>
     <string name="ok">OK</string>
+    <string name="recommended_books">Recommended books</string>
 
 </resources>
