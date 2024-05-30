@@ -36,7 +36,12 @@ public class BookAdapterLoan extends FirestoreRecyclerAdapter<Book, BookAdapterL
         viewHolder.title.setText(Book.getTitle());
         viewHolder.author.setText(Book.getAuthor());
         viewHolder.status.setText(Book.getStatus());
-        Picasso.get().load(Book.getPhoto()).into(viewHolder.photo);
+
+        Picasso.get()
+                .load(Book.getPhoto())
+                .resize(200,300)
+                .centerInside()
+                .into(viewHolder.photo);
 
         viewHolder.imageButtonEdit.setOnClickListener(new View.OnClickListener(){
 
@@ -59,12 +64,12 @@ public class BookAdapterLoan extends FirestoreRecyclerAdapter<Book, BookAdapterL
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(viewHolder.itemView.getContext(), "Book delete", Toast.LENGTH_SHORT);
+                                Toast.makeText(viewHolder.itemView.getContext(), "Book delete", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(viewHolder.itemView.getContext(), "Error book delete", Toast.LENGTH_SHORT);
+                                Toast.makeText(viewHolder.itemView.getContext(), "Error book delete", Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -100,7 +105,7 @@ public class BookAdapterLoan extends FirestoreRecyclerAdapter<Book, BookAdapterL
         //Cambiamos de Fragment
         private void replaceFragment(Fragment fragment) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container_loan, fragment); // Usa el ID del contenedor de fragmentos
+            transaction.replace(R.id.frame_layout, fragment); // Usa el ID del contenedor de fragmentos
             transaction.addToBackStack(null);
             transaction.commit();
         }

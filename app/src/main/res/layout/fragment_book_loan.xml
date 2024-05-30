@@ -41,7 +41,7 @@
             android:fontFamily="@font/inter"
             android:text="@string/book_loan"
             android:textColor="@color/buttonQueries"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -66,9 +66,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSingle"
-            android:layout_width="280dp"
-            android:layout_height="234dp"
-            android:layout_marginBottom="248dp"
+            android:layout_width="299dp"
+            android:layout_height="328dp"
+            android:layout_marginBottom="200dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.511"

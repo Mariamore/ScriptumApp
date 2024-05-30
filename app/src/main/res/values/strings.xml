@@ -90,5 +90,6 @@
     <string name="book">Book</string>
     <string name="latest_books_added">Latest books added</string>
     <string name="my_books">My Books</string>
+    <string name="ok">OK</string>
 
 </resources>
