@@ -40,9 +40,15 @@ public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdap
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         List<String> imageUrlsGroup = imageUrls.get(position);
         if (imageUrlsGroup != null && imageUrlsGroup.size() >= 3) {
-            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(0)).into(holder.imageView1);
-            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(1)).into(holder.imageView2);
-            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(2)).into(holder.imageView3);
+            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(0))
+                    .centerCrop()
+                    .into(holder.imageView1);
+            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(1))
+                    .centerCrop()
+                    .into(holder.imageView2);
+            Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(2))
+                    .centerCrop()
+                    .into(holder.imageView3);
 
             holder.imageView1.setOnClickListener(v -> {
                 if (onItemClickListener != null) {
