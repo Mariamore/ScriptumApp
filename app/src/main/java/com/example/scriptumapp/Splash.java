@@ -28,7 +28,7 @@ public class Splash extends AppCompatActivity {
                 // Cierra la actividad actual para evitar que el usuario pueda volver a ella
                 finish();
             }
-        }, 3000); // 2000 milisegundos = 2 segundos de retraso
+        }, 3000);
     }
 
 

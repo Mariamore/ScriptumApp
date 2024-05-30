@@ -43,9 +43,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
-
-
     // Variables
     private Button createAccButton;
     private TextView exit;
@@ -121,7 +118,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 nameInputEditText.requestFocus();
             } else if (address.isEmpty()){
                 addressInputEditText.setError(getString(R.string.required_field));
-
             } else if(email.isEmpty()){
                 emailInputEdittext.setError(getString(R.string.required_field));
                 emailInputEdittext.requestFocus();
@@ -157,6 +153,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
                                                         positiveToast(getString(R.string.account_created));
+                                                        replaceFragment(new ProfileFragment());
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -165,7 +162,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                                         negativeToast(getString(R.string.sign_up_failed));
                                                     }
                                                 });
-                                        replaceFragment(new ProfileFragment());
+
                                     } else {
                                         negativeToast(getString(R.string.sign_up_failed));
                                     }

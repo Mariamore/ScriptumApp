@@ -26,8 +26,7 @@
         var marker;
 
         function searchAddress(address) {
-            // Usa un servicio de geocodificación (puedes usar Nominatim de OpenStreetMap)
-            // En este ejemplo, simplemente agregamos un marcador en la ubicación de Madrid como demostración
+            //agregamos un marcador en la ubicación de Madrid como punto inicial del mapa
             var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
 
             fetch(url)

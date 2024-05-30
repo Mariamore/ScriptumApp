@@ -32,8 +32,7 @@
         marker = L.marker(coordinates).addTo(map);
 
         function searchAddress(address) {
-            // Usa un servicio de geocodificación (puedes usar Nominatim de OpenStreetMap)
-            // En este ejemplo, simplemente agregamos un marcador en la ubicación de Madrid como demostración
+
             var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + address;
 
             fetch(url)
@@ -53,8 +52,6 @@
 
                         // Llama a la función que pasará las coordenadas al código Java
                         Android.setCoordinates(lat, lon);
-
-
 
                     } else {
                         lat = 0;
