@@ -2,7 +2,6 @@ package com.example.scriptumapp;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -31,7 +30,7 @@ public class ImageCircle implements Transformation {
 
         // Dibujar el círculo base
         canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(0xFF787054); // Este color no importa realmente
+        paint.setColor(0xFF787054); // Este color no se va a ver al final
 
         float radius = size / 2f;
         float cx = size / 2f;

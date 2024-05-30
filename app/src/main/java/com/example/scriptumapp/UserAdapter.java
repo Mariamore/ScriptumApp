@@ -60,7 +60,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.imageContact.setImageResource(R.drawable.buttonimagecontact);
         }
 
-
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onMessageButtonClick(position);

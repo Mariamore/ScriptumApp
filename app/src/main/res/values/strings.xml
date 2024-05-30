@@ -100,5 +100,6 @@
     <string name="please_select_an_image">Please select an image</string>
     <string name="error_saving_book_data">Error saving book data</string>
     <string name="invalid_year_format">Invalid year format</string>
-
+    <string name="error_uploading_book">Error uploading book</string>
+    <string name="login_required">Login required</string>
 </resources>

@@ -183,7 +183,7 @@ public class BookEditFragmentExchange extends Fragment {
                             if (imageUri != null) {
                                 uploadPhotoExchange(docId);
                             }
-                            positiveToast("Book updated!");
+                            positiveToast(getString(R.string.book_updated));
                             getParentFragmentManager().popBackStack();
                         }
                     })

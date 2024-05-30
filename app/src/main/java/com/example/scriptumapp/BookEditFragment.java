@@ -144,8 +144,7 @@ public class BookEditFragment extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        negativeToast("Error updating book");
-                        //Toast.makeText(getContext(), "Failed to load document", Toast.LENGTH_SHORT).show();
+                        negativeToast(getString(R.string.error_uploading_book));
                     }
                 });
     }
@@ -189,14 +188,14 @@ public class BookEditFragment extends Fragment {
                             if (imageUri != null) {
                                 uploadPhoto(docId);
                             }
-                            positiveToast("Book updated!");
+                            positiveToast(getString(R.string.book_updated));
                             getParentFragmentManager().popBackStack();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            negativeToast("Error updating book");
+                            negativeToast(getString(R.string.error_uploading_book));
                         }
                     });
         }

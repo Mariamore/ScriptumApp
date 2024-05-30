@@ -1,14 +1,11 @@
 package com.example.scriptumapp;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.preference.PreferenceManager;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-
-
 
 public class MessagesChatFragment extends Fragment {
 
@@ -105,7 +94,6 @@ public class MessagesChatFragment extends Fragment {
     }
 
     public void sendMessage(String chatId, String senderId, String receiverId, String messageText) {
-        // Probar sin String ni long
         messageId = db.collection("messages").document().getId(); // Generar un ID único para el mensaje
         timestamp = System.currentTimeMillis();
         Message message = new Message(messageId, chatId, senderId, receiverId, messageText, timestamp);
@@ -114,9 +102,6 @@ public class MessagesChatFragment extends Fragment {
                 .addOnSuccessListener(aVoid -> {
                     // Éxito
                     messageEditText.setText(""); //Limpiamos el EditText de contenido
-                    //messageList.add(message);
-                    //adapter.notifyItemInserted(messageList.size() - 1); // Notificar al adaptador de la nueva inserción
-                    //recyclerView.scrollToPosition(messageList.size() - 1); // Desplazar al último mensaje
                 })
                 .addOnFailureListener(e -> {
                     // Error
@@ -145,11 +130,11 @@ public class MessagesChatFragment extends Fragment {
     }
 
     public String getChatId(String userId1, String userId2) {
-        // Ordenar los IDs de los usuarios alfabéticamente
+        // Se ordenan los IDs de los usuarios alfabéticamente
         String[] userIds = {userId1, userId2};
         Arrays.sort(userIds);
 
-        // Concatenar los IDs de los usuarios para formar el chatId
+        // Concatenamos los IDs de los usuarios para formar el chatId
         return userIds[0] + "_" + userIds[1];
     }
 

@@ -61,24 +61,14 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Añadir estas dos líneas siguientes
-        //binding = FragmentSearchBinding.inflate(inflater, container, false);
-        //return binding.getRoot();
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         searchEditText = rootView.findViewById(R.id.search_edit_text);
         db = FirebaseFirestore.getInstance();
-
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        //hay que pensar si queremos que usuarios no autenticados puedan buscar o no
         if (user != null) {
             idUser = user.getUid();
-            // Resto del código que utiliza el UID del usuario
-        } /*else {
-           idUser = "non_authenticated_user_id";
-
         }
-        */
         booksCollection = db.collection("booksData");
         searchButton = rootView.findViewById((R.id.searchButton));
         searchListView = rootView.findViewById(R.id.searchListView);
@@ -130,7 +120,6 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
 
                                 String userId = doc.getString("user");
 
-
                                 if (!userString.equals(idUser) && (containsAllWord(titleString, query) || containsAllWord(authorString, query))) {
 
                                     int relevanceScore = calculateRelevance(titleString, authorString, query);
@@ -144,9 +133,6 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                                 }
                             }
                         }
-
-
-
                         // Ordenamos los resultados en función de la puntuación de relevancia
                         int[] sortedIndices = IntStream.range(0, relevanceScores.size())
                                 .boxed()
@@ -210,7 +196,6 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
                 score++;
             }
         }
-
         return score;
     }
 
@@ -227,7 +212,6 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         } else {
             negativeToast("You need to be logged in");
         }
-
     }
 
     private void toastNoResultsFound() {
@@ -242,15 +226,13 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         toast.show();
     }
 
-    // Añadir este método para poder cambiar de fragment
+    // Método para cambiar de fragment
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
-
-
 
     @Override
     public void onItemClick(int position) {
@@ -269,10 +251,8 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         } else {
-            negativeToast("You need to be logged in");
+            negativeToast(getString(R.string.login_required));
         }
-
-
     }
     /**
      * Muestra un mensaje de notificación negativo (toast) en la pantalla.
