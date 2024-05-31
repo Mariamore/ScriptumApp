@@ -23,6 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -40,8 +42,10 @@ public class SearchByMapFragment extends Fragment {
     private WebView webView;
     private EditText locationEditText;
     private Button searchButton;
+    private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private String user, userIdMarker;
+    private FirebaseUser userF;
+    private String user, userIdMarker, userId;
     private List<String> users = new ArrayList<>();
     private List<Double[]> locations = new ArrayList<>();
 
@@ -76,6 +80,9 @@ public class SearchByMapFragment extends Fragment {
         locationEditText = rootView.findViewById(R.id.locationEditText);
         searchButton = rootView.findViewById(R.id.searchButton);
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        userF = mAuth.getCurrentUser();
+        userId = userF.getUid();
 
         webView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = webView.getSettings();
@@ -83,7 +90,7 @@ public class SearchByMapFragment extends Fragment {
         webView.addJavascriptInterface(this, "Android");
         webView.loadUrl("file:///android_res/raw/searchmap.html");
 
-        obtenerUbicacionesDeFirebase();
+        obtainFirebaseLocations();
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +106,7 @@ public class SearchByMapFragment extends Fragment {
         return rootView;
     }
 
-    private void obtenerUbicacionesDeFirebase() {
+    private void obtainFirebaseLocations() {
         db.collection("booksData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -108,7 +115,7 @@ public class SearchByMapFragment extends Fragment {
                     users.clear();
 
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                        if (document.contains("user")) {
+                        if (document.contains("user") && !document.getString("user").equals(userId)) {
                             user = document.getString("user");
                             if (user != null) {
                                 users.add(user);
@@ -116,13 +123,13 @@ public class SearchByMapFragment extends Fragment {
                         }
                     }
                     Log.d("Firebase", "Users obtained: " + users);
-                    obtenerUbicacionesDeUsuarios();
+                    obtainUsersLocations();
                 }
             }
         });
     }
 
-    private void obtenerUbicacionesDeUsuarios() {
+    private void obtainUsersLocations() {
         db.collection("usersData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
