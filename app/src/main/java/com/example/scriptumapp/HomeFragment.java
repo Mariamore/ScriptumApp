@@ -52,10 +52,9 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        //hay que pensar si queremos que usuarios no autenticados puedan buscar o no
+
         if (user != null) {
             idUser = user.getUid();
-            // Resto del código que utiliza el UID del usuario
         }
         return binding.getRoot();
     }

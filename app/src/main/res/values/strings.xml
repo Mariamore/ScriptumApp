@@ -77,7 +77,7 @@
     <string name="use_new_credentials">User logged out. Please log in with your new credentials.</string>
     <string name="no_user_is_logged_in">No user is logged in.</string>
     <string name="error_updating_email">"Error updating email: "</string>
-    <string name="pass">pass</string>
+    <string name="pass">password</string>
     <string name="user_logged_out">User logged out</string>
     <string name="user_photo_uploaded">User photo uploaded</string>
     <string name="error_uploading_user_photo">Error uploading user photo</string>
