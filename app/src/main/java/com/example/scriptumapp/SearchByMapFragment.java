@@ -90,7 +90,7 @@ public class SearchByMapFragment extends Fragment {
         webView.addJavascriptInterface(this, "Android");
         webView.loadUrl("file:///android_res/raw/searchmap.html");
 
-        obtainFirebaseLocations();
+        obtenerUbicacionesDeFirebase();
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +106,7 @@ public class SearchByMapFragment extends Fragment {
         return rootView;
     }
 
-    private void obtainFirebaseLocations() {
+    private void obtenerUbicacionesDeFirebase() {
         db.collection("booksData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

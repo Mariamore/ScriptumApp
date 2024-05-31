@@ -86,6 +86,9 @@ public class MessagesFragment extends Fragment {
         });
     }
 
+    /**
+     * Método para cargar los usuarios con los que el usuario actual ha tenido conversaciones.
+     */
     private void loadChatUsers() {
 
         userIdList.clear();
@@ -131,6 +134,11 @@ public class MessagesFragment extends Fragment {
                 });
     }
 
+    /**
+     * Método para obtener los datos de un usuario dado su ID.
+     *
+     * @param userId ID del usuario del que se obtendrán los datos.
+     */
     private void getUserData(String userId) {
         db.collection("usersData").whereEqualTo("user", userId)
                 .get()
@@ -150,6 +158,9 @@ public class MessagesFragment extends Fragment {
                 });
     }
 
+    /**
+     * Método para actualizar la interfaz de usuario con los datos obtenidos.
+     */
     private void updateUi(){
         if (userIdList.isEmpty()) {
             toastNoResultsFound();
@@ -173,6 +184,7 @@ public class MessagesFragment extends Fragment {
         }
     }
 
+
     public String getChatId(String userId1, String userId2) {
         // Ordenar los IDs de los usuarios alfabéticamente
         String[] userIds = {userId1, userId2};
@@ -182,7 +194,11 @@ public class MessagesFragment extends Fragment {
         return userIds[0] + "_" + userIds[1];
     }
 
-    // Añadir este método para poder cambiar de fragment
+    /**
+     * Método para reemplazar el fragmento actual con otro fragmento.
+     *
+     * @param fragment Fragmento que se va a mostrar.
+     */
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -190,6 +206,9 @@ public class MessagesFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Método para mostrar un Toast cuando no se encuentran resultados.
+     */
     private void toastNoResultsFound() {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail,

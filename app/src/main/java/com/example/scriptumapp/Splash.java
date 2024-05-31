@@ -28,7 +28,7 @@ public class Splash extends AppCompatActivity {
                 // Cierra la actividad actual para evitar que el usuario pueda volver a ella
                 finish();
             }
-        }, 3000);
+        }, 3000);//segundos durante los que se mantiene el splash
     }
 
 

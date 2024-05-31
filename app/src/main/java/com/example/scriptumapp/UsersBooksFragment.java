@@ -77,6 +77,11 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
         return rootView;
     }
 
+    /**
+     * Realiza una búsqueda en la base de datos y actualiza la interfaz de usuario con los resultados.
+     *
+     * @param userId El ID del usuario cuyos libros se están buscando.
+     */
     private void searchAndUpdateUi(String userId){
         db.collection("booksData")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -118,6 +123,7 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
                 });
     }
 
+
     @Override
     public void onMessageButtonClick(int position) {
         //Enviamos el usuario al fragment de messagesChatFragment
@@ -129,6 +135,9 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
         replaceFragment(messagesChatFragment);
     }
 
+    /**
+     * Muestra un Toast indicando que no se encontraron resultados.
+     */
     private void toastNoResultsFound() {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail,
@@ -141,7 +150,11 @@ public class UsersBooksFragment extends Fragment implements BookAdapterSearch.On
         toast.show();
     }
 
-    // Añadir este método para poder cambiar de fragment
+    /**
+     * Reemplaza el fragmento actual con otro fragmento.
+     *
+     * @param fragment El fragmento que se va a mostrar.
+     */
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -61,6 +61,7 @@ public class SearchMenuFragment extends Fragment implements View.OnClickListener
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
     /**
      * Muestra un mensaje de notificación negativo (toast) en la pantalla.
      *

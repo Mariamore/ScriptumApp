@@ -88,6 +88,11 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         return rootView;
     }
 
+    /**
+     * Método para buscar libros y actualizar la interfaz de usuario con los resultados de la búsqueda.
+     *
+     * @param query el texto que ha buscado el usuario.
+     */
     private void searchAndUpdateUi(String query){
         db.collection("booksData")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -199,6 +204,11 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         return score;
     }
 
+    /**
+     * Método llamado cuando se hace clic en el botón de mensaje.
+     *
+     * @param position La posición del elemento en la lista.
+     */
     @Override
     public void onMessageButtonClick(int position) {
         if (user!=null){
@@ -214,6 +224,9 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         }
     }
 
+    /**
+     * Método para mostrar un Toast cuando no se encuentran resultados de búsqueda.
+     */
     private void toastNoResultsFound() {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail,
@@ -234,6 +247,11 @@ public class SearchFragment extends Fragment implements BookAdapterSearch.OnMess
         fragmentTransaction.commit();
     }
 
+    /**
+     * Método llamado cuando se hace clic en un elemento de la lista.
+     *
+     * @param position La posición del elemento en la lista.
+     */
     @Override
     public void onItemClick(int position) {
         if (user!=null){

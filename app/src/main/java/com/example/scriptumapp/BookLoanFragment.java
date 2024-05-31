@@ -91,7 +91,7 @@ public class BookLoanFragment extends Fragment {
         mRecycler = rootView.findViewById(R.id.recyclerViewSingle);
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        //query para la coleccion Loan de la BBDD
+        //query para obtener los libros con el campo type = loan de la BBDD
         query = mFirestore.collection("booksData").whereEqualTo("user", idUser).whereEqualTo("type", "loan");
 
         //Crear opciones de la consulta

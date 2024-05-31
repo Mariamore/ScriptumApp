@@ -119,8 +119,6 @@ public class ResetPasswordFragment extends Fragment implements View.OnClickListe
     }
 
     //Creamos el método para resetear la contraseña
-
-        // Enviamos el correo
         private void resetPassword(String email){
             // Enviamos el correo
             mAuth.sendPasswordResetEmail(email).addOnCompleteListener(requireActivity(), new OnCompleteListener<Void>() {

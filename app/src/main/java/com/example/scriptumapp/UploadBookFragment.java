@@ -234,6 +234,11 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    /**
+     * Método para cargar una foto en el almacenamiento y guardar su URL en Firestore.
+     *
+     * @param idUser El ID del usuario al que pertenece el libro del cual vamos a cargar su foto.
+     */
     private void uploadPhoto(String idUser) {
 
         if (imageUri == null) { // Asegurarse de que la imagen se ha seleccionado
@@ -296,7 +301,11 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     }
 
 
-
+    /**
+     * Reemplaza el fragmento actual con un nuevo fragmento.
+     *
+     * @param fragment El nuevo fragmento que se mostrará.
+     */
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getParentFragmentManager(); // Obtiene el FragmentManager del padre
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -306,6 +315,11 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
     }
 
 
+    /**
+     * Muestra un Toast con un mensaje de error.
+     *
+     * @param message El mensaje de error a mostrar.
+     */
     private void negativeToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail, requireActivity().findViewById(R.id.toastLayoutFail));
@@ -317,6 +331,11 @@ public class UploadBookFragment extends Fragment implements View.OnClickListener
         toast.show();
     }
 
+    /**
+     * Muestra un Toast con un mensaje de éxito.
+     *
+     * @param message El mensaje de éxito a mostrar.
+     */
     private void positiveToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_ok, requireActivity().findViewById(R.id.toastLayoutOk));

@@ -39,6 +39,14 @@ public class BookAdapterSearch extends ArrayAdapter<String> {
         this.listener = listener;
     }
 
+    /**
+     * Obtiene una vista que muestra los datos en la posición especificada en el conjunto de datos.
+     *
+     * @param position    La posición del elemento dentro del conjunto de datos del adaptador que representa la vista a obtener.
+     * @param convertView La vista convertida que se puede reutilizar. Será null si no hay vista para reutilizar.
+     * @param parent      El ViewGroup al que se añadirá la nueva vista después de ser vinculada a una posición del adaptador.
+     * @return La vista que muestra los datos en la posición especificada en el conjunto de datos.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,6 +71,7 @@ public class BookAdapterSearch extends ArrayAdapter<String> {
                 .error(R.drawable.libro) // Imagen a mostrar si hay un error al cargar la imagen
                 .into(photoImageView);
 
+        // Configurar el OnClickListener para el botón de mensaje
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +81,7 @@ public class BookAdapterSearch extends ArrayAdapter<String> {
             }
         });
 
+        // Configurar el OnClickListener para el rootView
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

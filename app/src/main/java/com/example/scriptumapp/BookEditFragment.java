@@ -83,7 +83,7 @@ public class BookEditFragment extends Fragment {
         //extraemos los datos
         dataBook();
 
-        //Selecinar Imagen nueva en la edicion
+        // Seleccionamos una nueva imagen al hacer clic en la imagen actual
         imageBook_bookEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +94,7 @@ public class BookEditFragment extends Fragment {
             }
         });
 
-        //Guardamos los nuevos datos al pulsar en el boton
+        //Guardamos los nuevos datos al hacer clic en el botón
         button_saveBookEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +108,9 @@ public class BookEditFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == getActivity().RESULT_OK && requestCode == COD_SEL_IMAGE && data != null) {
+            // Obtenemos la URI de la imagen seleccionada
             imageUri = data.getData();
+            // Cargamos la imagen seleccionada en el ImageView usando Picasso
             Picasso.get()
                     .load(imageUri)
                     .resize(200, 300)
@@ -117,6 +119,9 @@ public class BookEditFragment extends Fragment {
         }
     }
 
+    /**
+     * Método para obtener y mostrar los datos del libro.
+     */
     public void dataBook(){
         db.collection("booksData").document(docId).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -148,15 +153,20 @@ public class BookEditFragment extends Fragment {
                     }
                 });
     }
-    //guardamos los datos nuevos
+
+    /**
+     * Método para guardar los cambios realizados al editar el libro.
+     */
     public void saveBookEdit(){
 
+        // Obtenemos los valores de los campos de texto
         String title = titleEditText_bookEdit.getText().toString();
         String author = authorEditText_bookEdit.getText().toString();
         String editorial = editorialEditText_bookEdit.getText().toString();
         String year = yearEditText_bookEdit.getText().toString();
         String status = statusEditText_bookEdit.getText().toString();
 
+        // Validamos los campos de texto
         if (title.isEmpty()){
             titleEditText_bookEdit.setError(getString(R.string.required_field));
             titleEditText_bookEdit.requestFocus();
@@ -173,6 +183,7 @@ public class BookEditFragment extends Fragment {
             yearEditText_bookEdit.setError(getString(R.string.invalid_year_format));
             yearEditText_bookEdit.requestFocus();
         } else {
+            // Creamos un mapa con los datos del libro
             Map<String, Object> data = new HashMap<>();
             data.put("title", title);
             data.put("author", author);
@@ -180,6 +191,7 @@ public class BookEditFragment extends Fragment {
             data.put("year", year);
             data.put("status", status);
 
+            // Actualizamos los datos del libro en Firestore
             db.collection("booksData").document(docId)
                     .update(data)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -201,6 +213,11 @@ public class BookEditFragment extends Fragment {
         }
     }
 
+    /**
+     * Método para cargar la foto del libro en Firebase Storage.
+     *
+     * @param docId El ID del documento del libro del que se va a actualizar la foto.
+     */
     public void uploadPhoto(String docId){
         String imageName= docId + ".jpg";
         StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
@@ -246,6 +263,12 @@ public class BookEditFragment extends Fragment {
             });
     }
 
+    /**
+     * Verifica si el año proporcionado es válido según un patrón específico.
+     *
+     * @param year El año a verificar.
+     * @return True si el año es válido, False en caso contrario.
+     */
     public static boolean isValidYear(String year) {
         if (year == null) {
             return false;
@@ -254,6 +277,11 @@ public class BookEditFragment extends Fragment {
         return matcher.matches();
     }
 
+    /**
+     * Muestra un toast con un diseño personalizado para indicar una operación fallida.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
     private void negativeToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail, requireActivity().findViewById(R.id.toastLayoutFail));
@@ -265,6 +293,11 @@ public class BookEditFragment extends Fragment {
         toast.show();
     }
 
+    /**
+     * Muestra un toast con un diseño personalizado para indicar una operación exitosa.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
     private void positiveToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_ok, requireActivity().findViewById(R.id.toastLayoutOk));

@@ -91,7 +91,7 @@ public class GiftBookFragment extends Fragment {
         mRecycler = rootView.findViewById(R.id.recyclerViewSingle2);
         mRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        //query para la coleccion Loan de la BBDD
+        //query para los libros con el campo type = gift de la BBDD
         query = mFirestore.collection("booksData").whereEqualTo("user", idUser).whereEqualTo("type", "gift");
 
         //Crear opciones de la consulta

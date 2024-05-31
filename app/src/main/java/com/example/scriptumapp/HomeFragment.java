@@ -131,11 +131,25 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
                 });
     }
 
+    /**
+     * Método para manejar el evento de clic en un elemento de la lista.
+     * Abre el fragmento de la ficha del libro correspondiente al imageUrl proporcionado.
+     *
+     * @param imageUrl La URL de la imagen del libro seleccionado.
+     */
     @Override
     public void onItemClick(String imageUrl) {
         openDetailFragment2(imageUrl);
     }
 
+    /**
+     * Método para abrir el fragmento de la ficha del libro.
+     * Comprueba si el usuario está autenticado antes de abrir el fragmento.
+     * Si el usuario está autenticado, busca el ID del libro asociado con la imagen proporcionada.
+     * Luego, pasa el ID del libro al fragmento de l ficha del libro y realiza la transacción del fragmento.
+     *
+     * @param imageUrl La URL de la imagen del libro seleccionado.
+     */
         private void openDetailFragment2(String imageUrl) {
             if(user!=null){
             db.collection("booksData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -178,6 +192,12 @@ public class HomeFragment extends Fragment implements ImageCarouselAdapter.OnIte
         super.onDestroyView();
         binding = null;
     }
+
+    /**
+     * Método privado para mostrar un Toast de error con un mensaje específico.
+     *
+     * @param message El mensaje que se mostrará en el Toast de error.
+     */
     private void negativeToast(String message) {
         // Usa inflater para inflar el diseño del toast
         LayoutInflater inflater = getLayoutInflater();

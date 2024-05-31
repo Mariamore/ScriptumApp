@@ -115,7 +115,9 @@ public class BookEditFragmentLoan extends Fragment {
         }
     }
 
-    //recuperamos datos con una funcion
+    /**
+     * Obtiene los datos del libro de Firestore y los muestra en los campos de edición de intercambio.
+     */
     private void dataBookLoan(){
 
         db.collection("booksData").document(docId).get()
@@ -143,7 +145,10 @@ public class BookEditFragmentLoan extends Fragment {
                     }
                 });
     }
-    //Guardamos los datos nuevos con la funcion
+
+    /**
+     * Guarda los cambios realizados al editar el libro.
+     */
     private void saveBookEditLoan(){
 
         String title = titleEditText_bookEditLoan.getText().toString();
@@ -194,6 +199,12 @@ public class BookEditFragmentLoan extends Fragment {
                     });
         }
     }
+
+    /**
+     * Sube la foto seleccionada a Firebase Storage y actualiza la URL de la imagen en Firestore.
+     *
+     * @param docId El ID del documento del libro del que se va a actualizar la foto.
+     */
     private void uploadPhotoEditLoan(String docId){
 
         String imageName= docId + ".jpg";
@@ -240,6 +251,12 @@ public class BookEditFragmentLoan extends Fragment {
                 });
     }
 
+    /**
+     * Verifica si el año proporcionado es válido según un patrón específico.
+     *
+     * @param year El año a verificar.
+     * @return True si el año es válido, False en caso contrario.
+     */
     public static boolean isValidYear(String year) {
         if (year == null) {
             return false;
@@ -248,6 +265,11 @@ public class BookEditFragmentLoan extends Fragment {
         return matcher.matches();
     }
 
+    /**
+     * Muestra un toast con un diseño personalizado para indicar una operación fallida.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
     private void negativeToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail, requireActivity().findViewById(R.id.toastLayoutFail));
@@ -259,6 +281,11 @@ public class BookEditFragmentLoan extends Fragment {
         toast.show();
     }
 
+    /**
+     * Muestra un toast con un diseño personalizado para indicar una operación exitosa.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
     private void positiveToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_ok, requireActivity().findViewById(R.id.toastLayoutOk));

@@ -72,7 +72,7 @@ public class FullScreenImageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootview =inflater.inflate(R.layout.fragment_full_screen_image, container, false);
 
         fullScreenImageView = rootview.findViewById(R.id.fullScreenImageView);

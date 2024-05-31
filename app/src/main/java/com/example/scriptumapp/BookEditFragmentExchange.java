@@ -74,6 +74,7 @@ public class BookEditFragmentExchange extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_book_edit_exchange, container, false);
 
+        //Inicializamos las variables
         authorEditText_bookEditExchange = rootView.findViewById(R.id.authorEditText_bookEditExchange);
         titleEditText_bookEditExchange  = rootView.findViewById(R.id.titleEditText_bookEditExchange);
         yearEditText_bookEditExchange = rootView.findViewById(R.id.yearEditText_bookEditExchange);
@@ -85,7 +86,7 @@ public class BookEditFragmentExchange extends Fragment {
         //Extraemos los datos del libro
         dataBookExchange();
 
-        //Selecinar Imagen nueva en la edicion
+        // Seleccionamos una nueva imagen al hacer clic en la imagen actual
         imageBook_bookEditExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +97,7 @@ public class BookEditFragmentExchange extends Fragment {
             }
         });
 
-        //guardamos los datos al pulsar el boton
+        //Guardamos los datos al hacer clic en el boton
         button_saveBookEditExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +109,13 @@ public class BookEditFragmentExchange extends Fragment {
         return rootView;
     }
 
+    /**
+     * Método llamado cuando se recibe un resultado de otra actividad.
+     *
+     * @param requestCode El código de solicitud original que identificó esta llamada.
+     * @param resultCode  El código de resultado devuelto por la actividad hija.
+     * @param data        Un Intent que lleva los datos de resultado.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -117,11 +125,15 @@ public class BookEditFragmentExchange extends Fragment {
         }
     }
 
+    /**
+     * Obtiene los datos del libro de Firestore y los muestra en los campos de edición de intercambio.
+     */
     public void dataBookExchange(){
         db.collection("booksData").document(docId).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        // Mostramos los datos del libro en los campos de texto
                         if (documentSnapshot.exists()) {
                             titleEditText_bookEditExchange.setText(documentSnapshot.getString("title"));
                             authorEditText_bookEditExchange.setText(documentSnapshot.getString("author"));
@@ -144,14 +156,19 @@ public class BookEditFragmentExchange extends Fragment {
                     }
                 });
     }
-    //guardamos los datos nuevos
+
+    /**
+     * Guarda los cambios realizados al editar el libro.
+     */
     public void saveBookEditExhange(){
+        // Obtenemos los valores de los campos de texto
         String title = titleEditText_bookEditExchange.getText().toString();
         String author = authorEditText_bookEditExchange.getText().toString();
         String editorial = editorialEditText_bookEditExchange.getText().toString();
         String year = yearEditText_bookEditExchange.getText().toString();
         String status = statusEditText_bookEditExchange.getText().toString();
 
+        // Validamos los campos de texto
         if (title.isEmpty()){
             titleEditText_bookEditExchange.setError(getString(R.string.required_field));
             titleEditText_bookEditExchange.requestFocus();
@@ -168,6 +185,7 @@ public class BookEditFragmentExchange extends Fragment {
             yearEditText_bookEditExchange.setError(getString(R.string.invalid_year_format));
             yearEditText_bookEditExchange.requestFocus();
         } else {
+            // Creamos un mapa con los datos del libro
             Map<String, Object> data = new HashMap<>();
             data.put("title", title);
             data.put("author", author);
@@ -175,6 +193,7 @@ public class BookEditFragmentExchange extends Fragment {
             data.put("year", year);
             data.put("status", status);
 
+            // Actualizamos los datos del libro en Firestore
             db.collection("booksData").document(docId)
                     .update(data)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -196,6 +215,11 @@ public class BookEditFragmentExchange extends Fragment {
         }
     }
 
+    /**
+     * Sube la foto seleccionada a Firebase Storage y actualiza la URL de la imagen en Firestore.
+     *
+     * @param docId El ID del documento del libro del que se va a actualizar la foto.
+     */
     public void uploadPhotoExchange(String docId){
         String imageName= docId + ".jpg";
         StorageReference imageRef = stRe.child("booksData/" + docId + "/" + imageName);
@@ -241,6 +265,12 @@ public class BookEditFragmentExchange extends Fragment {
                 });
     }
 
+    /**
+     * Verifica si el año proporcionado es válido según un patrón específico.
+     *
+     * @param year El año a verificar.
+     * @return True si el año es válido, False en caso contrario.
+     */
     public static boolean isValidYear(String year) {
         if (year == null) {
             return false;
@@ -249,6 +279,11 @@ public class BookEditFragmentExchange extends Fragment {
         return matcher.matches();
     }
 
+    /**
+     * Muestra un toast con un diseño personalizado para indicar una operación fallida.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
     private void negativeToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail, requireActivity().findViewById(R.id.toastLayoutFail));
@@ -260,6 +295,11 @@ public class BookEditFragmentExchange extends Fragment {
         toast.show();
     }
 
+    /**
+     * Muestra un toast con un diseño personalizado para indicar una operación exitosa.
+     *
+     * @param message El mensaje que se mostrará en el toast.
+     */
     private void positiveToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_ok, requireActivity().findViewById(R.id.toastLayoutOk));

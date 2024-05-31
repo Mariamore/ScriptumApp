@@ -92,14 +92,7 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /**
-     * Configura la vista del fragmento y realiza las inicializaciones necesarias.
-     *
-     * @param inflater           El objeto LayoutInflater que se utiliza para inflar la vista del fragmento.
-     * @param container          El contenedor padre en el que se debe insertar la vista.
-     * @param savedInstanceState El estado anteriormente guardado del fragmento.
-     * @return La vista raíz del fragmento.
-     */
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -171,6 +164,7 @@ public class BookInfoFragment extends Fragment implements View.OnClickListener {
     public double getLatitude(){
         return latitude;
     }
+
     /**
      * Devuelve la longitud almacenada para su uso en mapUser.html.
      *

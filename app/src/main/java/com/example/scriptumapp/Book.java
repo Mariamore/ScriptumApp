@@ -75,6 +75,12 @@ public class Book implements Parcelable {
         return 0;
     }
 
+    /**
+     * Escribe los datos del libro en el Parcel proporcionado.
+     *
+     * @param dest  El Parcel en el que deben escribirse los datos.
+     * @param flags avisos sobre cómo se debe escribir el objeto.
+     */
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(title);

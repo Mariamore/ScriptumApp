@@ -33,10 +33,19 @@ public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAda
         return new ImageViewHolder(view, onItemClickListener);
     }
 
+    /**
+     * Vincula los datos de las imágenes a las vistas correspondientes en el RecyclerView.
+     * Carga las tres primeras imágenes de la lista de URLs de imágenes en cada grupo y las muestra en ImageView.
+     * Configura los clics en las ImageView para abrir el fragmento de detalle del libro correspondiente.
+     *
+     * @param holder   El ViewHolder que contendrá las vistas.
+     * @param position La posición del elemento en los datos.
+     */
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         List<String> imageUrlsGroup = imageUrl2.get(position);
         if (imageUrlsGroup != null && imageUrlsGroup.size() >= 3) {
+            // Carga las imágenes en las ImageView usando Glide
             Glide.with(holder.itemView.getContext()).load(imageUrlsGroup.get(0))
                     .centerCrop()
                     .into(holder.imageView1);
@@ -47,6 +56,7 @@ public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAda
                     .centerCrop()
                     .into(holder.imageView3);
 
+            // Configura los clics en las ImageView para abrir el fragmento de detalle del libro correspondiente
             holder.imageView1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,11 +91,21 @@ public class ImageCarouselAdapter2 extends RecyclerView.Adapter<ImageCarouselAda
         return imageUrl2.size();
     }
 
+    /*
+     * ViewHolder para mantener las referencias de las vistas de cada elemento de la RecyclerView.
+     * Contiene tres ImageView para mostrar las imágenes de los libros.
+     */
     static class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView1;
         ImageView imageView2;
         ImageView imageView3;
 
+        /**
+         * Constructor que asigna las vistas de las ImageView.
+         *
+         * @param itemView             La vista inflada que representa un elemento en la RecyclerView.
+         * @param onItemClickListener El listener para manejar los clics en las imágenes.
+         */
         public ImageViewHolder(@NonNull View itemView, final OnItemClickListener onItemClickListener) {
             super(itemView);
             imageView1 = itemView.findViewById(R.id.imageView1);

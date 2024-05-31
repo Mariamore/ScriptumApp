@@ -93,6 +93,14 @@ public class MessagesChatFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Método para enviar un mensaje en el chat.
+     *
+     * @param chatId      ID del chat al que se enviará el mensaje.
+     * @param senderId    ID del remitente del mensaje.
+     * @param receiverId  ID del destinatario del mensaje.
+     * @param messageText Texto del mensaje a enviar.
+     */
     public void sendMessage(String chatId, String senderId, String receiverId, String messageText) {
         messageId = db.collection("messages").document().getId(); // Generar un ID único para el mensaje
         timestamp = System.currentTimeMillis();
@@ -109,6 +117,11 @@ public class MessagesChatFragment extends Fragment {
                 });
     }
 
+    /**
+     * Método para recibir mensajes en un chat específico.
+     *
+     * @param chatId ID del chat del que se recibirán los mensajes.
+     */
     public void receiveMessages(String chatId) {
         db.collection("messages").whereEqualTo("chatId", chatId)
                 .orderBy("timestamp")
@@ -129,6 +142,13 @@ public class MessagesChatFragment extends Fragment {
                 });
     }
 
+    /**
+     * Método para obtener el ID del chat entre dos usuarios dados.
+     *
+     * @param userId1 ID del primer usuario.
+     * @param userId2 ID del segundo usuario.
+     * @return ID del chat entre los dos usuarios.
+     */
     public String getChatId(String userId1, String userId2) {
         // Se ordenan los IDs de los usuarios alfabéticamente
         String[] userIds = {userId1, userId2};
@@ -138,6 +158,9 @@ public class MessagesChatFragment extends Fragment {
         return userIds[0] + "_" + userIds[1];
     }
 
+    /**
+     * Método para obtener el perfil del usuario.
+     */
     public void getUserProfile(){
         db.collection("usersData").whereEqualTo("user", userIdContact)
                 .get()
@@ -148,6 +171,7 @@ public class MessagesChatFragment extends Fragment {
                         textViewReceiver.setText(nameSurname);
                         if(documentSnapshot.contains("profileImageUrl")){
                             String profileImageUrl = documentSnapshot.getString("profileImageUrl");
+                            // Carga la imagen de perfil usando Picasso, aplicando transformación circular
                             Picasso.get()
                                     .load(profileImageUrl)
                                     .transform(new ImageCircle())
@@ -164,6 +188,11 @@ public class MessagesChatFragment extends Fragment {
                 });
     }
 
+    /**
+     * Método para crear y mostrar un Toast de error.
+     *
+     * @param text Texto que se mostrará en el Toast.
+     */
     private void createToastError(String text) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_layout_fail,

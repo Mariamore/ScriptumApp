@@ -25,6 +25,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.currentUserId = currentUserId;
     }
 
+    /**
+     * Método para determinar el tipo de vista de un mensaje en una posición determinada.
+     *
+     * @param position Posición del mensaje en la lista.
+     * @return Tipo de vista del mensaje (enviado o recibido).
+     */
     @Override
     public int getItemViewType(int position) {
         Message message = messageList.get(position);
@@ -35,6 +41,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    /**
+     * Método para crear un ViewHolder para un tipo de vista de mensaje específico.
+     *
+     * @param parent   El ViewGroup al que se adjuntará la nueva vista.
+     * @param viewType Tipo de vista del mensaje.
+     * @return ViewHolder correspondiente al tipo de vista de mensaje.
+     */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
@@ -48,6 +61,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    /**
+     * Método para asociar datos a las vistas en el ViewHolder.
+     *
+     * @param holder   ViewHolder que contendrá las vistas.
+     * @param position Posición del elemento en los datos.
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message message = messageList.get(position);
@@ -66,6 +85,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return messageList.size();
     }
 
+
+     //Clase ViewHolder para mensajes enviados.
+
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timestampText;
 
@@ -75,14 +97,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             timestampText = itemView.findViewById(R.id.textViewTimestampSent);
         }
 
+        /**
+         * Método para asociar datos de mensaje a las vistas en el ViewHolder.
+         *
+         * @param message Objeto de mensaje.
+         */
         void bind(Message message) {
             messageText.setText(message.getMessageText());
             timestampText.setText(formatTimestamp(message.getTimestamp()));
         }
     }
 
+    //Clase ViewHolder para mensajes recibidos.
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timestampText;
+
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -90,12 +119,23 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             timestampText = itemView.findViewById(R.id.textViewTimestampReceived);
         }
 
+        /**
+         * Método para asociar datos de mensaje a las vistas en el ViewHolder.
+         *
+         * @param message Objeto de mensaje.
+         */
         void bind(Message message) {
             messageText.setText(message.getMessageText());
             timestampText.setText(formatTimestamp(message.getTimestamp()));
         }
     }
 
+    /**
+     * Método para dar formato a una marca de tiempo en formato de fecha y hora legible.
+     *
+     * @param timestamp Marca de tiempo del mensaje.
+     * @return Cadena de fecha y hora formateada.
+     */
     private String formatTimestamp(long timestamp) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         return sdf.format(new Date(timestamp));

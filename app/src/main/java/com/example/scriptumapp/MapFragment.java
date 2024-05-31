@@ -155,6 +155,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         searchButton = rootView.findViewById(R.id.searchButton);
         backButton = rootView.findViewById(R.id.backButton);
         saveButton = rootView.findViewById(R.id.saveButton);
+        //pasos necesarios para conectar el webView con el map.html y permitir la transferencia de codigo entre ambos
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(this, "Android");
         webView.setWebViewClient(new WebViewClient());
